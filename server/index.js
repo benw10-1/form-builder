@@ -1,9 +1,11 @@
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
+const path = require("path")
 require("dotenv").config()
 
 const { typeDefs, resolvers } = require('./schemas')
 const db = require('./config/connection')
+
 const session = require("express-session")
 const MongoStore = require("connect-mongo")
 
@@ -21,6 +23,13 @@ const server = new ApolloServer({
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
+if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test") {
+  app.use(express.static(path.join(__dirname, "../client/build")))
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"))
+  })
+}
+
 app.use(session({
   name: "qid",
   secret: process.env.SECRET,
@@ -30,7 +39,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 2,
-    secure: process.env.NODE_ENV === "prod"
+    secure: process.env.NODE_ENV === "production"
   }
 }))
 
@@ -38,6 +47,7 @@ server.start().then(() => {
   server.applyMiddleware({
     app,
     cors: true,
+    context: ({ req }) => req
   })
 })
 

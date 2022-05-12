@@ -25,12 +25,20 @@ async function login(parent, args, context, info) {
     if (!valid) throw new Error("Wrong password")
 
     context.session.userID = user.id
-    console.log(context.session, context.session.userID)
 
     return user
 }
 
+async function logout(parent, args, context, info) {
+    if (!context.session.userID) return "Not logged in"
+
+    await context.session.destroy()
+
+    return "Logged out"
+}
+
 module.exports = {
     signup,
-    login
+    login,
+    logout
 }
