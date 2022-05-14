@@ -18,6 +18,10 @@ const userSchema = new Schema(
             type: String,
             required: true
         },
+        forms: [{
+            type: Schema.Types.ObjectId,
+            ref: "Form"
+        }]
     }
 )
 

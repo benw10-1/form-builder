@@ -1,44 +1,33 @@
 const bcrypt = require("bcrypt")
+const { AuthenticationError } = require('apollo-server-express')
 const { User } = require("../../models")
+const { signToken } = require('../../utils/auth')
 
-async function signup(parent, args, context, info) {
-    const password = await bcrypt.hash(args.password, 10)
-
-    const user = await User.create({ ...args, password })
-
-    context.session.userID = user.id
-    console.log(context.session.userID)
-
-    return user
+async function signup(parent, args, context) {
+    const user = await User.create({ ...args })
+    const token = signToken(user)
+    return { token, user }
 }
 
-async function login(parent, args, context, info) {
+async function login(parent, { login, password }) {
     const user = await User.findOne({
         $or: [
-            { name: args.login },
-            { email: args.login }
+            { name: login },
+            { email: login }
         ]
     })
-    if (!user) throw new Error("No user found")
+    
+    if (!user) throw new AuthenticationError("No user found")
 
-    const valid = await bcrypt.compare(args.password, user.password)
-    if (!valid) throw new Error("Wrong password")
+    const valid = await bcrypt.compare(password, user.password)
+    if (!valid) throw new AuthenticationError("Incorrect password")
 
-    context.session.userID = user.id
+    const token = signToken(user)
 
-    return user
-}
-
-async function logout(parent, args, context, info) {
-    if (!context.session.userID) return "Not logged in"
-
-    await context.session.destroy()
-
-    return "Logged out"
+    return { token, user }
 }
 
 module.exports = {
     signup,
-    login,
-    logout
+    login
 }

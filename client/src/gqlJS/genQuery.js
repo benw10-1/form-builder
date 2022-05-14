@@ -1,3 +1,5 @@
+import Auth from "../auth"
+
 /**
  * Utility function for generating gql requests
  * @param {String} q GraphQL query
@@ -11,13 +13,19 @@ async function genQuery(q, variables) {
         "query": q,
         variables
     }
+
+    let token = localStorage.getItem('id_token')
+    console.log(token)
+    // if (token) token = Auth.isTokenExpired(token) ? null : token
+    
     // fetch options
     const opt = {
         method: "POST",
         mode: "cors",
         credentials: "same-origin",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "authentication": token ? `Bearer ${token}` : ''
         },
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(body)
@@ -35,6 +43,9 @@ async function genQuery(q, variables) {
             __status__: "success",
             ...data.data
         }
+    }).then(data => {
+        console.log(data)
+        return data
     })
 }
 

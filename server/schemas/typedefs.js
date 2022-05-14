@@ -7,14 +7,38 @@ const typeDefs = gql`
     email: String!
   }
 
+  type Auth {
+    token: ID!
+    user: User
+  }
+
+  type Props {
+    title: String
+    content: String
+  }
+
+  type Piece {
+    _id: ID!
+    _type: String!
+    data: Props!
+  }
+
+  type Form {
+    _id: ID!
+    title: String!
+    description: String
+    creator: User!
+    pieces: [Piece!]!
+  }
+
   type Query {
-    userID: String
+    thisUser: User
+    getForm: Form
   }
 
   type Mutation {
-    signup(name: String!, password: String!, email: String!): User
-    login(login: String!, password: String!): User
-    logout: String
+    signup(name: String!, password: String!, email: String!): Auth
+    login(login: String!, password: String!): Auth
   }
 `;
 

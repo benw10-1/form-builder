@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { queries, mutations } from "../../gqlJS"
+import Auth from "../../auth"
 import "./Dashboard.css"
 
 function Dashboard() {
@@ -8,8 +9,8 @@ function Dashboard() {
     // only run once
     // second argument is the array in which each element is checked. If there are changes to the array, it runs the effect
     useEffect(async () => {
-        // returns null if not logged in and userID otherwise
-        let loggedIn = await queries.loginStatus()
+        // returns null if not logged in and user otherwise
+        let loggedIn = Auth.loggedIn()
         // redirect if not logged in (pog)
         if (!loggedIn) window.location.replace(window.location.origin)
         // set loading state and re render
@@ -31,4 +32,4 @@ function Dashboard() {
     );
 }
 
-export default Dashboard;
+export default Dashboard

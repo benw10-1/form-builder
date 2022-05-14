@@ -2,19 +2,47 @@ import genQuery from "./genQuery"
 
 /**
  * Login status.
- * @returns null or userID.
+ * @returns null or user data.
  */
-async function loginStatus() {
+async function getUserData() {
     const query = `
     query Query {
-      userID
+        thisUser { 
+            user {
+                name
+                email
+            }
+        }
     }
     `
 
     return genQuery(query).then(data => {
-        if (data.__status__ === "error") return false
-        return data.userID
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            ...data.thisUser
+        }
     })
 }
 
-export default { loginStatus }
+/**
+ * Get form data.
+ * @returns formdata or null (not logged in)
+ */
+async function getForms() {
+    const query = `
+    query Query {
+        getForms
+    }
+    `
+
+    return genQuery(query).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            ...data.getForms
+        }
+    })
+}
+
+export default { getUserData, getForms }
