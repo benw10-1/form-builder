@@ -1,4 +1,4 @@
-const genQuery = require("./genQuery")
+import genQuery from "./genQuery"
 
 async function login(login, password) {
     const variables = { login, password }
@@ -38,4 +38,4 @@ async function logout() {
     return genQuery(query)
 }
 
-module.exports = { login, signup, logout }
+export default { login, signup, logout }

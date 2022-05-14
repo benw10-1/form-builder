@@ -1,5 +1,5 @@
-const mutations = require("./mutations")
-const queries = require("./queries")
-const genQuery = require("./genQuery")
+import mutations from "./mutations"
+import queries from "./queries"
+import genQuery from "./genQuery"
 
 export { mutations, queries, genQuery }

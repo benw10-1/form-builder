@@ -1,5 +1,5 @@
-import App from "./App"
+import Home from "./Home"
 import Login from "./Login"
 import Dashboard from "./Dashboard"
 
-export { App, Login, Dashboard }
+export { Home, Login, Dashboard }
