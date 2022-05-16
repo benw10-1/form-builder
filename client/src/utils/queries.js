@@ -28,7 +28,12 @@ async function getUserData() {
 /**
  * Get form data.
  * @returns formdata or null (not logged in)
+ * /////////////////////////////////////////////////////////////
+ *Wait how do we pass an argument if we are doing it like this without the Appollo client???///////////////////////
+ **can we just do it like in ALTqueries?
+ /////////////////////////////////////////////////////
  */
+
 async function getForms() {
     const query = `
     query Query {

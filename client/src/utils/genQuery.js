@@ -1,4 +1,4 @@
-import Auth from "../auth"
+import Auth from "./auth"
 
 /**
  * Utility function for generating gql requests

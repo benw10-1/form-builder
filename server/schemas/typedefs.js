@@ -21,6 +21,7 @@ const typeDefs = gql`
     _id: ID!
     _type: String!
     data: Props!
+    responses:[String]
   }
 
   type Form {
