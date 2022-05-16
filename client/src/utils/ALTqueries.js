@@ -27,8 +27,8 @@ query allForms($userID: ID!) {
 `;
 
 export const QUERY_RESPONSES = gql`
-query singleForm($formID: ID!) {
-  singleForm(formID: $formID) {
+query responses($formID: ID!) {
+  responses(formID: $formID) {
     _id
     title
     description
@@ -36,6 +36,7 @@ query singleForm($formID: ID!) {
         _id
         type
         data
+        responses
     }
   }
 }

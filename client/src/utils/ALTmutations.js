@@ -15,3 +15,13 @@ mutation editForm($formID: ID!) {
   }
 }
 `;
+
+export const EDIT_PIECE = gql`
+mutation editPiece($pieceID: ID!) {
+  editPiece(pieceID: $pieceID) {
+    _id
+    _type
+    data
+  }
+}
+`;
