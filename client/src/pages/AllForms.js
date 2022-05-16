@@ -1,8 +1,12 @@
+//displays list of all forms the user has created
+//each form has option to edit or view responses
+//include redundant new form button at bottom why not
+
 import React, { useState, useEffect } from "react";
 import { queries, mutations } from "../../gqlJS"
-import "./formView.css"
+//import "./formView.css"
 
-function formView() {
+function AllForms() {
     let [loading, setLoading] = useState(true)
 
     // only run once
@@ -28,4 +32,4 @@ function formView() {
     );
 }
 
-export default Dashboard;
+export default AllForms;

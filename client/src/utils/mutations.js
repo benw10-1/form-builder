@@ -1,5 +1,5 @@
 import genQuery from "./genQuery"
-import Auth from "../auth"
+import Auth from "./auth"
 
 async function login(login, password) {
 const variables = { login, password }

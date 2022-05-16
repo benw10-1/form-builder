@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { queries, mutations } from "../../gqlJS"
-import Auth from "../../auth"
+import Auth from "../../utils/auth"
 import "./Dashboard.css"
 
 function Dashboard() {
@@ -32,4 +32,4 @@ function Dashboard() {
     );
 }
 
-export default Dashboard
+export default Dashboard;
