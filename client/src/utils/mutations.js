@@ -25,8 +25,8 @@ async function login(login, password) {
   })
 }
 
-async function signup(username, email, password) {
-  const variables = { username, email, password }
+async function signup(name, email, password) {
+  const variables = { name, email, password }
   const query = `
     mutation Signup($name: String!, $password: String!, $email: String!) {
       signup(name: $name, password: $password, email: $email) {

@@ -33,7 +33,6 @@ async function createForm(parent, { title, description }, context) {
     if (!user) new AuthenticationError("Not logged in!")
     // creates default form for use in editing
     const newForm = await defaultForm(title, user._id, description)
-
     return newForm
 }
 

@@ -52,7 +52,7 @@ function Dashboard() {
             window.location.replace(window.location.origin + "/login")
             return
         }
-        let myForms = (await queries.getMyForms()).result ?? []
+        let myForms = (await queries.getMyForms())?.result ?? []
         setForms(myForms)
         setLoading(false)
     }, [1])
@@ -64,6 +64,7 @@ function Dashboard() {
             <div>
                 <div>Dashboard</div>
                 <AllForms forms={forms} />
+                <button onClick={Auth.logout}>Logout</button>
             </div>
         )
         return body
