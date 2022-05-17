@@ -46,7 +46,7 @@ function Login() {
         // checks for error status (see client/src/gqlJS and server/schemas/resolvers)
         // TODO: Change alert
         if (result.__status__ === "error") alert("Bad login")
-        else window.location.replace(window.location.origin + "/dashboard")
+        else window.location.assign(window.location.origin + "/dashboard")
     }
 
     // main render logic

@@ -13,10 +13,14 @@ const formSchema = new Schema(
             type: String,
             trim: true
         },
-        // for custom endpoints later and shorter urls. If no endpoint, site has not been published yet, but persist endpoint even when user unpublishes
+        // for custom endpoints later and shorter urls. If no endpoint, site has not been published yet, but persist endpoint even when user unpublishes. Fix unique constraint
         endpoint: {
             type: String,
-            unique: true
+            trim: true,
+            index: {
+                unique: true,
+                partialFilterExpression: { "endpoint": { $type: "string" }}
+            }
         },
         published: {
             type: Boolean,
@@ -42,7 +46,7 @@ const formSchema = new Schema(
 // cascade delete pieces and responses on form delete
 formSchema.post('remove', function(doc) {
     // doc is the document being removed, and we are removing all pieces with a form with same ID
-    Response.remove({ form_ref: doc._id })
+    Response.remove({ form_ref: doc._id }).exec()
     Piece.remove({ form_ref: doc._id }).exec()
 })
 

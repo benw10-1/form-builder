@@ -10,7 +10,7 @@ function AllForms({ forms=[] }) {
         forms.forEach(x => {
             const { _id, title } = x
             const onclick = (event) => {
-                window.location.replace(window.location.origin + "/editForm/" + _id)
+                window.location.assign(window.location.origin + "/editForm/" + _id)
             }
             renderedForms.push(<button onClick={onclick}>{title}</button>)
         })
@@ -23,7 +23,7 @@ function AllForms({ forms=[] }) {
                 return
             }
 
-            window.location.replace(window.location.origin + "/editForm/" + newForm._id)
+            window.location.assign(window.location.origin + "/editForm/" + newForm._id)
         }
 
         renderedForms.push((
