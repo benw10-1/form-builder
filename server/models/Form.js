@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose')
+const Piece = require("./Piece")
+const Response = require("./Response")
 
 const formSchema = new Schema(
     {
@@ -11,6 +13,15 @@ const formSchema = new Schema(
             type: String,
             trim: true
         },
+        // for custom endpoints later and shorter urls. If no endpoint, site has not been published yet, but persist endpoint even when user unpublishes
+        endpoint: {
+            type: String,
+            unique: true
+        },
+        published: {
+            type: Boolean,
+            required: true
+        },
         // faux one-to-one relationship (object reference)
         creator: {
             type: Schema.Types.ObjectId,
@@ -18,12 +29,22 @@ const formSchema = new Schema(
             required: true
         },
         // faux many-to-one relationship (nested object reference)
-        pieces: [{
-            type: Schema.Types.ObjectId,
-            ref: "Piece"
-        }]
+        piece_refs: {
+            type: [{
+                type: Schema.Types.ObjectId,
+                ref: "Piece"
+            }],
+            default: []
+        }
     }
 )
+
+// cascade delete pieces and responses on form delete
+formSchema.post('remove', function(doc) {
+    // doc is the document being removed, and we are removing all pieces with a form with same ID
+    Response.remove({ form_ref: doc._id })
+    Piece.remove({ form_ref: doc._id }).exec()
+})
 
 const Form = model('Form', formSchema)
 

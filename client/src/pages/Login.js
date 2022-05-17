@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { queries, mutations } from "../../gqlJS"
-import Auth from "../../auth"
+import { queries, mutations, Auth } from "../utils"
 
 function Login() {
     // regex matching the correct password
@@ -18,7 +17,7 @@ function Login() {
     useEffect(async () => {
         let loggedIn = Auth.loggedIn()
         if (loggedIn) window.location.replace(window.location.origin + "/dashboard")
-        setLoading(false)
+        else setLoading(false)
     }, [1])
 
     // on login edit

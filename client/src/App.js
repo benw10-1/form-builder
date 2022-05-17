@@ -1,59 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { AllForms, Dashboard, FourOFour, Home, Login, NewForm, Respond, Responses, Signup, SingleForm, SingleResponse } from "./pages"
+import {
+    Dashboard,
+    FourOFour,
+    Home,
+    Login,
+    Signup,
+    Form,
+    EditForm
+} from "./pages"
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {return (
+function App() {
+    return (
+        <BrowserRouter>
+            <Routes>
+                {/*routes that do not require user to be logged in (content in Home will be different if logged in)*/}
+                <Route path="/" element={<Home/>} />
+                <Route path="/login" element={<Login/>} />
+                <Route path="/signup" element={<Signup/>} />
+                <Route path="/form/:endpoint" element={<Form/>} />
 
-    //so this works without an Appollo client ?..
-    <BrowserRouter>
-    <Routes>
+                {/* routes that require user to be logged in */}
+                <Route path="/dashboard" element={<Dashboard/>} />
+                {/* View responses and edit form in one page */}
+                <Route path="/editform/:id" element={<EditForm />} />    
 
-        {/*routes that do not require user to be logged in (content in Home will be different if logged in)*/}
-        <Route exact path="/"> 
-            <Home/>
-        </Route>
-        <Route exact path="/login"> 
-            <Login/> 
-        </Route>
-        <Route exact path="/signup"> 
-            <Signup/> 
-        </Route>
-        <Route exact path="/respond/:formID"> 
-            <Respond/> 
-        </Route>
+                {/* wrong route route */}
+                <Route path="*" element={<FourOFour />}/>
 
-        {/*routes that require user to be logged in*/}
-        <Route exact path="/dashboard/:userID"> 
-            <Dashboard/> 
-        </Route>
-        <Route exact path="/allforms/:userID"> 
-            <AllForms/> 
-        </Route>
-        <Route exact path="/newform/:userID"> 
-            <NewForm/> 
-        </Route>
-        <Route exact path="/singleform/:formID"> 
-            <SingleForm/> 
-        </Route>
-        <Route exact path="/responses/:formID"> 
-            <Responses/> 
-        </Route>
-        <Route exact path="/singleresponse/:formID/:responseNum"> 
-            <SingleResponse/> 
-        </Route>
-
-        {/*wrong route route*/}
-        <Route path="*"> 
-            <FourOFour/>
-        </Route>
-
-    </Routes>
-    </BrowserRouter>
-
-);}
+            </Routes>
+        </BrowserRouter>
+    );
+}
 
 
 export default App;

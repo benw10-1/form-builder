@@ -4,11 +4,11 @@ import genQuery from "./genQuery"
  * Login status.
  * @returns null or user data.
  */
-async function getUserData() {
+async function getMe() {
     const query = `
     query Query {
-        thisUser { 
-            user {
+        getMe { 
+            User {
                 name
                 email
             }
@@ -20,7 +20,7 @@ async function getUserData() {
         if (data.__status__ === "error") return null
         return {
             __status__: data.__status__,
-            ...data.thisUser
+            ...data.getMe
         }
     })
 }
@@ -28,16 +28,18 @@ async function getUserData() {
 /**
  * Get form data.
  * @returns formdata or null (not logged in)
- * /////////////////////////////////////////////////////////////
- *Wait how do we pass an argument if we are doing it like this without the Appollo client???///////////////////////
- **can we just do it like in ALTqueries?
- /////////////////////////////////////////////////////
  */
 
-async function getForms() {
+async function getMyForms() {
     const query = `
     query Query {
-        getForms
+        getMyForms {
+            _id
+            title
+            description
+            endpoint
+            published
+        }
     }
     `
 
@@ -45,9 +47,58 @@ async function getForms() {
         if (data.__status__ === "error") return null
         return {
             __status__: data.__status__,
-            ...data.getForms
+            result: data.getMyForms
         }
     })
 }
 
-export default { getUserData, getForms }
+async function getPiecesForRender(id) {
+    const query = `
+    query Query($id: ID!) {
+        getPiecesForRender(id: $id) {
+            _id
+            _type
+            props {
+                key
+                value
+            }
+        }
+    }
+    `
+
+    const variables = { "id": id }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getPiecesForRender
+        }
+    })
+}
+
+async function getResponsesByForm(id) {
+    const query = `
+    query Query($id: ID!) {
+        getResponsesByForm(id: $id) {
+            _id
+            answers {
+                key
+                value
+            }
+        }
+    }
+    `
+
+    const variables = { "id": id }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getResponsesByForm
+        }
+    })
+}
+
+export default { getMe, getMyForms, getPiecesForRender, getResponsesByForm }

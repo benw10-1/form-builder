@@ -5,6 +5,7 @@ const typeDefs = gql`
     _id: ID!
     name: String!
     email: String!
+    forms: [Form!]!
   }
 
   type Auth {
@@ -12,32 +13,43 @@ const typeDefs = gql`
     user: User
   }
 
-  type Props {
-    title: String
-    content: String
+  type Prop {
+    key: String
+    value: String
   }
 
   type Piece {
     _id: ID!
     _type: String!
-    data: Props!
-    responses:[String]
+    form_ref: ID!
+    props: [Prop!]!
   }
 
   type Form {
     _id: ID!
     title: String!
     description: String
+    endpoint: String
+    published: Boolean!
     creator: User!
-    pieces: [Piece!]!
+    piece_refs: [ID!]!
+  }
+
+  type Response {
+    _id: ID!
+    form_ref: ID!
+    answers: [Prop!]!
   }
 
   type Query {
-    thisUser: User
-    getForm: Form
+    getMe: User
+    getMyForms: [Form!]!
+    getPiecesForRender(id: ID!): [Piece!]!
+    getResponsesByForm(id: ID!): [Response!]!
   }
 
   type Mutation {
+    createForm(title: String!, description: String): Form!
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
   }

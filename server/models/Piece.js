@@ -2,28 +2,22 @@ const { Schema, model } = require('mongoose')
 
 const pieceSchema = new Schema(
     {
-        title: {
-            type: String,
-            required: true,
-            trim: true
-        },
         _type: {
             type: String,
-            enum: ["header", "part", "break"],
+            enum: ["header", "question", "break"],
             trim: true,
             required: true
         },
         // faux one-to-one relationship (object reference)
-        form: {
+        form_ref: {
             type: Schema.Types.ObjectId,
-            ref: "Form",
-            required: true
+            // ref: "Form"
         },
         // formless data for manual processing
-        data: {
+        props: [{
             type: Object,
             required: true
-        }
+        }]
     }
 )
 

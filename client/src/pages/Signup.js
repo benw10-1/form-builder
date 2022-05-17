@@ -1,9 +1,9 @@
 //sign up
+import React, { useState, useEffect } from "react";
 
+function Signup() {
 
-function Signup(){
-
-    return(
+    return (
         <h1>Please enter your credoontials</h1>
     );
 }

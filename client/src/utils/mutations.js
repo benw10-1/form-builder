@@ -2,8 +2,8 @@ import genQuery from "./genQuery"
 import Auth from "./auth"
 
 async function login(login, password) {
-const variables = { login, password }
-    const query = `
+  const variables = { login, password }
+  const query = `
     mutation Login($login: String!, $password: String!) {
       login(login: $login, password: $password) {
         token
@@ -15,18 +15,19 @@ const variables = { login, password }
     }
     `
 
-    return genQuery(query, variables).then(data => {
-      Auth.login(data.login.token)
-      return {
-        __status__: data.__status__,
-        ...data.login
-      }
-    })
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    Auth.login(data.login.token)
+    return {
+      __status__: data.__status__,
+      result: data.login
+    }
+  })
 }
 
 async function signup(username, email, password) {
-    const variables = { username, email, password }
-    const query = `
+  const variables = { username, email, password }
+  const query = `
     mutation Signup($name: String!, $password: String!, $email: String!) {
       signup(name: $name, password: $password, email: $email) {
         token
@@ -38,13 +39,37 @@ async function signup(username, email, password) {
     }      
     `
 
-    return genQuery(query, variables).then(data => {
-      Auth.login(data.signup.token)
-      return {
-        __status__: data.__status__,
-        ...data.signup
-      }
-    })
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    Auth.login(data.signup.token)
+    return {
+      __status__: data.__status__,
+      result: data.signup
+    }
+  })
 }
 
-export default { login, signup }
+async function createForm(title, description) {
+  const variables = { title, description }
+  const query = `
+    mutation CreateForm($title: String!, $description: String) {
+      createForm(title: $title, description: $description) {
+        _id
+        title
+        description
+        endpoint
+        published
+      }
+    }      
+    `
+
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.createForm
+    }
+  })
+}
+
+export default { login, signup, createForm }

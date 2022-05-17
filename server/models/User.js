@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const bcrypt = require("bcrypt")
 
 const userSchema = new Schema(
     {
@@ -18,12 +19,29 @@ const userSchema = new Schema(
             type: String,
             required: true
         },
-        forms: [{
-            type: Schema.Types.ObjectId,
-            ref: "Form"
-        }]
+        forms: {
+            type: [{
+                type: Schema.Types.ObjectId,
+                ref: "Form"
+            }],
+            default: []
+        }
     }
 )
+
+// hook that hashes created password before saved to DB
+userSchema.pre('save', async function (next) {
+    if (this.isNew || this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10)
+    }
+
+    next()
+})
+
+// compares password to hashed password
+userSchema.methods.isValidPassword = async function (password) {
+    return bcrypt.compare(password, this.password)
+}
 
 const User = model('User', userSchema)
 
