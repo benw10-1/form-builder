@@ -9,30 +9,43 @@ import {
     CardContent,
     Skeleton,
     Button,
+    Box
 } from "@mui/material"
 import "./Login.css"
 
+// destructure props
 function Login({ handlers: { login: [loginVal, handleLoginChange], pass: [passVal, handlePassChange], handleSubmit, other } }) {
     return (
         <React.Fragment>
-            <TextField id="input-user" label="Username or email" variant="standard" onChange={handleLoginChange} value={loginVal} />
-            <TextField id="input-pass" label="Password" variant="standard" type="password" onChange={handlePassChange} value={passVal} />
+            <Box m={"0 0 30px 0"}>
+                <TextField id="input-user" label="Username or email" variant="standard" onChange={handleLoginChange} value={loginVal} fullWidth={true} />
+            </Box>
+            <Box m={"0 0 42.5px 0"}>
+                <TextField id="input-pass" label="Password" variant="standard" type="password" onChange={handlePassChange} value={passVal} fullWidth={true} />
+            </Box>
             <div className="button-block">
                 <div className="button-cont">
-                    <Button onClick={other} variant="outlined" width={105} height={42}>Signup</Button>
-                    <Button onClick={handleSubmit} variant="contained" width={89} height={42}>Login</Button>
+                    <Button onClick={other} variant="outlined" width={105} height={32}>Signup</Button>
+                    <Button onClick={handleSubmit} variant="contained" width={89} height={32}>Login</Button>
                 </div>
             </div>
         </React.Fragment>
     )
 }
 
+// destructure props
 function Signup({ handlers: { login: [loginVal, handleLoginChange], email: [emailVal, handleEmailChange], pass: [passVal, handlePassChange], handleSubmit, other } }) {
     return (
         <React.Fragment>
-            <TextField id="input-user" label="Username" variant="standard" onChange={handleLoginChange} value={loginVal} />
-            <TextField id="input-email" label="Email" variant="standard" onChange={handleEmailChange} value={emailVal} />
-            <TextField id="input-pass" label="Password" variant="standard" type="password" onChange={handlePassChange} value={passVal} />
+            <Box m={"10px 0 20px 0"}>
+                <TextField id="input-user" label="Username" variant="standard" onChange={handleLoginChange} value={loginVal} fullWidth={true} />
+            </Box>
+            <Box m={"0 0 20px 0"}>
+                <TextField id="input-email" label="Email" variant="standard" onChange={handleEmailChange} value={emailVal} fullWidth={true} />
+            </Box>
+            <Box m={"0 0 40px 0"}>
+                <TextField id="input-pass" label="Password" variant="standard" type="password" onChange={handlePassChange} value={passVal} fullWidth={true} />
+            </Box>
             <div className="button-block">
                 <div className="button-cont">
                     <Button onClick={other} variant="outlined" width={89} height={42}>Login</Button>
@@ -64,6 +77,7 @@ function LoginSignup({ switchState }) {
         // reset password but keep username
         setPassVal("")
         const new_path = _switch ? "login" : "signup"
+        // set url withoput reloading
         window.history.pushState('data', new_path, "/" + new_path);
         setTimeout(() => {
             setSwitch(!_switch)
@@ -74,7 +88,7 @@ function LoginSignup({ switchState }) {
     // same logic as Dashboard.js
     useEffect(() => {
         async function req() {
-            let loggedIn = false // Auth.loggedIn()
+            let loggedIn = Auth.loggedIn()
             if (loggedIn) window.location.replace(window.location.origin + "/dashboard")
             else setLoading(false)
         }
@@ -138,7 +152,7 @@ function LoginSignup({ switchState }) {
             <React.Fragment>
                 <CssBaseline />
                 <Container maxWidth={false}>
-                    <div className="positioning">
+                    <div className="login-positioning">
                         {(() => {
                             if (loading) return (
                                 <React.Fragment>

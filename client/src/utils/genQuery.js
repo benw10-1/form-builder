@@ -48,6 +48,9 @@ async function genQuery(q, variables) {
     }).then(data => {
         console.log(data)
         return data
+    }).catch(err => {
+        console.log(err)
+        return err
     })
 }
 
