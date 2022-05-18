@@ -101,4 +101,6 @@ async function getResponsesByForm(id) {
     })
 }
 
-export default { getMe, getMyForms, getPiecesForRender, getResponsesByForm }
+const exp = { getMe, getMyForms, getPiecesForRender, getResponsesByForm }
+
+export default exp

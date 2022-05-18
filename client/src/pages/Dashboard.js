@@ -46,16 +46,19 @@ function Dashboard() {
 
     // only run once
     // second argument is the array in which each element is checked. If there are changes to the array, it runs the effect
-    useEffect(async () => {
-        let loggedIn = Auth.loggedIn()
-        if (!loggedIn) {
-            window.location.replace(window.location.origin + "/login")
-            return
+    useEffect(() => {
+        async function req() {
+            let loggedIn = Auth.loggedIn()
+            if (!loggedIn) {
+                window.location.replace(window.location.origin + "/login")
+                return
+            }
+            let myForms = (await queries.getMyForms())?.result ?? []
+            setForms(myForms)
+            setLoading(false)
         }
-        let myForms = (await queries.getMyForms())?.result ?? []
-        setForms(myForms)
-        setLoading(false)
-    }, [1])
+        req()
+    }, [])
 
     // main render logic
     const pageRender = () => {

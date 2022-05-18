@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 
 import {
     Dashboard,
     FourOFour,
     Home,
-    Login,
-    Signup,
+    LoginSignup,
     Form,
     EditForm
 } from "./pages"
@@ -19,8 +17,8 @@ function App() {
             <Routes>
                 {/*routes that do not require user to be logged in (content in Home will be different if logged in)*/}
                 <Route path="/" element={<Home/>} />
-                <Route path="/login" element={<Login/>} />
-                <Route path="/signup" element={<Signup/>} />
+                <Route path="/login" element={<LoginSignup switchState={false}/>} />
+                <Route path="/signup" element={<LoginSignup switchState={true}/>} />
                 <Route path="/form/:endpoint" element={<Form/>} />
 
                 {/* routes that require user to be logged in */}

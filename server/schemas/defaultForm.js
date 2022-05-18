@@ -13,12 +13,12 @@ async function defaultPieces(title, form_ref, description) {
         _type: "question",
         form_ref,
         props: [
-            { key: "qtext", value: "Question example?" },
-            { key: "qsubtext", value: "Question description" },
+            { key: "qtext", value: "Some question?" },
+            { key: "qsubtext", value: "Some desc" },
             { key: "qtype", value: "multiple" },
             { key: "qoptions", value: "Option 1" },
             { key: "qoptions", value: "Option 2" },
-            { key: "qoptions", value: "Option 3" },
+            { key: "qoptions", value: "ANOTHER ONE" },
             { key: "qoptions", value: "Option 4" },
         ]
     })

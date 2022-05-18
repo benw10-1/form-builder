@@ -72,4 +72,6 @@ async function createForm(title, description) {
   })
 }
 
-export default { login, signup, createForm }
+const exp = { login, signup, createForm }
+
+export default exp
