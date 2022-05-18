@@ -8,7 +8,10 @@ import {
     Box,
     Link,
     Avatar,
-    Skeleton
+    Skeleton,
+    Modal,
+    TextField,
+    Button
 } from "@mui/material";
 
 import AddIcon from '@mui/icons-material/Add';
@@ -17,7 +20,7 @@ import Signout from "../Signout";
 import * as moment from "moment"
 import "./Dashboard.css"
 
-function AllForms({ forms=[] }) {
+function AllForms({ forms=[], modal }) {
     // main render logic
     const render = () => {
         let renderedForms = []
@@ -78,20 +81,10 @@ function AllForms({ forms=[] }) {
                 </Paper>
             ))
         })
-
-        const addForm = async () => {
-            // for now default values, but can pass stuff from in
-            let newForm = (await mutations.createForm("Form example", "Some description")).result
-            if (!newForm) {
-                console.log("Something went wrong")
-                return
-            }
-            window.location.assign(window.location.origin + "/editForm/" + newForm._id)
-        }
         
         renderedForms.push((
-            <Paper sx={{ ...cardsx, background: "#0000000A", ...centered }} onClick={addForm}>
-                <Avatar variant={"circular"} size={"40px"} sx={{ padding: "13px", ...hoversx }}>
+            <Paper sx={{ ...cardsx, background: "#0000000A", ...centered }}>
+                <Avatar variant={"circular"} size={"40px"} sx={{ padding: "13px", ...hoversx }} onClick={modal}>
                     <AddIcon sx={plussx} fontSize={"medium"} />
                 </Avatar>
             </Paper>
@@ -108,9 +101,15 @@ function AllForms({ forms=[] }) {
 }
 
 function Dashboard() {
-    let [loading, setLoading] = useState(true)
-    let [forms, setForms] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [forms, setForms] = useState([])
 
+    const [formName, setFormName] = useState("")
+    const [formDesc, setFormDesc] = useState("")
+
+    const [open, setOpen] = useState(false)
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => setOpen(false)
     // only run once
     // second argument is the array in which each element is checked. If there are changes to the array, it runs the effect
     useEffect(() => {
@@ -130,6 +129,24 @@ function Dashboard() {
         req()
     }, [])
 
+    const handleNameChange = (event) => {
+        setFormName(event.target.value)
+    }
+
+    const handleDescChange = (event) => {
+        setFormDesc(event.target.value)
+    }
+
+    const addForm = async () => {
+        // for now default values, but can pass stuff from in
+        let newForm = (await mutations.createForm(formName, formDesc))?.result
+        if (!newForm) {
+            console.log("Something went wrong")
+            return
+        }
+        window.location.assign(window.location.origin + "/editForm/" + newForm._id)
+    }
+
     // main render logic
     const pageRender = () => {
 
@@ -147,14 +164,43 @@ function Dashboard() {
             display: "block",
             margin: "0 4% 0 0"
         }
+        const modalsx = {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: '#FFFFFF',
+            boxShadow: 24,
+            padding: "25px 20px",
+            border: 0,
+            "&:focus" : {
+                outline: "none"
+            }
+        }
 
         const body = (
             <React.Fragment>
                 <CssBaseline />
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="create-a-form"
+                    aria-describedby="modal-for-creating-form"
+                >
+                    <Box sx={modalsx}>
+                        <Typography variant="h6" component="h2">
+                            Create a new form
+                        </Typography>
+                        <TextField onChange={handleNameChange} value={formName} label="Title" variant="standard" fullWidth={false} sx={{ margin: "5px 0 10px 0" }}></TextField>
+                        <TextField onChange={handleDescChange} value={formDesc} label="Short description" variant="standard" fullWidth={true}></TextField>
+                        <Button width={"42px"} variant={"contained"} onClick={addForm} sx={{ margin: "25px 0 0 0"}} >Create Form</Button>
+                    </Box>
+                </Modal>
                 <Signout />
                 <Container maxWidth={false} disableGutters={true} >
                     <div className="dash-positioning">
-                        <div style={boxsx}>
+                        <Box sx={boxsx}>
                             <Typography variant="h6" height={42} sx={fontsx}>
                                 {(() => {return "Evening " + Auth.getProfile()?.name ?? "User"})()}
                                 <br />
@@ -166,7 +212,7 @@ function Dashboard() {
                             <Typography variant="body1" width={216} height={48} sx={fontsx}>
                                 {'Create a new form by clicking the plus on the right side.'}
                             </Typography>
-                        </div>
+                        </Box>
                         <Paper sx={papersx}>
                             <Box p={"128px 0 0 64px"}>
                                 <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)" }}>
@@ -180,7 +226,7 @@ function Dashboard() {
                                         }
                                         return arr
                                     }
-                                    return <AllForms forms={forms} />
+                                    return <AllForms forms={forms} modal={handleOpen} />
                                 })()}
                                 
                             </Box>
