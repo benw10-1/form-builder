@@ -39,6 +39,7 @@ async function getMyForms() {
             description
             endpoint
             published
+            createdAt
         }
     }
     `

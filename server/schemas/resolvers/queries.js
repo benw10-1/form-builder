@@ -4,7 +4,7 @@ const { AuthenticationError } = require('apollo-server-express')
 async function getMe(parent, args, context) {
     // get user and also return full forms object
     if (context.user) {
-        let user = await User.findOne({ _id: context.user._id }).populate("forms")
+        let user = await User.findOne({ _id: context.user._id })
         delete user.password
         return user
     }

@@ -33,6 +33,7 @@ const typeDefs = gql`
     published: Boolean!
     creator: User!
     piece_refs: [ID!]!
+    createdAt: String!
   }
 
   type Response {

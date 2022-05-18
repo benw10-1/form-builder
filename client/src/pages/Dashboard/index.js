@@ -6,26 +6,28 @@ import {
     Paper,
     Typography,
     Box,
-    Card,
-    Avatar
+    Link,
+    Avatar,
+    Skeleton
 } from "@mui/material";
 
 import AddIcon from '@mui/icons-material/Add';
 
 import Signout from "../Signout";
+import * as moment from "moment"
 import "./Dashboard.css"
 
 function AllForms({ forms=[] }) {
     // main render logic
     const render = () => {
         let renderedForms = []
-
+        
         const cardsx = {
             width: "280px",
             height: "136px",
-            "&:hover": { boxShadow: 15, cursor: "pointer" },
+            "&:hover": { boxShadow: 15 },
             position: "relative",
-            marginTop: "26px"
+            margin: "26px 51px 0 0"
         }
         const centered = {
             display: "flex",
@@ -35,17 +37,43 @@ function AllForms({ forms=[] }) {
         const plussx = {
             width: "14px"
         }
+        const hoversx = {
+            "&:hover": { cursor: "pointer" }
+        }
 
         // maybe add form pages if forms exceed certain count
         forms.forEach(x => {
-            const { _id, title } = x
-            const onclick = (event) => {
+            const { _id, title, description, createdAt, published } = x
+            const editclick = (event) => {
                 window.location.assign(window.location.origin + "/editForm/" + _id)
             }
+            const prevclick = (event) => {
+                window.location.assign(window.location.origin + "/preview/" + _id)
+            }
             renderedForms.push((
-                <Paper sx={{ ...cardsx, background: "#FFFFFF" }}>
-                    <Box>
-                    {title}
+                <Paper sx={{ ...cardsx, background: "#FFFFFF", padding: "16px 16px 0 16px" }}>
+                    {published ? (
+                        <Typography sx={{ fontSize: "12px", color: "#4CAF50", position: "absolute", right: "16px", top: "17px" }}>
+                            Published
+                        </Typography>
+                    ) : null}
+                    <Box h={"64px"} w={"248px"} onClick={editclick} sx={{ ...hoversx, overflow: "hidden" }}>
+                        <Typography variant="h4" sx={{ margin: "0 0 4px 0", fontSize: "24px" }}>
+                            {title}
+                        </Typography>
+                        {(() => {
+                            if (description) return (
+                                <Typography variant="body1" sx={{ fontSize: "14px" }}>
+                                    {description}
+                                </Typography>
+                            )
+                        })()}
+                    </Box>
+                    <Box sx={{ width: "248px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "13px" }}>
+                        <Typography variant="body1" sx={{ fontSize: "14px" }} h={"20px"} w={"100%"}>
+                            {"Created " + moment(Number(createdAt)).format("LL")}
+                        </Typography>
+                        <Link onClick={prevclick} sx={hoversx}>Preview</Link>
                     </Box>
                 </Paper>
             ))
@@ -63,7 +91,7 @@ function AllForms({ forms=[] }) {
         
         renderedForms.push((
             <Paper sx={{ ...cardsx, background: "#0000000A", ...centered }} onClick={addForm}>
-                <Avatar variant={"circular"} size={"40px"} sx={{ padding: "13px" }}>
+                <Avatar variant={"circular"} size={"40px"} sx={{ padding: "13px", ...hoversx }}>
                     <AddIcon sx={plussx} fontSize={"medium"} />
                 </Avatar>
             </Paper>
@@ -93,21 +121,24 @@ function Dashboard() {
                 return
             }
             let myForms = (await queries.getMyForms())?.result ?? []
-            setForms(myForms)
-            setLoading(false)
+            // fake loading to see effect
+            setTimeout(() => {
+                setForms(myForms)
+                setLoading(false)
+            }, 250)
         }
         req()
     }, [])
 
     // main render logic
     const pageRender = () => {
-        if (loading) return <div>Loading...</div>
 
         const fontsx = { fontFamily: "Roboto", fontStyle: "normal" }
         const papersx = {
             width: "100%",
             minHeight: "100%",
-            overflow: "auto"
+            overflow: "auto",
+            borderRadius: "0"
         }
         const boxsx = {
             padding: "118px 0 0 4%",
@@ -137,11 +168,21 @@ function Dashboard() {
                             </Typography>
                         </div>
                         <Paper sx={papersx}>
-                            <Box p={"128px 64px 0 64px"}>
-                                <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px" }}>
+                            <Box p={"128px 0 0 64px"}>
+                                <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)" }}>
                                     {(forms && forms.length > 0) ? 'Click on a form to edit or view responses.' : "No forms available, click on the + button below."}
                                 </Typography>
-                                <AllForms forms={forms} />
+                                {(() => {
+                                    if (loading) {
+                                        let arr = []
+                                        for (let i=0; i < 4; i++) {
+                                            arr.push(<Skeleton variant="rectangular" sx={{ borderRadius: "5px", width: "280px", height: "136px", margin: "26px 51px 0 0" }} animation="wave" />)
+                                        }
+                                        return arr
+                                    }
+                                    return <AllForms forms={forms} />
+                                })()}
+                                
                             </Box>
                         </Paper>
                     </div>

@@ -160,7 +160,7 @@ function LoginSignup({ switchState }) {
                                         <Skeleton variant="rectangular" width={_switch ? 172 : 252} height={42} animation="wave" />
                                         <Skeleton variant="rectangular" width={371} height={28} animation="wave" />
                                     </div>
-                                    <Skeleton variant="rectangular" sx={sxcont} animation="wave" />
+                                    <Skeleton variant="rectangular" sx={{ ...sxcontent, borderRadius: "5px" }} animation="wave" />
                                 </React.Fragment>
                             )
                             return (

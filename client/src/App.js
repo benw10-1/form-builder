@@ -20,12 +20,12 @@ function App() {
                 <Route path="/login" element={<LoginSignup switchState={false}/>} />
                 <Route path="/signup" element={<LoginSignup switchState={true}/>} />
                 <Route path="/form/:endpoint" element={<Form/>} />
-                <Route path="/preview/:endpoint" element={<Form/>} />
 
                 {/* routes that require user to be logged in */}
                 <Route path="/dashboard" element={<Dashboard/>} />
                 {/* View responses and edit form in one page */}
-                <Route path="/editform/:id" element={<EditForm />} />    
+                <Route path="/editform/:id" element={<EditForm />} />
+                <Route path="/preview/:id" element={<Form/>} />
 
                 {/* wrong route route */}
                 <Route path="*" element={<FourOFour />}/>

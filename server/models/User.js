@@ -18,13 +18,6 @@ const userSchema = new Schema(
         password: {
             type: String,
             required: true
-        },
-        forms: {
-            type: [{
-                type: Schema.Types.ObjectId,
-                ref: "Form"
-            }],
-            default: []
         }
     }
 )
