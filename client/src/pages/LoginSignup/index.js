@@ -77,7 +77,7 @@ function LoginSignup({ switchState }) {
         // reset password but keep username
         setPassVal("")
         const new_path = _switch ? "login" : "signup"
-        // set url withoput reloading
+        // set url without reloading
         window.history.pushState('data', new_path, "/" + new_path);
         setTimeout(() => {
             setSwitch(!_switch)
@@ -87,7 +87,7 @@ function LoginSignup({ switchState }) {
 
     // same logic as Dashboard.js
     useEffect(() => {
-        async function req() {
+        const req = async () => {
             let loggedIn = Auth.loggedIn()
             if (loggedIn) window.location.replace(window.location.origin + "/dashboard")
             else setLoading(false)

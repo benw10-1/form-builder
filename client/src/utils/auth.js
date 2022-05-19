@@ -2,9 +2,10 @@ import decode from "jwt-decode"
 
 class AuthService {
     getProfile() {
-        let dec = decode(this.getToken())
-        console.log(dec)
-        return dec.data
+        const tok = this.getToken()
+        if (!tok) return null
+
+        return decode(tok).data
     }
 
     loggedIn() {
@@ -36,7 +37,7 @@ class AuthService {
 
     logout() {
         localStorage.removeItem('id_token')
-        window.location.reload()
+        window.location.assign("/")
     }
 }
 

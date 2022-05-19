@@ -17,7 +17,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 
 import Signout from "../Signout";
-import * as moment from "moment"
+import moment from "moment";
 import "./Dashboard.css"
 
 function AllForms({ forms=[], modal }) {
@@ -113,7 +113,7 @@ function Dashboard() {
     // only run once
     // second argument is the array in which each element is checked. If there are changes to the array, it runs the effect
     useEffect(() => {
-        async function req() {
+        const req = async () => {
             let loggedIn = Auth.loggedIn()
             if (!loggedIn) {
                 window.location.replace(window.location.origin + "/login")

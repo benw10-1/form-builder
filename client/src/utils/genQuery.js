@@ -14,9 +14,10 @@ async function genQuery(q, variables) {
         variables
     }
 
-    let token = localStorage.getItem('id_token')
+    let token = Auth.getToken()
+
     if (token && Auth.isTokenExpired(token)) {
-        window.location.reload()
+        Auth.logout()
         return
     }
     
