@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 function Home(){
 
     return(
-        <h1>Welcome</h1>
+        <h1>Welcome to Home</h1>
     );
 }
 

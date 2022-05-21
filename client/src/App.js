@@ -6,7 +6,8 @@ import {
     Home,
     LoginSignup,
     Form,
-    EditForm
+    EditForm,
+    Navbar
 } from "./pages"
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -15,6 +16,7 @@ function App() {
     console.log("APP!!")
     return (
         <BrowserRouter>
+        <Navbar />
             <Routes>
                 {/*routes that do not require user to be logged in (content in Home will be different if logged in)*/}
                 <Route path="/" element={<Home/>} />
