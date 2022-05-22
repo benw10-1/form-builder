@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express')
-const { User, Form, Response } = require("../../models")
+const { User, Form, Response, Piece } = require("../../models")
 const { signToken } = require('../../utils/auth')
 const defaultForm = require("../defaultForm")
 
@@ -36,8 +36,41 @@ async function createForm(parent, { title, description }, context) {
     return newForm
 }
 
-async function updateForm(parent, { id, form }, context) {
-    // not implemented yet
+async function updateFormMeta(parent, { id, title, description }, context) {
+    if (!context.user) throw new AuthenticationError("Not logged in")
+    const form = await Form.findById(id)
+    if (!form) throw new Error("Form not found")
+    if (context.user._id !== form.creator) throw new AuthenticationError("Can't access by ID")
+
+    const updated = await Form.updateOne({ _id: id }, { title, description }).exec()
+
+    return updated
+}
+
+async function updateFormPieces(parent, { id, pieces }, context) {
+    if (!context.user) throw new AuthenticationError("Not logged in")
+    const form = await Form.findById(id)
+    if (!form) throw new Error("Form not found")
+    if (context.user._id !== form.creator) throw new AuthenticationError("Can't access by ID")
+
+    const parsedPieces = []
+    pieces.forEach(async (x) => {
+        if (!x.props) throw new Error("No props passed to: " + x._type ?? "Untyped")
+        // if existing piece
+        if (x._id) {
+            const updated = await Piece.updateOne({ _id: x._id }, { props: x.props }).exec()
+
+            if (updated) return updated._id
+        }
+        // if cant find piece or no id passed create a new piece
+        const newPiece = await Piece.create({ form_ref: id, props: x.props })
+
+        return newPiece._id
+    })
+
+    const updated = await Form.updateOne({ _id: id }, { piece_refs: parsedPieces }).exec()
+
+    return updated
 }
 
 async function respond(parent, { id, responses }, context) {
@@ -54,5 +87,7 @@ module.exports = {
     signup,
     login,
     createForm,
-    respond
+    respond,
+    updateFormMeta,
+    updateFormPieces
 }

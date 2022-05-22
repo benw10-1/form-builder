@@ -108,4 +108,48 @@ async function respond(id, responses) {
   })
 }
 
-export default { login, signup, createForm, respond }
+async function updateFormMeta(title, description) {
+  const variables = { title, description }
+  const query = `
+    mutation UpdateFormMeta($id: ID!, $title: String!, $description: String)) {
+      updateFormMeta(id: $id, title: $title, description: $description) {
+        _id
+        title
+        description
+        piece_refs
+      }
+    }      
+    `
+
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.updateFormMeta
+    }
+  })
+}
+
+async function updateFormPieces(title, description) {
+  const variables = { title, description }
+  const query = `
+    mutation UpdateFormPieces($id: ID!, pieces: [Piece!]!) {
+      updateFormPieces(id: $id, pieces: $pieces) {
+        _id
+        title
+        description
+        piece_refs
+      }
+    }      
+    `
+
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.updateFormPieces
+    }
+  })
+}
+
+export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces }
