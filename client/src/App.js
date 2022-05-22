@@ -12,7 +12,6 @@ import {
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
-    console.log("APP!!")
     return (
         <BrowserRouter>
             <Routes>
