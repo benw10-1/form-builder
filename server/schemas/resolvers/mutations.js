@@ -40,7 +40,7 @@ async function updateFormMeta(parent, { id, title, description }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
-    if (context.user._id !== form.creator) throw new AuthenticationError("Can't access by ID")
+    if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
 
     const updated = await Form.updateOne({ _id: id }, { title, description }).exec()
 
@@ -51,7 +51,7 @@ async function updateFormPieces(parent, { id, pieces }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
-    if (context.user._id !== form.creator) throw new AuthenticationError("Can't access by ID")
+    if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
 
     const parsedPieces = []
     pieces.forEach(async (x) => {

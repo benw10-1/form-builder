@@ -133,7 +133,7 @@ async function updateFormMeta(title, description) {
 async function updateFormPieces(title, description) {
   const variables = { title, description }
   const query = `
-    mutation UpdateFormPieces($id: ID!, pieces: [Piece!]!) {
+    mutation UpdateFormPieces($id: ID!, pieces: [PieceInp!]!) {
       updateFormPieces(id: $id, pieces: $pieces) {
         _id
         title

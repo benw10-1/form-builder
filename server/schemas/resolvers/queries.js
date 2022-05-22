@@ -26,7 +26,8 @@ async function getPiecesByID(parent, { id }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
     const form = await Form.findById(id).populate("piece_refs")
     if (!form) throw new Error("Form not found")
-    if (context.user._id !== form.creator) throw new AuthenticationError("Can't access by ID")
+
+    if (context.user._id !== String(form.creator)) throw new AuthenticationError("Can't access by ID")
     
     return form.piece_refs
 }
@@ -46,7 +47,7 @@ async function getResponsesByForm(parent, { id }, context) {
 
     const form = await Form.findOne({ _id: id })
     if (!form) throw new AuthenticationError("Form not found")
-    if (form.creator !== user._id) throw new AuthenticationError("Not creator")
+    if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
 
     const responses = await Response.find({ form_ref: id })
 

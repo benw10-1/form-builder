@@ -18,10 +18,22 @@ const typeDefs = gql`
   }
 
   type Piece {
-    _id: ID
+    _id: ID!
     _type: String!
     form_ref: ID!
     props: [Prop!]!
+  }
+
+  input PropInp {
+    key: String
+    value: String
+  }
+
+  input PieceInp {
+    _id: ID
+    _type: String!
+    form_ref: ID!
+    props: [PropInp!]!
   }
 
   type Form {
@@ -52,10 +64,10 @@ const typeDefs = gql`
   type Mutation {
     createForm(title: String!, description: String): Form!
     updateFormMeta(id: ID!, title: String!, description: String): Form
-    updateFormPieces(id: ID!, pieces: [Piece!]!): Form
+    updateFormPieces(id: ID!, pieces: [PieceInp!]!): Form
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
-    respond(id: ID!, responses: [Prop!]!): Response!
+    respond(id: ID!, responses: [PropInp!]!): Response!
   }
 `;
 

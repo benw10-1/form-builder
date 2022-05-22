@@ -127,6 +127,4 @@ async function getResponsesByForm(id) {
     })
 }
 
-const exp = { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint }
-
-export default exp
+export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint }
