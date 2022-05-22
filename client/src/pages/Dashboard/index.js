@@ -106,6 +106,12 @@ function Dashboard() {
 
     const [formName, setFormName] = useState("")
     const [formDesc, setFormDesc] = useState("")
+    const [reload, setReload] = useState(false)
+
+    const reloadPage = () => {
+        setLoading(true)
+        setReload(!reload)
+    }
 
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
@@ -127,7 +133,7 @@ function Dashboard() {
             }, 250)
         }
         req()
-    }, [])
+    }, [reload])
 
     const handleNameChange = (event) => {
         setFormName(event.target.value)
@@ -144,6 +150,8 @@ function Dashboard() {
             console.log("Something went wrong")
             return
         }
+        handleClose()
+        reloadPage()
         window.location.assign(window.location.origin + "/editForm/" + newForm._id)
     }
 
