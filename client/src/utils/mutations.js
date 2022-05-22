@@ -1,6 +1,6 @@
 import genQuery from "./genQuery"
 import Auth from "./auth"
-import parseProps from "./parseProps"
+import { parseProps, unparseProps } from "./parseProps"
 
 async function login(login, password) {
   const variables = { login, password }
@@ -108,8 +108,8 @@ async function respond(id, responses) {
   })
 }
 
-async function updateFormMeta(title, description) {
-  const variables = { title, description }
+async function updateFormMeta(id, title, description) {
+  const variables = { id, title, description }
   const query = `
     mutation UpdateFormMeta($id: ID!, $title: String!, $description: String)) {
       updateFormMeta(id: $id, title: $title, description: $description) {
@@ -130,8 +130,7 @@ async function updateFormMeta(title, description) {
   })
 }
 
-async function updateFormPieces(title, description) {
-  const variables = { title, description }
+async function updateFormPieces(id, pieces) {
   const query = `
     mutation UpdateFormPieces($id: ID!, pieces: [PieceInp!]!) {
       updateFormPieces(id: $id, pieces: $pieces) {
@@ -142,6 +141,9 @@ async function updateFormPieces(title, description) {
       }
     }      
     `
+  
+  pieces = unparseProps(pieces)
+  const variables = { id, pieces }
 
   return genQuery(query, variables).then(data => {
     if (data.__status__ === "error") return data
