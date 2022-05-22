@@ -38,13 +38,14 @@ const typeDefs = gql`
   type Response {
     _id: ID!
     form_ref: ID!
-    answers: [Prop!]!
+    responses: [Prop!]!
   }
 
   type Query {
     getMe: User
     getMyForms: [Form!]!
-    getPiecesForRender(id: ID!): [Piece!]!
+    getPiecesByID(id: ID!): [Piece!]!
+    getPiecesByEndpoint(ep: String!): [Piece!]!
     getResponsesByForm(id: ID!): [Response!]!
   }
 
@@ -52,6 +53,7 @@ const typeDefs = gql`
     createForm(title: String!, description: String): Form!
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
+    respond(id: ID!, responses: [Prop!]!): Response!
   }
 `;
 

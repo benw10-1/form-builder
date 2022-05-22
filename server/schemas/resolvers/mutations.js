@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express')
-const { User, Form } = require("../../models")
+const { User, Form, Response } = require("../../models")
 const { signToken } = require('../../utils/auth')
 const defaultForm = require("../defaultForm")
 
@@ -40,12 +40,19 @@ async function updateForm(parent, { id, form }, context) {
     // not implemented yet
 }
 
-async function respond(parent, { id, ...args }, context) {
-    // not implemented yet
+async function respond(parent, { id, responses }, context) {
+    const form = await Form.findById(id)
+    if (!form) throw new Error("Form not found")
+    if (!form.published) throw new Error("Form not published")
+
+    const newResponse = await Response.create({ form_ref: id, responses })
+
+    return newResponse
 }
 
 module.exports = {
     signup,
     login,
     createForm,
+    respond
 }

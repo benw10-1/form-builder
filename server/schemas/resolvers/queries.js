@@ -22,8 +22,21 @@ async function getMyForms(parent, args, context) {
     return forms
 }
 
-async function getPiecesForRender(parent, { id }, context) {
-    return (await Form.findById(id).populate("piece_refs")).piece_refs
+async function getPiecesByID(parent, { id }, context) {
+    if (!context.user) throw new AuthenticationError("Not logged in")
+    const form = await Form.findById(id).populate("piece_refs")
+    if (!form) throw new Error("Form not found")
+    if (context.user._id !== form.creator) throw new AuthenticationError("Can't access by ID")
+    
+    return form.piece_refs
+}
+
+async function getPiecesByEndpoint(parent, { endpoint }, context) {
+    const form = await Form.findOne({ "endpoint": endpoint }).populate("piece_refs")
+    if (!form) throw new Error("Form not found")
+    if (!form.published) throw new Error("Form not published")
+
+    return form.piece_refs
 }
 
 async function getResponsesByForm(parent, { id }, context) {
@@ -36,10 +49,9 @@ async function getResponsesByForm(parent, { id }, context) {
     if (form.creator !== user._id) throw new AuthenticationError("Not creator")
 
     const responses = await Response.find({ form_ref: id })
-    console.log(responses)
 
     return responses
 }
 
 
-module.exports = { getMe, getMyForms, getResponsesByForm, getPiecesForRender }
+module.exports = { getMe, getMyForms, getResponsesByForm, getPiecesByID, getPiecesByEndpoint }

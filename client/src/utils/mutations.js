@@ -1,5 +1,6 @@
 import genQuery from "./genQuery"
 import Auth from "./auth"
+import parseProps from "./parseProps"
 
 async function login(login, password) {
   const variables = { login, password }
@@ -71,7 +72,40 @@ async function createForm(title, description) {
     }
   })
 }
+/**
+ * 
+ * @param {*} id Form id to respond to
+ * @param {*} responses Can be array or object, will parse array
+ * @returns Response object created
+ */
+async function respond(id, responses) {
+  if (responses.length) responses = parseProps(responses)
 
-const exp = { login, signup, createForm }
+  responses = Object.keys(responses).map(key => {
+    return { "key": key, "value": responses[key] }
+  })
 
-export default exp
+  const variables = { id, responses }
+  const query = `
+    mutation Respond($id: ID!, $responses: [Prop!]!) {
+      respond(id: $id, responses: $responses) {
+        _id
+        form_ref
+        responses {
+          key
+          value
+        }
+      }
+    }      
+    `
+
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.respond
+    }
+  })
+}
+
+export default { login, signup, createForm, respond }

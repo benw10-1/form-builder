@@ -53,10 +53,10 @@ async function getMyForms() {
     })
 }
 
-async function getPiecesForRender(id) {
+async function getPiecesByID(id) {
     const query = `
     query Query($id: ID!) {
-        getPiecesForRender(id: $id) {
+        getPiecesByID(id: $id) {
             _id
             _type
             props {
@@ -73,7 +73,32 @@ async function getPiecesForRender(id) {
         if (data.__status__ === "error") return null
         return {
             __status__: data.__status__,
-            result: data.getPiecesForRender
+            result: data.getPiecesByID
+        }
+    })
+}
+
+async function getPiecesByEndpoint(endpoint) {
+    const query = `
+    query Query($ep: String!) {
+        getPiecesByEndpoint(ep: $ep) {
+            _id
+            _type
+            props {
+                key
+                value
+            }
+        }
+    }
+    `
+
+    const variables = { "ep": endpoint }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getPiecesByEndpoint
         }
     })
 }
@@ -83,7 +108,7 @@ async function getResponsesByForm(id) {
     query Query($id: ID!) {
         getResponsesByForm(id: $id) {
             _id
-            answers {
+            responses {
                 key
                 value
             }
@@ -102,6 +127,6 @@ async function getResponsesByForm(id) {
     })
 }
 
-const exp = { getMe, getMyForms, getPiecesForRender, getResponsesByForm }
+const exp = { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint }
 
 export default exp

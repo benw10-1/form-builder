@@ -55,7 +55,7 @@ function Form() {
                 window.location.replace(window.location.origin + "/login")
                 return
             }
-            let reqPieces = (await queries.getPiecesForRender(id)).result ?? []
+            let reqPieces = (await queries.getPiecesByID(id)).result ?? []
             if (!reqPieces) {
                 window.location.replace(window.location.origin + "/dashboard")
             }

@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
 const bcrypt = require("bcrypt")
+const Form = require("./Form")
 
 const userSchema = new Schema(
     {
@@ -29,6 +30,11 @@ userSchema.pre('save', async function (next) {
     }
 
     next()
+})
+
+userSchema.post('remove', function(doc) {
+    // doc is the document being removed, and we are removing all pieces with a form with same ID
+    Form.remove({ creator: doc._id }).exec()
 })
 
 // compares password to hashed password

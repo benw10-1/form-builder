@@ -6,7 +6,7 @@ const responseSchema = new Schema(
             type: Schema.Types.ObjectId,
             required: true,
         },
-        answers: [{
+        responses: [{
             type: Object,
             required: true
         }]

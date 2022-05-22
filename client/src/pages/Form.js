@@ -48,24 +48,24 @@ function Form() {
     let [pieces, setPieces] = useState([])
 
     // same logic as Dashboard.js
-    useEffect(() => {
-        async function req() {
-            let loggedIn = Auth.loggedIn()
-            if (!loggedIn) {
-                window.location.replace(window.location.origin + "/login")
-                return
-            }
-            let reqPieces = (await queries.getPiecesForRender(id)).result ?? []
-            if (!reqPieces) {
-                window.location.replace(window.location.origin + "/dashboard")
-            }
-            else {
-                setPieces(reqPieces)
-                setLoading(false)
-            }
-        }
-        req()
-    }, [])
+    // useEffect(() => {
+    //     async function req() {
+    //         let loggedIn = Auth.loggedIn()
+    //         if (!loggedIn) {
+    //             window.location.replace(window.location.origin + "/login")
+    //             return
+    //         }
+    //         let reqPieces = (await queries.getPiecesForRender(id)).result ?? []
+    //         if (!reqPieces) {
+    //             window.location.replace(window.location.origin + "/dashboard")
+    //         }
+    //         else {
+    //             setPieces(reqPieces)
+    //             setLoading(false)
+    //         }
+    //     }
+    //     req()
+    // }, [])
 
     // main render logic
     const pageRender = () => {
