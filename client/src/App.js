@@ -14,7 +14,6 @@ import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { Auth } from "./utils"
 
 function App() {
-    console.log("APP!!")
     return (
         <BrowserRouter>
             <Routes>
