@@ -41,7 +41,7 @@ function InputEl({ id, props }) {
     }
 }
 
-function Form() {
+function EditForm() {
     let { id } = useParams()
 
     let [loading, setLoading] = useState(true)
@@ -103,4 +103,4 @@ function Form() {
     );
 }
 
-export default Form;
+export default EditForm;
