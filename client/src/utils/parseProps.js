@@ -13,4 +13,19 @@ function parseProps(props) {
     return parsed
 }
 
+function unparseProps(props) {
+    const parsed = []
+    props.forEach(x => {
+        if (x.length !== 2) return new Error("Invalid prop!")
+        let [key, value] = x
+
+        if (value.length) value.forEach(y => {parsed.push([key, y])})
+        else parsed.push(x)
+    })
+    
+    return parsed
+}
+
+export { parseProps, unparseProps }
+
 export default parseProps
