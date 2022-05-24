@@ -16,26 +16,135 @@ import {
     Modal,
     TextField,
     Button,
-    Divider
+    Divider,
+    Card
     
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 
-const cardsx = {
-    width: "280px",
-    height: "136px",
-    "&:hover": { boxShadow: 15 },
-    position: "relative",
-    margin: "26px 51px 0 0"
+
+import AddIcon from '@mui/icons-material/Add';
+import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
+import EditIcon from '@mui/icons-material/Edit';
+import TitleRounded from '@mui/icons-material/TitleRounded';
+
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+
+const gray = {
+    color: "rgba(0,0,0,0.5)"
 }
+
+const editiconsx = {
+
+    opacity:".9",
+    position: "absolute",
+    top: "0px",
+    right: "0px",
+    fontSize:"30px",
+    opacity: ".25",
+    "&:hover": { opacity: ".85" }
+} 
+
+const iconboxsx = {
+    position: "absolute",
+    top: "0px",
+    left: "0px",
+    width: "100%",
+    height: "100%",
+    opacity: ".0",
+    "&:hover": { opacity: "1.0" }    
+}
+
+const boxsx = {
+    
+    position:"relative", 
+    width:"100%",
+}
+
+const formsx = {
+    /* Auto layout */
+    
+    padding: "63px 61px 63px 61px",
+    overflow: "auto",
+
+    position: "absolute",
+    width: "800px",
+    height: "1040px",
+    left: "382px",
+    top: "83px",
+
+    /* Light/Background/Paper */
+    background: "#FFFFFF",
+
+    /* Elevation/1 */
+    boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
+    borderRadius: "4px"
+}
+
+const toolssx = {
+
+    width: "673px",
+    height: "40px",
+    display: "flex",
+    margin: "auto",
+    display:"flex",
+    alignItems: "center"
+}
+
+const toolboxsx = {
+    display:"flex",
+    marginRight: "25px"
+}
+
+const fontsx = {
+    fontFamily: 'Roboto',
+    fontStyle: "normal",
+    fontWeight: "400",
+    //display: flex;
+    //align-items: center;
+}
+
+const titlesx = {
+    fontSize: "34px",
+    lineHeight: "123.5%",
+    letterSpacing: "0.25px"
+
+}
+
+const headsx = {
+    fontSize: "24px",
+    lineHeight: "123.5%",
+    letterSpacing: "0.25px"
+
+}
+
+const normsx = {
+    fontSize: "16px",
+    lineHeight: "150%",
+    letterSpacing: "0.15px"
+
+}
+
+const subsx = {
+    fontSize: "12px",
+    lineHeight: "166%",
+    letterSpacing: "0.4px"
+
+}
+
 const centered = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
 }
 const plussx = {
-    width: "14px"
+    width: "20px"
 }
 const hoversx = {
     "&:hover": { cursor: "pointer" }
@@ -58,8 +167,8 @@ const NormalRender = ( {piece} ) => {
     if(piece.type == "header"){
         return (
             <>
-                <Typography variant="h4" component="h3">{parsed.htext}</Typography>
-                {parsed.hsubtext && <Typography variant="h5" component="h5">{parsed.hsubtext}</Typography>}
+                <Typography sx={{...fontsx,...headsx}}>{parsed.htext}</Typography>
+                {parsed.hsubtext && <Typography sx={{...fontsx,...normsx}}>{parsed.hsubtext}</Typography>}
                
             </>
         )
@@ -68,20 +177,19 @@ const NormalRender = ( {piece} ) => {
             <>
                 <br/>
                 <Divider variant="middle" />
-                <br/>
+                
             </>    
         )
     }else if (piece.type == "question"){
 
         if(parsed.qtype == "text"){
-            //if text box height is given, set it, else 1 line
-            let r = 1;
+            //if text box height is given use box, else line
             if(parsed.inSize && parsed.inSize!=1){
-                r = parsed.inSize;
+                let r = parsed.inSize;
                 return (
                     <>
-                    <Typography variant="body1" component="x">{parsed.qtext}</Typography><br/>
-                    {parsed.qsubtext  && <Typography variant="body2" component="x">{parsed.qsubtext}</Typography>}<br/>
+                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                    {parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}<br/>
                     <TextField
                         id="outlined-multiline-static"
                         //label="Multiline" 
@@ -96,8 +204,8 @@ const NormalRender = ( {piece} ) => {
             } else{
                 return (
                     <>
-                    <Typography variant="body1" component="x">{parsed.qtext}</Typography><br/>
-                    {parsed.qsubtext  && <Typography variant="body2" component="x">{parsed.qsubtext}</Typography>}<br/>
+                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                    {parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}
                     <TextField id="standard-basic" label="This should be a prop" variant="standard" />
 
                     </>
@@ -105,21 +213,45 @@ const NormalRender = ( {piece} ) => {
 
             }
             
-        }else if (parsed.qtype == "multiple"){
-            //if text box height is given, set it, else 1 line
-            var reno = [];
-            for (var i = 0; i < parsed.qoptions.length; i++) {reno.push(<button type="button" >{parsed.qoptions[i]}</button>)}
-                ////okok the component below has to be a unique identifier, right?
+        }else if (parsed.qtype == "check"){
+            var renoc = [];
+            for (var i = 0; i < parsed.qoptions.length; i++) {renoc.push(<FormControlLabel control={<Checkbox />} label={parsed.qoptions[i]} />)}
             return (
                 <>
-                    <Typography variant="body1" component="x">{parsed.qtext}</Typography>
-                    {parsed.qsubtext  && <Typography variant="body2" component="x">{parsed.qsubtext}</Typography>}
-                    <div>{reno}</div>
+                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                    <FormLabel >{parsed.qsubtext}</FormLabel>
+                    <FormGroup>
+                        {renoc}
+                    </FormGroup>
 
                     
     
 
                     
+                </>
+            )
+        }else if (parsed.qtype == "radio"){
+            //if text box height is given, set it, else 1 line
+            var renor = [];
+            for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
+                ////okok the component below has to be a unique identifier, right?
+            return (
+                <>
+                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                    <FormControl>
+                        <FormLabel >{parsed.qsubtext}</FormLabel>
+                        <RadioGroup aria-labelledby="demo-radio-buttons-group-label"  name="radio-buttons-group">
+                            {renor}
+                        </RadioGroup>
+                    </FormControl>
+
+                    
+
+                   
+
+
+              
+  
                 </>
             )
         }else {
@@ -147,8 +279,8 @@ const Titler = ({form}) => {
 
     return (
         <>
-            <Typography variant="h3" component="h3">{form.title}</Typography>
-            {form.description && <Typography variant="subtitle1" component="h5">{form.description}</Typography>}
+            <Typography sx={{...fontsx,...titlesx}}>{form.title}</Typography>
+            {form.description && <Typography sx={{...fontsx,...normsx}}>{form.description}</Typography>}
             <br/>
             <Divider variant="middle" />
             <br/>
@@ -165,23 +297,21 @@ function Editor ({pieces}) {
     for (var i = 0; i < pieces.length; i++) {
         //if not currently being edited then normal render
         renP.push( 
-            
-            <Box > 
-                <NormalRender  piece={pieces[i]} Key={i} /> 
-                
-                
-                <br/>
-                <EditIcon sx={{opacity:"0.5"}}/>
-                <br/><br/>
+            <>
+            <Box sx={boxsx}  > 
+                <Box sx={iconboxsx}>
+                    <EditIcon sx={editiconsx}/>
+                </Box>
+                <NormalRender sx={{backgroundColor:"blue"}} piece={pieces[i]} Key={i} />
+                <br/><br/> 
             </Box>
-
+            </>
         );
     }
     return (
-        <div>{renP}</div>
+        <>{renP}</>
     )
 
-   
 }
 
 
@@ -195,12 +325,12 @@ function ALTEditForm() {
         piecerefs:[ 
             {type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"},{key:"inSize", value:"5" }]},
             {type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"}]},
-            {type:"question", props:[{key:"qtype", value:"multiple"},{ key:"qtext", value:"Choose wisely?"},{key: "qoptions", value:["6", "a goat","a cow"]}]},
+            {type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose wisely?"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
             {type:"break", props:[]},
             {type:"header", props:[{key:"htext", value:"Now listen"},{ key:"hsubtext", value: "very carefully"}]},
             {type:"header", props:[{key:"htext", value:"Keep listening"}]},
-            {type:"question", props:[{key:"qtype", value:"multiple"},{ key:"qtext", value:"Choose recklessly?"},{ key:"qoptions", value:["7", "a goat","a chicken"]}]},
-            {type:"question", props:[{key:"qtype", value:"multiple"},{ key:"qtext", value:"Choose recklessly?"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]}
+            {type:"question", props:[{key:"qtype", value:"check"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
+            {type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]}
         ]
     
     }
@@ -208,15 +338,26 @@ function ALTEditForm() {
 
 
     return(
-        <Container sx={{overflow:"auto"}}>
+        <Card sx={formsx}>
             <Titler form={form1}/>
             <Editor pieces={form1.piecerefs}/>
-            <AddIcon sx={plussx} fontSize={"medium"} />
-            
-            <Avatar variant={"circular"} size={"40px"} sx={{ padding: "13px", ...hoversx }} onClick={()=>{console.log("yoo")}}>
-                    <AddIcon sx={plussx} fontSize={"medium"} />
-            </Avatar>
-        </Container>
+            <Card sx={toolssx}>
+                <Box sx={toolboxsx}>
+                    <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
+                    <Typography sx={{...fontsx,...normsx,...gray}}>Add Question</Typography>
+                </Box>
+                <Box sx={toolboxsx}>
+                    <TitleRounded sx={{...plussx,...gray}} fontSize={"medium"} />
+                    <Typography sx={{...fontsx,...normsx,...gray}}>Add Header</Typography>  
+                </Box>
+                <Box sx={toolboxsx}>
+                    <MoreHorizFilled sx={{...plussx,...gray}} fontSize={"medium"} />
+                    <Typography sx={{...fontsx,...normsx,...gray}}>Add Divider</Typography>  
+                </Box>
+                
+
+            </Card>
+        </Card>
         
     )
 
