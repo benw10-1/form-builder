@@ -3,6 +3,10 @@ import React, { useState, useEffect } from "react";
 import { queries, mutations, Auth, parseProps } from "../utils"
 import { useParams } from "react-router-dom"
 
+import * as uuid from "uuid";
+
+
+
 import {
     Fab,
     Container,
@@ -58,7 +62,9 @@ const iconboxsx = {
     width: "100%",
     height: "100%",
     opacity: ".0",
-    "&:hover": { opacity: "1.0" }    
+    "&:hover": { 
+        opacity: "1.0",
+        cursor: "pointer" }    
 }
 
 const boxsx = {
@@ -99,7 +105,10 @@ const toolssx = {
 
 const toolboxsx = {
     display:"flex",
-    marginRight: "25px"
+    marginRight: "25px",
+    "&:hover": { 
+        boxShadow: 15,
+        cursor: "pointer" },
 }
 
 const fontsx = {
@@ -153,7 +162,7 @@ const hoversx = {
 
 const editingRender = ( piece ) => {
 
-    if(piece.type == "header")
+    if(piece._type == "header")
 
   return (
     <div >
@@ -164,7 +173,7 @@ const editingRender = ( piece ) => {
 
 const NormalRender = ( {piece} ) => {
     let parsed= parseProps(piece.props);
-    if(piece.type == "header"){
+    if(piece._type == "header"){
         return (
             <>
                 <Typography sx={{...fontsx,...headsx}}>{parsed.htext}</Typography>
@@ -172,7 +181,7 @@ const NormalRender = ( {piece} ) => {
                
             </>
         )
-    }else if (piece.type == "break"){
+    }else if (piece._type == "break"){
         return (
             <>
                 <br/>
@@ -180,7 +189,7 @@ const NormalRender = ( {piece} ) => {
                 
             </>    
         )
-    }else if (piece.type == "question"){
+    }else if (piece._type == "question"){
 
         if(parsed.qtype == "text"){
             //if text box height is given use box, else line
@@ -224,10 +233,6 @@ const NormalRender = ( {piece} ) => {
                         {renoc}
                     </FormGroup>
 
-                    
-    
-
-                    
                 </>
             )
         }else if (parsed.qtype == "radio"){
@@ -318,31 +323,113 @@ function Editor ({pieces}) {
 
 function ALTEditForm() {
 
-    let form1 = {
-        _id : 1999,
-        title : "Ye Examplar",
-        description : "'tis to prove the encoded instructions",
-        piecerefs:[ 
-            {type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"},{key:"inSize", value:"5" }]},
-            {type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"}]},
-            {type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose wisely?"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
-            {type:"break", props:[]},
-            {type:"header", props:[{key:"htext", value:"Now listen"},{ key:"hsubtext", value: "very carefully"}]},
-            {type:"header", props:[{key:"htext", value:"Keep listening"}]},
-            {type:"question", props:[{key:"qtype", value:"check"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
-            {type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]}
-        ]
+
     
+
+    ////////////////////////scratch/function area/////////////////////////////////////////////////////////////////////
+
+    const [pieces, setPieces] = useState([]);
+    const [aPiece, setAPiece] = useState({});
+    const [titledesc, setTitleDesc] = useState({});
+
+    useEffect(() => {
+
+        ///dummy data///////////////////////////////////////////////////////////////
+
+        let form1 = {
+            _id : 1999,
+            title : "Ye Examplar",
+            published: true,
+            description : "'tis to prove the encoded instructions",
+            pieces:[ 
+            {_id: "89", _type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"},{key:"inSize", value:"5" }]},
+            {_id: "89", _type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"}]},
+            {_id: "89", _type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose wisely?"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
+            {_id: "89", _type:"break", props:[]},
+            {_id: "89", _type:"header", props:[{key:"htext", value:"Now listen"},{ key:"hsubtext", value: "very carefully"}]},
+            {_id: "89", _type:"header", props:[{key:"htext", value:"Keep listening"}]},
+            {_id: "89", _type:"question", props:[{key:"qtype", value:"check"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
+            {_id: "89", _type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]}
+            ]
+    
+        }
+
+        let piece1 = { _type:"question", props:[{key:"qtype", value:"check"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]}
+
+
+        ///end dummy data////////////////////////////////////////////////////////////////////
+
+
+
+
+        setTitleDesc({title: form1.title, description: form1.description})
+
+        //setPieces(form1.pieces);//replace this line with setPieces(<get pieces of this form>)/SEE AT BOTTOM /////////////////////////******************
+        //console.log(pieces);
+        setPieces(form1.pieces.map((piece)=>{
+                let z = {
+                    _id: piece._id,
+                    piid: uuid.v4(), 
+                    _type: piece._type, 
+                    props: piece.props
+                }
+                return z;   
+            }));
+        
+        
+    }, [])
+
+    function removeIds(){
+        setPieces(pieces.map(  (piece)=>{
+            if(piece._id){
+                let z = {
+                    _id: piece._id,
+                    _type: piece._type, 
+                    props: piece.props
+                };
+                return z;
+            }else{
+                let z = { 
+                    type: piece.type, 
+                    props: piece.props
+                };
+                return z;
+            }   
+        }));
     }
+
+
+
+    function saveToDb(){
+        removeIds();
+        console.log(pieces);//replace this line with a mutation to save pieces to form!!!!!!!!!!********************************************
+    }
+
+
     
+    
+    function logPieces(){
+        console.log(pieces);
+    }
+
+    function addAPiece(){
+        
+        console.log(pieces);
+    }
+
+    
+
+
+    
+    ////////////////////////end scratch/function area/////////////////////////////////////////////////////////////////////
 
 
     return(
         <Card sx={formsx}>
-            <Titler form={form1}/>
-            <Editor pieces={form1.piecerefs}/>
+            <Titler form={titledesc}/>
+            <Editor pieces={pieces}/>
             <Card sx={toolssx}>
-                <Box sx={toolboxsx}>
+                <Box sx={toolboxsx} >
                     <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
                     <Typography sx={{...fontsx,...normsx,...gray}}>Add Question</Typography>
                 </Box>
@@ -354,7 +441,18 @@ function ALTEditForm() {
                     <MoreHorizFilled sx={{...plussx,...gray}} fontSize={"medium"} />
                     <Typography sx={{...fontsx,...normsx,...gray}}>Add Divider</Typography>  
                 </Box>
-                
+                <Box sx={toolboxsx} onClick={()=>{logPieces()}}>
+                    <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
+                    <Typography sx={{...fontsx,...normsx,...gray}}>log pieces</Typography>
+                </Box>
+                <Box sx={toolboxsx} onClick={()=>{addAPiece()}}>
+                    <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
+                    <Typography sx={{...fontsx,...normsx,...gray}}>add piece </Typography>
+                </Box>
+                <Box sx={toolboxsx} onClick={()=>{removeIds()}}>
+                    <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
+                    <Typography sx={{...fontsx,...normsx,...gray}}>remove ids </Typography>
+                </Box>
 
             </Card>
         </Card>
@@ -369,3 +467,31 @@ function ALTEditForm() {
 
 export default ALTEditForm;
 
+
+
+/*
+let { id } = useParams()
+
+    let [loading, setLoading] = useState(true)
+    let [pieces, setPieces] = useState([])
+
+    // same logic as Dashboard.js
+    useEffect(() => {
+        async function req() {
+            let loggedIn = Auth.loggedIn()
+            if (!loggedIn) {
+                window.location.replace(window.location.origin + "/login")
+                return
+            }
+            let reqPieces = (await queries.getPiecesByID(id)).result ?? []
+            if (!reqPieces) {
+                window.location.replace(window.location.origin + "/dashboard")
+            }
+            else {
+                setPieces(reqPieces)
+                setLoading(false)
+            }
+        }
+        req()
+    }, [])
+*/

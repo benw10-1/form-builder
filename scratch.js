@@ -1,18 +1,4 @@
-let form1 = {
-    _id : 1999,
-    title : "Ye Examplar",
-    description : "'tis to prove the encoded instructions",
-    piecerefs:[ 
-        {type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"},{key:"inSize", value:"5" }]},
-        {type:"question", props:[{key:"qtype", value:"multiple"},{ key:"qtext", value:"Choose wisely?"},{key: "qoptions", value:["6", "a goat","a cow"]}]},
-        {type:"break", props:[]},
-        {type:"header", props:[{key:"htext", value:"Now listen"},{ key:"hsubtext", value: "very carefully"}]},
-        {type:"header", props:[{key:"htext", value:"Keep listening"}]},
-        {type:"question", props:[{key:"qtype", value:"multiple"},{ key:"qtext", value:"Choose recklessly?"},{ key:"qoptions", value:["7", "a goat","a chicken"]}]},
-        {type:"question", props:[{key:"qtype", value:"multiple"},{ key:"qtext", value:"Choose recklessly?"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]}
-    ]
 
-}
 function parseProps(props) {
     const parsed = {}
     props.forEach(x => {
@@ -27,12 +13,42 @@ function parseProps(props) {
     
     return parsed
 }
+function unparseProps(props) {
+    const parsed = []
+    props.forEach(x => {
+        if (x.length !== 2) return new Error("Invalid prop!")
+        let [key, value] = x
 
-for (let i = 0; i<7; i++){
-    console.log(`form1.piecerefs[${i}].props`);
-    console.log(form1.piecerefs[i].props);
-    console.log(`parseProps(form1.piecerefs[${i}].props)`);
-    console.log(parseProps(form1.piecerefs[i].props));
+        if (value.length) value.forEach(y => {parsed.push([key, y])})
+        else parsed.push(x)
+    })
+    
+    return parsed
+}
+
+let form1 = {
+    _id : 1999,
+    title : "Ye Examplar",
+    published: true,
+    description : "'tis to prove the encoded instructions",
+    pieces:[ 
+        {type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"},{key:"inSize", value:"5" }]},
+        {type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"}]},
+        {type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose wisely?"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
+        {type:"break", props:[]},
+        {type:"header", props:[{key:"htext", value:"Now listen"},{ key:"hsubtext", value: "very carefully"}]},
+        {type:"header", props:[{key:"htext", value:"Keep listening"}]},
+        {type:"question", props:[{key:"qtype", value:"check"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
+        {type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose recklessly"}, {key:"qsubtext", value:"dooo it, doo it"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]}
+    ]
 
 }
+
+
+
+
+console.log(form1.pieces[2].props);
+console.log(parseProps(form1.pieces[2].props));
+
+
 
