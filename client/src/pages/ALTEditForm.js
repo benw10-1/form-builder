@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { queries, mutations, Auth, parseProps } from "../utils"
 import { useParams } from "react-router-dom"
 
@@ -11,7 +11,6 @@ import {
     Fab,
     Container,
     CssBaseline,
-    Paper,
     Typography,
     Box,
     Link,
@@ -19,17 +18,23 @@ import {
     Skeleton,
     Modal,
     TextField,
-    Button,
     Divider,
-    Card
+    Card,
+    
     
 } from "@mui/material";
+
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 import AddIcon from '@mui/icons-material/Add';
 import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
 import EditIcon from '@mui/icons-material/Edit';
 import TitleRounded from '@mui/icons-material/TitleRounded';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
@@ -52,7 +57,9 @@ const editiconsx = {
     right: "0px",
     fontSize:"30px",
     opacity: ".25",
-    "&:hover": { opacity: ".85" }
+    "&:hover": {
+        opacity: ".85",
+        cursor: "pointer"  }
 } 
 
 const iconboxsx = {
@@ -64,13 +71,57 @@ const iconboxsx = {
     opacity: ".0",
     "&:hover": { 
         opacity: "1.0",
-        cursor: "pointer" }    
+        }    
 }
 
+const checkiconsx = {
+    position: "absolute",
+    top: "0px",
+    right: "0px",
+    fontSize:"30px",
+    opacity: ".25",
+    "&:hover": {
+        opacity: ".85",
+        cursor: "pointer"  }
+
+}
+const deliconsx = {
+    position: "absolute",
+    top: "0px",
+    right: "40px",
+    fontSize:"30px",
+    opacity: ".25",
+    "&:hover": {
+        opacity: ".85",
+        cursor: "pointer"  }
+
+}
+const checkiconboxsx = {
+    position: "absolute",
+    top: "0px",
+    left: "0px",
+    width: "100%",
+    height: "100%"
+
+}
 const boxsx = {
     
     position:"relative", 
     width:"100%",
+}
+const editboxsx = {
+    position:"relative", 
+    width:"100%",
+    borderLeft: "5px solid #42A5F5",
+    paddingLeft: "10px"
+
+}
+const noneditboxsx = {
+    position:"relative", 
+    width:"100%",
+    borderLeft: "5px solid white",
+    paddingLeft: "10px"
+
 }
 
 const formsx = {
@@ -92,7 +143,13 @@ const formsx = {
     boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
     borderRadius: "4px"
 }
+const toolbarsx = {
+    opacity: ".0",
+    "&:hover": { 
+        opacity: "1.0",
+     } 
 
+}
 const toolssx = {
 
     width: "673px",
@@ -294,30 +351,9 @@ const Titler = ({form}) => {
     )
 };
 
-function Editor ({pieces}) {
 
-    //prob add key below
-    //this is where we check which piece is in editing mode, now we only have non editing mode 
-    var renP = [];
-    for (var i = 0; i < pieces.length; i++) {
-        //if not currently being edited then normal render
-        renP.push( 
-            <>
-            <Box sx={boxsx}  > 
-                <Box sx={iconboxsx}>
-                    <EditIcon sx={editiconsx}/>
-                </Box>
-                <NormalRender sx={{backgroundColor:"blue"}} piece={pieces[i]} Key={i} />
-                <br/><br/> 
-            </Box>
-            </>
-        );
-    }
-    return (
-        <>{renP}</>
-    )
 
-}
+
 
 
 
@@ -331,6 +367,155 @@ function ALTEditForm() {
     const [pieces, setPieces] = useState([]);
     const [aPiece, setAPiece] = useState({});
     const [titledesc, setTitleDesc] = useState({});
+
+    const [editing, _setEditing] = useState('');
+    const editRef = useRef(editing);
+    const setEditing = (b) => {
+        _setEditing(b);
+        editRef.current = b;
+    }
+
+
+    ///////////////////////////popmenu stuff////////////////
+    const BasicMenu = ({l})=> {
+        const [anchorEl, setAnchorEl] = React.useState(null);
+        const open = Boolean(anchorEl);
+        const handleClick = (e) => {
+          setAnchorEl(e.currentTarget);
+        };
+        const handleClose = () => {
+          setAnchorEl(null);
+        };
+      
+        return (
+          <div>
+            <Box sx={toolboxsx} 
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            >
+                <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
+                <Typography sx={{...fontsx,...normsx,...gray}}>Add Question</Typography>
+            </Box>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={()=>{
+                  handleClose();
+                  addPiece("question",l,"ss");
+                  }}>Single Select</MenuItem>
+              <MenuItem onClick={()=>{
+                  handleClose();
+                  addPiece("question",l,"ms");
+                  }}>Multiple Select</MenuItem>
+              <MenuItem onClick={()=>{
+                  handleClose();
+                  addPiece("question",l,"st");
+                  }}>Single Line Text</MenuItem>
+                  <MenuItem onClick={()=>{
+                  handleClose();
+                  addPiece("question",l,"mt");
+                  }}>Multiple Line Text</MenuItem>
+            </Menu>
+          </div>
+        );
+      }
+
+///////////////////end popup menu stuff////////////////////////////////////////////////
+
+    const Toolbar = ({location})=> {
+        return(
+            <Card sx={toolssx}>
+                    <Box sx={toolboxsx} >
+                        <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx,...gray}}>Add Question</Typography>
+                    </Box>
+                    <Box sx={toolboxsx}>
+                        <TitleRounded sx={{...plussx,...gray}} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx,...gray}}>Add Header</Typography>  
+                    </Box>
+                    <Box sx={toolboxsx} onClick={()=>{addPiece("break",location)}}>
+                        <MoreHorizFilled sx={{...plussx,...gray}} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx,...gray}}>Add Divider</Typography>  
+                    </Box>
+                    <Box sx={toolboxsx} onClick={()=>{logPieces()}}>
+                        <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx,...gray}}>log pieces</Typography>
+                    </Box>
+                    <BasicMenu l={location}/>
+                    
+
+    
+                </Card>
+        )
+    }
+
+    function Editor ({pieces}) {
+
+        //prob add key below
+        //this is where we check which piece is in editing mode, now we only have non editing mode 
+        var renP = [];
+        for (var i = 0; i < pieces.length; i++) {
+            //if not currently being edited then normal render
+            let a = pieces[i].piid;
+            if(a==editRef.current){
+                renP.push( 
+                    <>
+                    <Box sx={toolbarsx}>
+                        <Toolbar location={a}/>
+                    </Box>
+                    <Box sx={editboxsx} key={i} >
+                        <Box sx={boxsx}  key={i} > 
+                            <Box sx={checkiconboxsx}>
+                                <DeleteIcon sx={deliconsx} onClick={()=>{ delPiece(a)}}/>
+                                <CheckCircleIcon sx={checkiconsx} onClick={()=>{ edit('-1')}}/>
+                            </Box>
+                            <NormalRender sx={{backgroundColor:"blue"}} piece={pieces[i]} Key={i} /> 
+                        </Box>
+                    </Box>
+                    
+                    </>
+                );
+
+
+            }else{
+                renP.push( 
+                    <>
+                    <Box sx={toolbarsx}>
+                        <Toolbar location={a}/>
+                    </Box>
+                    <Box sx={noneditboxsx} key={i} >
+                        <Box sx={boxsx}  key={i} > 
+                            <Box sx={iconboxsx}>
+                                <EditIcon sx={editiconsx} onClick={()=>{ edit(a)}}/>
+                            </Box>
+                            <NormalRender sx={{backgroundColor:"blue"}} piece={pieces[i]} Key={i} />
+                        </Box>
+                    </Box>
+                    </>
+                );
+
+            }
+            
+        }
+        return (
+            <>
+            {renP}
+            <br/>
+            <Toolbar location={'-1'}/>
+            </>
+        )
+        
+    
+    }
 
     useEffect(() => {
 
@@ -362,10 +547,10 @@ function ALTEditForm() {
 
 
 
-        setTitleDesc({title: form1.title, description: form1.description})
+        
 
         //setPieces(form1.pieces);//replace this line with setPieces(<get pieces of this form>)/SEE AT BOTTOM /////////////////////////******************
-        //console.log(pieces);
+        setTitleDesc({title: form1.title, description: form1.description})
         setPieces(form1.pieces.map((piece)=>{
                 let z = {
                     _id: piece._id,
@@ -374,7 +559,9 @@ function ALTEditForm() {
                     props: piece.props
                 }
                 return z;   
-            }));
+        }));
+
+        setEditing('-1');
         
         
     }, [])
@@ -412,12 +599,39 @@ function ALTEditForm() {
         console.log(pieces);
     }
 
-    function addAPiece(){
+    function addPiece(type,loc,qt="-1"){
+
+        const P = { piid: uuid.v4(), _type: type, props:[]};
+
+        if(type=="break"){
+            setEditing('-1');
+        }else {
+            if(type=="question"){
+                console.log("A QUESTION IN THE WILD");
+            }
+            setEditing(P.piid);
+        }
+
+        if(loc=="-1"){
+            setPieces([...pieces, P]);
+        } else {
+            const index = pieces.map(e => e.piid).indexOf(loc);
+            setPieces([...pieces.slice(0,index), P, ...pieces.slice(index)]);
+        }
         
-        console.log(pieces);
     }
 
-    
+    function edit(a){
+        setEditing(a);
+        console.log(editRef.current)
+    }
+
+    function delPiece(c){
+        setEditing('-1');
+        console.log(   `exterminate ${c}`)
+        setPieces(pieces.filter(p => p.piid != c))
+
+    }
 
 
     
@@ -426,35 +640,8 @@ function ALTEditForm() {
 
     return(
         <Card sx={formsx}>
-            <Titler form={titledesc}/>
+            <Titler form={titledesc} sx={{borderLeft: "5px solid white"}}/>
             <Editor pieces={pieces}/>
-            <Card sx={toolssx}>
-                <Box sx={toolboxsx} >
-                    <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
-                    <Typography sx={{...fontsx,...normsx,...gray}}>Add Question</Typography>
-                </Box>
-                <Box sx={toolboxsx}>
-                    <TitleRounded sx={{...plussx,...gray}} fontSize={"medium"} />
-                    <Typography sx={{...fontsx,...normsx,...gray}}>Add Header</Typography>  
-                </Box>
-                <Box sx={toolboxsx}>
-                    <MoreHorizFilled sx={{...plussx,...gray}} fontSize={"medium"} />
-                    <Typography sx={{...fontsx,...normsx,...gray}}>Add Divider</Typography>  
-                </Box>
-                <Box sx={toolboxsx} onClick={()=>{logPieces()}}>
-                    <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
-                    <Typography sx={{...fontsx,...normsx,...gray}}>log pieces</Typography>
-                </Box>
-                <Box sx={toolboxsx} onClick={()=>{addAPiece()}}>
-                    <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
-                    <Typography sx={{...fontsx,...normsx,...gray}}>add piece </Typography>
-                </Box>
-                <Box sx={toolboxsx} onClick={()=>{removeIds()}}>
-                    <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
-                    <Typography sx={{...fontsx,...normsx,...gray}}>remove ids </Typography>
-                </Box>
-
-            </Card>
         </Card>
         
     )
@@ -495,3 +682,7 @@ let { id } = useParams()
         req()
     }, [])
 */
+
+
+
+
