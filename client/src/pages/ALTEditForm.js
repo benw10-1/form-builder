@@ -49,6 +49,10 @@ const gray = {
     color: "rgba(0,0,0,0.5)"
 }
 
+const deloptsx = {
+    display: "flex",
+}
+
 const editiconsx = {
 
     opacity:".9",
@@ -101,9 +105,23 @@ const checkiconboxsx = {
     top: "0px",
     left: "0px",
     width: "100%",
-    height: "100%"
+    height: "100%",
+    opacity: ".25",
+    "&:hover": {
+        opacity: ".85",
+        cursor: "pointer"  }
 
 }
+
+const freeiconsx = {
+    
+    opacity: ".25",
+    "&:hover": {
+        opacity: ".85",
+        cursor: "pointer"  }
+
+}
+
 const boxsx = {
     
     position:"relative", 
@@ -217,18 +235,10 @@ const hoversx = {
 }
 
 
-const editingRender = ( piece ) => {
 
-    if(piece._type == "header")
-
-  return (
-    <div >
-      Yoo
-    </div>
-  );
-};
 
 const NormalRender = ( {piece} ) => {
+    
     let parsed= parseProps(piece.props);
     if(piece._type == "header"){
         return (
@@ -281,7 +291,9 @@ const NormalRender = ( {piece} ) => {
             
         }else if (parsed.qtype == "check"){
             var renoc = [];
-            for (var i = 0; i < parsed.qoptions.length; i++) {renoc.push(<FormControlLabel control={<Checkbox />} label={parsed.qoptions[i]} />)}
+            if(parsed.qoptions){
+                for (var i = 0; i < parsed.qoptions.length; i++) {renoc.push(<FormControlLabel control={<Checkbox />} label={parsed.qoptions[i]} />)}
+            }
             return (
                 <>
                     <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
@@ -295,7 +307,10 @@ const NormalRender = ( {piece} ) => {
         }else if (parsed.qtype == "radio"){
             //if text box height is given, set it, else 1 line
             var renor = [];
-            for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
+            if(parsed.qoptions){
+                console.log(parsed.qoptions);
+                for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
+            }
                 ////okok the component below has to be a unique identifier, right?
             return (
                 <>
@@ -364,8 +379,23 @@ function ALTEditForm() {
 
     ////////////////////////scratch/function area/////////////////////////////////////////////////////////////////////
 
-    const [pieces, setPieces] = useState([]);
-    const [aPiece, setAPiece] = useState({});
+    const [pieces, _setPieces] = useState([]);
+    const pieceArrRef = useRef(pieces);
+    const setPieces = (d) => {
+        _setPieces(d);
+        pieceArrRef.current = d;
+    }
+
+    const [aPiece, _setAPiece] = useState({});
+    const pieceRef = useRef(aPiece);
+    const setAPiece = (c) => {
+        _setAPiece(c);
+        pieceRef.current = c;
+    }
+
+    const optionRef = useRef({});
+
+
     const [titledesc, setTitleDesc] = useState({});
 
     const [editing, _setEditing] = useState('');
@@ -374,6 +404,219 @@ function ALTEditForm() {
         _setEditing(b);
         editRef.current = b;
     }
+
+    const EditingRender = ( {piece} ) => {
+
+        setAPiece(piece)
+
+        const handleChange = (e) => {
+            let P = pieceRef.current;
+            P.props = P.props.filter(pr=>pr.key!=e.target.name);
+            P.props.push({key: e.target.name, value: e.target.value});
+            setAPiece(P);
+        };
+
+        const handleOptionChange = (e) => {
+            optionRef.current = { key: "qoptions", value: e.target.value }
+        }
+        
+        const submitOption = () => {
+            if(optionRef.current){
+                console.log(pieceArrRef.current);
+
+                let P = pieceRef.current;
+                P.props.push(optionRef.current)
+                setAPiece(P);
+                const index = pieceArrRef.current.map(e => e.piid).indexOf(piece.piid);
+                setPieces([...pieceArrRef.current.slice(0,index), pieceRef.current, ...pieceArrRef.current.slice(index+1)]);
+                optionRef.current=(null);
+
+                console.log(pieceArrRef.current);
+
+            }
+            
+        }
+
+
+        const deleteOption = (f) => {
+            let P = pieceRef.current;
+            P.props = P.props.filter(pr=> !(pr.key=="qoptions"&&pr.value==f) );
+            setAPiece(P);
+            const index = pieceArrRef.current.map(e => e.piid).indexOf(piece.piid);
+            setPieces([...pieceArrRef.current.slice(0,index), pieceRef.current, ...pieceArrRef.current.slice(index+1)]);
+            optionRef.current=(null);
+
+        }
+
+
+        //let parsed= parseProps(pieceRef.current.props);
+        let parsed= parseProps(piece.props);
+
+        if(piece._type == "header"){
+            return (
+                <>
+                
+                
+                    <TextField
+          
+                        label="Header"
+                        name="htext"
+                        placeholder="Section Title"
+                        variant="standard"
+                        defaultValue={parseProps(pieceRef.current.props).htext}
+                        onChange={handleChange}
+                    /><br/>
+                
+                
+                    <TextField
+          
+                        label="Subheader"
+                        name="hsubtext"
+                        placeholder="Section Subtitle"
+                        variant="standard"
+                        defaultValue={parseProps(pieceRef.current.props).htext}
+                        onChange={handleChange}
+                    />
+                    
+                
+                  
+                </>
+            )
+        }else if (piece._type == "break"){
+            return (
+                <>
+                    <br/>
+                    <Divider variant="middle" />
+                    
+                </>    
+            )
+        }else if (piece._type == "question"){
+    
+            if(parsed.qtype == "text"){
+                //if text box height is given use box, else line
+                if(parsed.inSize && parsed.inSize!=1){
+                    let r = parsed.inSize;
+                    return (
+                        <>
+                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                        {parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}<br/>
+                        <TextField
+                            id="outlined-multiline-static"
+                            //label="Multiline" 
+                            //maybe put the title here idk
+                            multiline
+                            rows={r}
+                            placeholder="Maybe add a placeholder prop idk"
+                        />
+    
+                        </>
+                    )
+                } else{
+                    return (
+                        <>
+                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                        {parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}
+                        <TextField id="standard-basic" label="This should be a prop" variant="standard" />
+    
+                        </>
+                    )
+    
+                }
+                
+            }else if (parsed.qtype == "check"){
+                var renoc = [];
+                var rend = [];
+
+            
+                if(parsed.qoptions){    
+                    console.log(parsed.qoptions);
+                    for (var i = 0; i < piece.props.length; i++) {
+                        let aa= piece.props[i].value;
+                        if(piece.props[i].key=="qoptions"){
+                            renoc.push(
+                                <Box sx={deloptsx} >
+                                    <FormControlLabel control={<Checkbox />} label={aa} />
+                                    <DeleteIcon sx={{...freeiconsx, marginTop: "10px"}} onClick={()=>{ deleteOption(aa) }}/>
+                                </Box>)
+                        }
+                        }
+                }
+                return (
+                    <>
+                        <TextField
+                            label="Question text"
+                            name="qtext"
+                            placeholder="Question"
+                            variant="standard"
+                            defaultValue={parseProps(pieceRef.current.props).qtext}
+                            onChange={handleChange}
+                        /><br/>         
+                        <TextField
+                            label="Question Subtext"
+                            name="qsubtext"
+                            placeholder="Subquestion"
+                            variant="standard"
+                            defaultValue={parseProps(pieceRef.current.props).qsubtext}
+                            onChange={handleChange}
+                        />
+                       
+                            <FormGroup>
+                                {renoc}
+                            </FormGroup><br/>
+                            
+                        
+
+                        <TextField
+                        label="Answer option"
+                        name="qoptions"
+                        placeholder="Answer"
+                        variant="standard"
+                        onChange={handleOptionChange}
+                        />
+                        <CheckCircleIcon sx={freeiconsx} onClick={()=>{ submitOption()}}/>
+                        
+
+                    </>
+                )
+
+            }else if (parsed.qtype == "radio"){
+                //if text box height is given, set it, else 1 line
+                var renor = [];
+                if(parsed.qoptions){
+                    for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
+                }
+                    ////okok the component below has to be a unique identifier, right?
+                return (
+                    <>
+                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                        <FormControl>
+                            <FormLabel >{parsed.qsubtext}</FormLabel>
+                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label"  name="radio-buttons-group">
+                                {renor}
+                            </RadioGroup>
+                        </FormControl>
+    
+                      
+                    </>
+                )
+            }else {
+                return (
+                    <div>
+                        <h4> A qtypeless question appeared in the wild</h4>
+                    </div>
+                    
+                )
+        
+            }
+        }else {
+            return (
+                <div>
+                    <h4> A typeless piece appeared in the wild</h4>
+                </div>
+                
+            )
+        } 
+    };
 
 
     ///////////////////////////popmenu stuff////////////////
@@ -427,7 +670,7 @@ function ALTEditForm() {
             </Menu>
           </div>
         );
-      }
+    }
 
 ///////////////////end popup menu stuff////////////////////////////////////////////////
 
@@ -438,7 +681,7 @@ function ALTEditForm() {
                         <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
                         <Typography sx={{...fontsx,...normsx,...gray}}>Add Question</Typography>
                     </Box>
-                    <Box sx={toolboxsx}>
+                    <Box sx={toolboxsx} onClick={()=>{addPiece("header",location)}}>
                         <TitleRounded sx={{...plussx,...gray}} fontSize={"medium"} />
                         <Typography sx={{...fontsx,...normsx,...gray}}>Add Header</Typography>  
                     </Box>
@@ -464,8 +707,10 @@ function ALTEditForm() {
         //this is where we check which piece is in editing mode, now we only have non editing mode 
         var renP = [];
         for (var i = 0; i < pieces.length; i++) {
-            //if not currently being edited then normal render
+            
             let a = pieces[i].piid;
+
+            //if currently being edited then editing render
             if(a==editRef.current){
                 renP.push( 
                     <>
@@ -476,9 +721,9 @@ function ALTEditForm() {
                         <Box sx={boxsx}  key={i} > 
                             <Box sx={checkiconboxsx}>
                                 <DeleteIcon sx={deliconsx} onClick={()=>{ delPiece(a)}}/>
-                                <CheckCircleIcon sx={checkiconsx} onClick={()=>{ edit('-1')}}/>
+                                <CheckCircleIcon sx={checkiconsx} onClick={()=>{edit('-1')}}/>
                             </Box>
-                            <NormalRender sx={{backgroundColor:"blue"}} piece={pieces[i]} Key={i} /> 
+                            <EditingRender piece={pieces[i]} Key={i} /> 
                         </Box>
                     </Box>
                     
@@ -497,7 +742,7 @@ function ALTEditForm() {
                             <Box sx={iconboxsx}>
                                 <EditIcon sx={editiconsx} onClick={()=>{ edit(a)}}/>
                             </Box>
-                            <NormalRender sx={{backgroundColor:"blue"}} piece={pieces[i]} Key={i} />
+                            <NormalRender piece={pieces[i]} Key={i} />
                         </Box>
                     </Box>
                     </>
@@ -598,7 +843,7 @@ function ALTEditForm() {
     function logPieces(){
         console.log(pieces);
     }
-
+/////////////////////////////////////////////////////////////CHANGE THESES VALUES, WE DON"T WANT GOATS TO SHOW UP IF THEY LEAVE IT BLANK!!///OR NOT////
     function addPiece(type,loc,qt="-1"){
 
         const P = { piid: uuid.v4(), _type: type, props:[]};
@@ -607,7 +852,20 @@ function ALTEditForm() {
             setEditing('-1');
         }else {
             if(type=="question"){
-                console.log("A QUESTION IN THE WILD");
+                if(qt=="ss"){
+                    P.props.push({key:"qtype", value:"radio"},{ key:"qtext", value:""}, {key:"qsubtext", value:""});
+                }else if(qt=="ms"){
+                    P.props.push({key:"qtype", value:"check"},{ key:"qtext", value:""}, {key:"qsubtext", value:""})
+                }else if(qt=="st"){
+                    P.props.push({key:"qtype",value:"text"},{ key:"qtext",value:""},{ key:"qsubtext", value: ""})
+                }else if(qt=="mt"){
+                    P.props.push({key:"qtype",value:"text"},{ key:"qtext",value:""},{ key:"qsubtext", value: ""},{key:"inSize", value:"" })
+                }else {
+                    console.log("why though");
+                }
+            }else{
+                P.props.push({key:"htext", value:""},{ key:"hsubtext", value: ""})
+
             }
             setEditing(P.piid);
         }
@@ -620,6 +878,15 @@ function ALTEditForm() {
         }
         
     }
+/*
+This is unnecessary (and doesn't work) because shallow references? disconcerting but ok...
+    function savePiece(loc){
+        const index = pieceArrRef.current.map(e => e.piid).indexOf(loc);
+        setPieces([...pieceArrRef.current.slice(0,index), pieceRef.current, ...pieceArrRef.current.slice(index+1)])
+        
+    };
+*/
+    
 
     function edit(a){
         setEditing(a);
@@ -628,9 +895,7 @@ function ALTEditForm() {
 
     function delPiece(c){
         setEditing('-1');
-        console.log(   `exterminate ${c}`)
         setPieces(pieces.filter(p => p.piid != c))
-
     }
 
 
@@ -641,7 +906,7 @@ function ALTEditForm() {
     return(
         <Card sx={formsx}>
             <Titler form={titledesc} sx={{borderLeft: "5px solid white"}}/>
-            <Editor pieces={pieces}/>
+            <Editor pieces={pieceArrRef.current}/>
         </Card>
         
     )
