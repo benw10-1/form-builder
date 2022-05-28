@@ -43,10 +43,13 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
+import Slider from '@mui/material/Slider';
 
 const gray = {
     color: "rgba(0,0,0,0.5)"
+}
+const sliderboxsx = {
+    width: "30%"
 }
 
 const deloptsx = {
@@ -257,22 +260,20 @@ const NormalRender = ( {piece} ) => {
             </>    
         )
     }else if (piece._type == "question"){
-
+//{parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}<br/>
         if(parsed.qtype == "text"){
             //if text box height is given use box, else line
-            if(parsed.inSize && parsed.inSize!=1){
-                let r = parsed.inSize;
+            if(parsed.inLength && parsed.inLength!=1){
+                let r = parsed.inLength;
+                
                 return (
                     <>
-                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                    {parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}<br/>
-                    <TextField
+                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography><br/>
+                    <TextField sx={{width:`${parsed.inWidth}%`}}
                         id="outlined-multiline-static"
-                        //label="Multiline" 
-                        //maybe put the title here idk
                         multiline
                         rows={r}
-                        placeholder="Maybe add a placeholder prop idk"
+                        label={parsed.qsubtext}
                     />
 
                     </>
@@ -281,8 +282,7 @@ const NormalRender = ( {piece} ) => {
                 return (
                     <>
                     <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                    {parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}
-                    <TextField id="standard-basic" label="This should be a prop" variant="standard" />
+                    <TextField id="standard-basic" sx={{width:`${parsed.inWidth}%`}} label={parsed.qsubtext} variant="standard" />
 
                     </>
                 )
@@ -308,7 +308,7 @@ const NormalRender = ( {piece} ) => {
             //if text box height is given, set it, else 1 line
             var renor = [];
             if(parsed.qoptions){
-                console.log(parsed.qoptions);
+                
                 for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
             }
                 ////okok the component below has to be a unique identifier, right?
@@ -414,7 +414,14 @@ function ALTEditForm() {
             P.props = P.props.filter(pr=>pr.key!=e.target.name);
             P.props.push({key: e.target.name, value: e.target.value});
             setAPiece(P);
+            
         };
+
+        const handleUnclick = (e) => {
+            const index = pieceArrRef.current.map(e => e.piid).indexOf(piece.piid);
+            setPieces([...pieceArrRef.current.slice(0,index), pieceRef.current, ...pieceArrRef.current.slice(index+1)]);
+
+        }
 
         const handleOptionChange = (e) => {
             optionRef.current = { key: "qoptions", value: e.target.value }
@@ -422,16 +429,12 @@ function ALTEditForm() {
         
         const submitOption = () => {
             if(optionRef.current){
-                console.log(pieceArrRef.current);
-
                 let P = pieceRef.current;
                 P.props.push(optionRef.current)
                 setAPiece(P);
                 const index = pieceArrRef.current.map(e => e.piid).indexOf(piece.piid);
                 setPieces([...pieceArrRef.current.slice(0,index), pieceRef.current, ...pieceArrRef.current.slice(index+1)]);
                 optionRef.current=(null);
-
-                console.log(pieceArrRef.current);
 
             }
             
@@ -474,7 +477,7 @@ function ALTEditForm() {
                         name="hsubtext"
                         placeholder="Section Subtitle"
                         variant="standard"
-                        defaultValue={parseProps(pieceRef.current.props).htext}
+                        defaultValue={parseProps(pieceRef.current.props).hsubtext}
                         onChange={handleChange}
                     />
                     
@@ -494,19 +497,60 @@ function ALTEditForm() {
     
             if(parsed.qtype == "text"){
                 //if text box height is given use box, else line
-                if(parsed.inSize && parsed.inSize!=1){
-                    let r = parsed.inSize;
+                if(parsed.inLength && parsed.inLength!=1){
+                    let r = parsed.inLength;
                     return (
                         <>
-                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                        {parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}<br/>
                         <TextField
+                            label="Question text"
+                            name="qtext"
+                            variant="standard"
+                            defaultValue={parseProps(pieceRef.current.props).qtext}
+                            onChange={handleChange}
+                        /><br/>         
+                        <TextField
+                            label="Question Label"
+                            name="qsubtext"
+                            variant="standard"
+                            defaultValue={parseProps(pieceRef.current.props).qsubtext}
+                            onChange={handleChange}
+                        /><br/>
+                        <Box sx={sliderboxsx}>
+                            <br/>
+                            <Typography sx={{...fontsx,...normsx,...gray}}>Text Entry Width</Typography>
+                            <Slider
+                                size="small"
+                                defaultValue={parsed.inWidth}
+                                aria-label="Small"
+                                valueLabelDisplay="auto"
+                                name="inWidth"
+                                min={10}
+                                onChange={handleChange}
+                                onChangeCommitted={handleUnclick}
+                            />
+                        </Box>
+                        <Box sx={sliderboxsx}>
+                            <br/>
+                            <Typography sx={{...fontsx,...normsx,...gray}}>Text Entry Length</Typography>
+                            <Slider
+                                size="small"
+                                defaultValue={parsed.inLength}
+                                aria-label="Small"
+                                valueLabelDisplay="auto"
+                                name="inLength"
+                                min={2}
+                                onChange={handleChange}
+                                onChangeCommitted={handleUnclick}
+                            />
+                        </Box>
+                        
+                        
+                        <TextField sx={{width: `${parsed.inWidth}%`}}
                             id="outlined-multiline-static"
-                            //label="Multiline" 
-                            //maybe put the title here idk
                             multiline
                             rows={r}
-                            placeholder="Maybe add a placeholder prop idk"
+                            label={parseProps(pieceRef.current.props).qsubtext}
+                            
                         />
     
                         </>
@@ -514,9 +558,36 @@ function ALTEditForm() {
                 } else{
                     return (
                         <>
-                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                        {parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}
-                        <TextField id="standard-basic" label="This should be a prop" variant="standard" />
+                        <TextField
+                            label="Question text"
+                            name="qtext"
+                            variant="standard"
+                            defaultValue={parseProps(pieceRef.current.props).qtext}
+                            onChange={handleChange}
+                        /><br/>         
+                        <TextField
+                            label="Question Label"
+                            name="qsubtext"
+                            variant="standard"
+                            defaultValue={parseProps(pieceRef.current.props).qsubtext}
+                            onChange={handleChange}
+                        /><br/>
+                        <Box sx={sliderboxsx}>
+                            <br/>
+                            <Typography sx={{...fontsx,...normsx,...gray}}>Text Entry Width</Typography>
+                            <Slider
+                                size="small"
+                                defaultValue={parsed.inWidth}
+                                aria-label="Small"
+                                valueLabelDisplay="auto"
+                                name="inWidth"
+                                min={10}
+                                onChange={handleChange}
+                                onChangeCommitted={handleUnclick}
+                            />
+                        </Box>
+                        
+                        <TextField id="standard-basic" sx={{width:`${parsed.inWidth}%`}} label={parseProps(pieceRef.current.props).qsubtext} variant="standard" />
     
                         </>
                     )
@@ -525,9 +596,6 @@ function ALTEditForm() {
                 
             }else if (parsed.qtype == "check"){
                 var renoc = [];
-                var rend = [];
-
-            
                 if(parsed.qoptions){    
                     console.log(parsed.qoptions);
                     for (var i = 0; i < piece.props.length; i++) {
@@ -567,7 +635,7 @@ function ALTEditForm() {
                         
 
                         <TextField
-                        label="Answer option"
+                        label="Add option"
                         name="qoptions"
                         placeholder="Answer"
                         variant="standard"
@@ -580,25 +648,60 @@ function ALTEditForm() {
                 )
 
             }else if (parsed.qtype == "radio"){
-                //if text box height is given, set it, else 1 line
                 var renor = [];
-                if(parsed.qoptions){
-                    for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
+                if(parsed.qoptions){    
+                    for (var i = 0; i < piece.props.length; i++) {
+                        let aa= piece.props[i].value;
+                        if(piece.props[i].key=="qoptions"){
+                            renor.push(
+                                <Box sx={deloptsx} >
+                                    <FormControlLabel control={<Radio />} label={aa} value={aa}/>
+                                    <DeleteIcon sx={{...freeiconsx, marginTop: "10px"}} onClick={()=>{ deleteOption(aa) }}/>
+                                </Box>)
+                        }}
                 }
-                    ////okok the component below has to be a unique identifier, right?
                 return (
                     <>
-                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                        <TextField
+                            label="Question text"
+                            name="qtext"
+                            placeholder="Question"
+                            variant="standard"
+                            defaultValue={parseProps(pieceRef.current.props).qtext}
+                            onChange={handleChange}
+                        /><br/>         
+                        <TextField
+                            label="Question Subtext"
+                            name="qsubtext"
+                            placeholder="Subquestion"
+                            variant="standard"
+                            defaultValue={parseProps(pieceRef.current.props).qsubtext}
+                            onChange={handleChange}
+                        /><br/>
+
+
                         <FormControl>
-                            <FormLabel >{parsed.qsubtext}</FormLabel>
                             <RadioGroup aria-labelledby="demo-radio-buttons-group-label"  name="radio-buttons-group">
                                 {renor}
-                            </RadioGroup>
-                        </FormControl>
-    
-                      
+                            </RadioGroup><br/>
+                        </FormControl><br/>
+                            
+                        
+
+                        <TextField
+                        label="Add option"
+                        name="qoptions"
+                        placeholder="Answer"
+                        variant="standard"
+                        onChange={handleOptionChange}
+                        />
+                        <CheckCircleIcon sx={freeiconsx} onClick={()=>{ submitOption()}}/>
+                        
+
                     </>
                 )
+                
+                
             }else {
                 return (
                     <div>
@@ -714,17 +817,19 @@ function ALTEditForm() {
             if(a==editRef.current){
                 renP.push( 
                     <>
+                    <Box Key={a}>
                     <Box sx={toolbarsx}>
                         <Toolbar location={a}/>
                     </Box>
-                    <Box sx={editboxsx} key={i} >
-                        <Box sx={boxsx}  key={i} > 
+                    <Box sx={editboxsx} >
+                        <Box sx={boxsx}   > 
                             <Box sx={checkiconboxsx}>
                                 <DeleteIcon sx={deliconsx} onClick={()=>{ delPiece(a)}}/>
                                 <CheckCircleIcon sx={checkiconsx} onClick={()=>{edit('-1')}}/>
                             </Box>
-                            <EditingRender piece={pieces[i]} Key={i} /> 
+                            <EditingRender piece={pieces[i]}  /> 
                         </Box>
+                    </Box>
                     </Box>
                     
                     </>
@@ -734,16 +839,18 @@ function ALTEditForm() {
             }else{
                 renP.push( 
                     <>
+                    <Box Key={a}>
                     <Box sx={toolbarsx}>
                         <Toolbar location={a}/>
                     </Box>
-                    <Box sx={noneditboxsx} key={i} >
-                        <Box sx={boxsx}  key={i} > 
+                    <Box sx={noneditboxsx}  >
+                        <Box sx={boxsx}   > 
                             <Box sx={iconboxsx}>
                                 <EditIcon sx={editiconsx} onClick={()=>{ edit(a)}}/>
                             </Box>
-                            <NormalRender piece={pieces[i]} Key={i} />
+                            <NormalRender piece={pieces[i]}  />
                         </Box>
+                    </Box>
                     </Box>
                     </>
                 );
@@ -772,8 +879,8 @@ function ALTEditForm() {
             published: true,
             description : "'tis to prove the encoded instructions",
             pieces:[ 
-            {_id: "89", _type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"},{key:"inSize", value:"5" }]},
-            {_id: "89", _type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"}]},
+            {_id: "89", _type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"},{key:"inLength", value:"5" },{key:"inWidth", value:"50" }]},
+            {_id: "89", _type:"question", props:[{key:"qtype",value:"text"},{ key:"qtext",value:"Why?"},{ key:"qsubtext", value: "srsly?"},{key:"inLength", value:"1" },{key:"inWidth", value:"50" }]},
             {_id: "89", _type:"question", props:[{key:"qtype", value:"radio"},{ key:"qtext", value:"Choose wisely?"},{ key:"qoptions", value:"7"},{ key:"qoptions", value: "a goat"},{ key:"qoptions", value:"a chicken"}]},
             {_id: "89", _type:"break", props:[]},
             {_id: "89", _type:"header", props:[{key:"htext", value:"Now listen"},{ key:"hsubtext", value: "very carefully"}]},
@@ -857,9 +964,9 @@ function ALTEditForm() {
                 }else if(qt=="ms"){
                     P.props.push({key:"qtype", value:"check"},{ key:"qtext", value:""}, {key:"qsubtext", value:""})
                 }else if(qt=="st"){
-                    P.props.push({key:"qtype",value:"text"},{ key:"qtext",value:""},{ key:"qsubtext", value: ""})
+                    P.props.push({key:"qtype",value:"text"},{ key:"qtext",value:""},{ key:"qsubtext", value: ""},{key:"inLength", value:"1" },{key:"inWidth", value:"50" })
                 }else if(qt=="mt"){
-                    P.props.push({key:"qtype",value:"text"},{ key:"qtext",value:""},{ key:"qsubtext", value: ""},{key:"inSize", value:"" })
+                    P.props.push({key:"qtype",value:"text"},{ key:"qtext",value:""},{ key:"qsubtext", value: ""},{key:"inLength", value:"8" },{key:"inWidth", value:"50" })
                 }else {
                     console.log("why though");
                 }
@@ -890,7 +997,6 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
 
     function edit(a){
         setEditing(a);
-        console.log(editRef.current)
     }
 
     function delPiece(c){
@@ -904,10 +1010,29 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
 
 
     return(
-        <Card sx={formsx}>
-            <Titler form={titledesc} sx={{borderLeft: "5px solid white"}}/>
-            <Editor pieces={pieceArrRef.current}/>
-        </Card>
+        <>
+        <CssBaseline />
+        <Container maxWidth={false} disableGutters={true} >
+            <Box sx={boxsx}>
+                            <Typography variant="h6" height={42} sx={fontsx}>
+                                {(() => {return "Evening " + Auth.getProfile()?.name ?? "User"})()}
+                                <br />
+                            </Typography>
+                            <Typography variant="h4" width={73} height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
+                                {'My Form'}
+                                <br />
+                            </Typography>
+                            <Typography variant="body1" width={216} height={48} sx={fontsx}>
+                                {'Edit your form by clicking on the toolbar icons.'}
+                            </Typography>
+            </Box>
+            <Card sx={formsx}>
+                <Titler form={titledesc} sx={{borderLeft: "5px solid white"}}/>
+                <Editor pieces={pieceArrRef.current}/>
+            </Card>
+        </Container>
+        </>
+        
         
     )
 
