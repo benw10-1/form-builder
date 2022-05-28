@@ -141,8 +141,6 @@ async function updateFormPieces(id, pieces) {
       }
     }      
     `
-  
-  pieces = unparseProps(pieces)
   const variables = { id, pieces }
 
   return genQuery(query, variables).then(data => {

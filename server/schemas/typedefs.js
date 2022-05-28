@@ -32,7 +32,7 @@ const typeDefs = gql`
   input PieceInp {
     _id: ID
     _type: String!
-    form_ref: ID!
+    form_ref: ID
     props: [PropInp!]!
   }
 
@@ -45,6 +45,7 @@ const typeDefs = gql`
     creator: User!
     piece_refs: [ID!]!
     createdAt: String!
+    props: [Prop!]!
   }
 
   type Response {

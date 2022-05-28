@@ -7,13 +7,14 @@ function parseProps(props) {
             if (typeof found !== "object") value = [found, value]
             else value = [...found, value]
         }
-        parsed[x.key] = value
+        parsed[key] = value
     })
     
     return parsed
 }
 
 function unparseProps(props) {
+    if (!props.length) return props
     const parsed = []
     props.forEach(x => {
         if (x.length !== 2) return new Error("Invalid prop!")
