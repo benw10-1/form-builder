@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
-import { queries, mutations, Auth, parseProps } from "../utils"
+import { queries, mutations, Auth, parseProps, dayTime } from "../utils"
 import { useParams } from "react-router-dom"
 
 import * as uuid from "uuid";
@@ -44,6 +44,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
+
+import "./nstyle.css"
+
+function ALTEditForm() {
 
 const gray = {
     color: "rgba(0,0,0,0.5)"
@@ -153,9 +158,9 @@ const formsx = {
 
     position: "absolute",
     width: "800px",
-    height: "1040px",
+    // height: "1040px",
     left: "382px",
-    top: "83px",
+    top:"0px",
 
     /* Light/Background/Paper */
     background: "#FFFFFF",
@@ -192,7 +197,7 @@ const toolboxsx = {
 const fontsx = {
     fontFamily: 'Roboto',
     fontStyle: "normal",
-    fontWeight: "400",
+    //fontWeight: "400",
     //display: flex;
     //align-items: center;
 }
@@ -372,7 +377,7 @@ const Titler = ({form}) => {
 
 
 
-function ALTEditForm() {
+
 
 
     
@@ -394,9 +399,11 @@ function ALTEditForm() {
     }
 
     const optionRef = useRef({});
+    const publishedRef = useRef({});
 
 
     const [titledesc, setTitleDesc] = useState({});
+    
 
     const [editing, _setEditing] = useState('');
     const editRef = useRef(editing);
@@ -722,7 +729,8 @@ function ALTEditForm() {
     };
 
 
-    ///////////////////////////popmenu stuff////////////////
+    ///////////////////////////toolbar stuff////////////////
+    //      //////////////////////////popmenu stuff////////////////
     const BasicMenu = ({l})=> {
         const [anchorEl, setAnchorEl] = React.useState(null);
         const open = Boolean(anchorEl);
@@ -775,7 +783,8 @@ function ALTEditForm() {
         );
     }
 
-///////////////////end popup menu stuff////////////////////////////////////////////////
+    //      /////////////////end popup menu stuff////////////////////////////////////////////////
+
 
     const Toolbar = ({location})=> {
         return(
@@ -803,6 +812,88 @@ function ALTEditForm() {
                 </Card>
         )
     }
+
+    ///////////////////////////end toolbar stuff////////////////
+
+    ///////////////////////////right side buttons stuff////////////////////////
+
+    //need to add edit detector if am going to ask for save or not for every link
+
+    let respondlink = "somelink";
+    function saveform () {
+        console.log("save")
+    }
+    function publishform () {
+        //set published = true, then
+        publishedRef.current=true
+        saveform();
+        console.log("saved and published")
+    }
+    function unpublishform () {
+        //set published = true, then
+        publishedRef.current=false
+        saveform();
+        console.log("saved and published")
+    }
+    function clearformconf () {
+        //get confirmation!!
+        console.log("are you sure?, all your questions will be erased.")
+    }
+    function deleteformconf () {
+        //get confirmation!!
+        console.log("are you sure?, all your questions will be erased.")
+    }
+    function responseslinkconf () {
+        //get confirmation??
+        console.log("do you want to save your changes?")
+    }
+    function gotodash () {
+        //get confirmation??
+        console.log("do you want to save your changes?")
+    }
+
+
+    function ButtonsOne ({published}) {
+
+        if(!published){
+            return(
+
+                <Stack spacing={2} direction="column">,
+                    <Button variant="contained" onClick={saveform}>SAVE FORM </Button>
+                    <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
+                    <Typography sx={{...fontsx,...normsx,...gray}}>Form is currently not available to respondents</Typography>
+                    <Divider variant="middle" /><br/>
+                    <Divider variant="middle" />
+                    <Button variant="outlined" onClick={clearformconf}>CLEAR FORM </Button>
+                    <Button variant="contained" onClick={deleteformconf}>DELETE FORM</Button>
+                    <Divider variant="middle" /><br/>
+                    <Divider variant="middle" />
+                    <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
+                    <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
+                </Stack>
+
+            )
+        } else {
+            return(
+                <Stack spacing={2} direction="column">,
+                    <Button variant="contained" onClick={saveform}>SAVE FORM </Button>
+                    <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
+                    <Typography sx={{...fontsx,...normsx,...gray}}>Form is currently published at:</Typography> 
+                    <Typography sx={{...fontsx,...normsx,...gray}}>{respondlink}</Typography>
+                    <Divider variant="middle" /><br/>
+                    <Divider variant="middle" />
+                    <Button variant="outlined" onClick={clearformconf}>CLEAR FORM </Button>
+                    <Button variant="contained" onClick={deleteformconf}>DELETE FORM</Button>
+                    <Divider variant="middle" /><br/>
+                    <Divider variant="middle" />
+                    <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
+                    <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
+                </Stack>
+            )
+        }
+    }
+
+
 
     function Editor ({pieces}) {
 
@@ -902,6 +993,7 @@ function ALTEditForm() {
         
 
         //setPieces(form1.pieces);//replace this line with setPieces(<get pieces of this form>)/SEE AT BOTTOM /////////////////////////******************
+        publishedRef.current=form1.published
         setTitleDesc({title: form1.title, description: form1.description})
         setPieces(form1.pieces.map((piece)=>{
                 let z = {
@@ -1012,14 +1104,15 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
     return(
         <>
         <CssBaseline />
-        <Container maxWidth={false} disableGutters={true} >
-            <Box sx={boxsx}>
-                            <Typography variant="h6" height={42} sx={fontsx}>
-                                {(() => {return "Evening " + Auth.getProfile()?.name ?? "User"})()}
+        <Box  display="flex" flexDirection="column" sx={{height:"100%", backgroundColor:"rgb(250,250,250)"}}>
+            
+        <Box sx={{ padding: "118px 0 0 4%",maxWidth: "275px",height: "100%",display: "block",margin: "0 4% 0 0"}}>
+                            <Typography variant="h6" height={55} sx={fontsx}>
+                                {(() => {return dayTime() + " " + Auth.getProfile()?.name ?? "User"})()}
                                 <br />
                             </Typography>
-                            <Typography variant="h4" width={73} height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
-                                {'My Form'}
+                            <Typography variant="h4"  height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
+                                {titledesc.title}
                                 <br />
                             </Typography>
                             <Typography variant="body1" width={216} height={48} sx={fontsx}>
@@ -1030,7 +1123,11 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
                 <Titler form={titledesc} sx={{borderLeft: "5px solid white"}}/>
                 <Editor pieces={pieceArrRef.current}/>
             </Card>
-        </Container>
+            <Box sx={{ padding: "118px 0 0 4%",maxWidth: "275px",height: "100%",display: "block",margin: "0 4% 0 0"}}>
+                <ButtonsOne published={publishedRef.current}/>
+            </Box>
+            
+        </Box>
         </>
         
         

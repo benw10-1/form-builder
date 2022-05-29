@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { queries, mutations, Auth } from "../../utils"
+import { queries, mutations, Auth, dayTime } from "../../utils"
 import {
     Container,
     CssBaseline,
@@ -167,7 +167,7 @@ function Dashboard() {
         }
         const boxsx = {
             padding: "118px 0 0 4%",
-            maxWidth: "382px",
+            maxWidth: "275px",
             height: "100%",
             display: "block",
             margin: "0 4% 0 0"
@@ -209,8 +209,8 @@ function Dashboard() {
                 <Container maxWidth={false} disableGutters={true} >
                     <div className="dash-positioning">
                         <Box sx={boxsx}>
-                            <Typography variant="h6" height={42} sx={fontsx}>
-                                {(() => {return "Evening " + Auth.getProfile()?.name ?? "User"})()}
+                            <Typography variant="h6" height={55} sx={fontsx}>
+                                {(() => {return dayTime() + " " + Auth.getProfile()?.name ?? "User"})()}
                                 <br />
                             </Typography>
                             <Typography variant="h4" width={73} height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
