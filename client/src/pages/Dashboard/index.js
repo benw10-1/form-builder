@@ -152,7 +152,7 @@ function Dashboard() {
         }
         handleClose()
         reloadPage()
-        window.location.assign(window.location.origin + "/editForm/" + newForm._id)
+        window.location.assign(window.location.origin + "/editform/" + newForm._id)
     }
 
     // main render logic

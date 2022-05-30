@@ -5,8 +5,6 @@ import { useParams } from "react-router-dom"
 
 import * as uuid from "uuid";
 
-
-
 import {
     Fab,
     Container,
@@ -27,15 +25,12 @@ import {
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
-
 import AddIcon from '@mui/icons-material/Add';
 import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
 import EditIcon from '@mui/icons-material/Edit';
 import TitleRounded from '@mui/icons-material/TitleRounded';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Radio from '@mui/material/Radio';
@@ -52,6 +47,11 @@ function ALTEditForm() {
 
 const gray = {
     color: "rgba(0,0,0,0.5)"
+}
+
+const pink = {
+    color: "rgba(200,0,0,0.5)"
+
 }
 const sliderboxsx = {
     width: "30%"
@@ -169,6 +169,25 @@ const formsx = {
     boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
     borderRadius: "4px"
 }
+
+const buttonssx = {
+    /* Auto layout */
+    padding: "63px 61px 63px 61px",
+    
+    overflow: "auto",
+
+    position: "absolute",
+    maxWidth: "575px",
+    //height: "100%",
+    left: "1182px",
+    top:"0px",
+
+   
+}
+
+
+
+
 const toolbarsx = {
     opacity: ".0",
     "&:hover": { 
@@ -178,9 +197,10 @@ const toolbarsx = {
 }
 const toolssx = {
 
-    width: "673px",
+    maxWidth: "500px",
     height: "40px",
     display: "flex",
+    justifyContent: "space-evenly",
     margin: "auto",
     display:"flex",
     alignItems: "center"
@@ -188,18 +208,17 @@ const toolssx = {
 
 const toolboxsx = {
     display:"flex",
-    marginRight: "25px",
+    marginRight: "15px",
+    marginLeft: "15px",
+    opacity: ".25",
     "&:hover": { 
-        boxShadow: 15,
+        opacity: ".85",
         cursor: "pointer" },
 }
 
 const fontsx = {
     fontFamily: 'Roboto',
     fontStyle: "normal",
-    //fontWeight: "400",
-    //display: flex;
-    //align-items: center;
 }
 
 const titlesx = {
@@ -249,13 +268,23 @@ const NormalRender = ( {piece} ) => {
     
     let parsed= parseProps(piece.props);
     if(piece._type == "header"){
-        return (
-            <>
-                <Typography sx={{...fontsx,...headsx}}>{parsed.htext}</Typography>
-                {parsed.hsubtext && <Typography sx={{...fontsx,...normsx}}>{parsed.hsubtext}</Typography>}
-               
-            </>
-        )
+        if(parsed.htext==""&&parsed.hsubtext==""){
+            return (
+                <>
+                <Typography sx={{...fontsx,...headsx,...pink}}>Empty Header</Typography>
+                </>
+            )
+        }else{
+            return (
+                <>
+                    <Typography sx={{...fontsx,...headsx}}>{parsed.htext}</Typography>
+                    {parsed.hsubtext && <Typography sx={{...fontsx,...normsx}}>{parsed.hsubtext}</Typography>}
+                   
+                </>
+            )
+
+        }
+        
     }else if (piece._type == "break"){
         return (
             <>
@@ -266,85 +295,88 @@ const NormalRender = ( {piece} ) => {
         )
     }else if (piece._type == "question"){
 //{parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}<br/>
-        if(parsed.qtype == "text"){
-            //if text box height is given use box, else line
-            if(parsed.inLength && parsed.inLength!=1){
-                let r = parsed.inLength;
-                
-                return (
-                    <>
-                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography><br/>
-                    <TextField sx={{width:`${parsed.inWidth}%`}}
-                        id="outlined-multiline-static"
-                        multiline
-                        rows={r}
-                        label={parsed.qsubtext}
-                    />
-
-                    </>
-                )
-            } else{
-                return (
-                    <>
-                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                    <TextField id="standard-basic" sx={{width:`${parsed.inWidth}%`}} label={parsed.qsubtext} variant="standard" />
-
-                    </>
-                )
-
-            }
-            
-        }else if (parsed.qtype == "check"){
-            var renoc = [];
-            if(parsed.qoptions){
-                for (var i = 0; i < parsed.qoptions.length; i++) {renoc.push(<FormControlLabel control={<Checkbox />} label={parsed.qoptions[i]} />)}
-            }
+        if(parsed.qtext==""&&parsed.qsubtext==""){
             return (
                 <>
-                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                    <FormLabel >{parsed.qsubtext}</FormLabel>
-                    <FormGroup>
-                        {renoc}
-                    </FormGroup>
-
+                    <Typography sx={{...fontsx,...headsx,...pink}}>Empty Question</Typography>
                 </>
             )
-        }else if (parsed.qtype == "radio"){
-            //if text box height is given, set it, else 1 line
-            var renor = [];
-            if(parsed.qoptions){
-                
-                for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
-            }
-                ////okok the component below has to be a unique identifier, right?
-            return (
-                <>
-                    <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                    <FormControl>
-                        <FormLabel >{parsed.qsubtext}</FormLabel>
-                        <RadioGroup aria-labelledby="demo-radio-buttons-group-label"  name="radio-buttons-group">
-                            {renor}
-                        </RadioGroup>
-                    </FormControl>
+        }else{
 
+            if(parsed.qtype == "text"){
+                //if text box height is given use box, else line
+                if(parsed.inLength && parsed.inLength!=1){
+                    let r = parsed.inLength;
                     
-
-                   
-
-
-              
-  
-                </>
-            )
-        }else {
-            return (
-                <div>
-                    <h4> A qtypeless question appeared in the wild</h4>
-                </div>
-                
-            )
+                    return (
+                        <>
+                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography><br/>
+                        <TextField sx={{width:`${parsed.inWidth}%`}}
+                            id="outlined-multiline-static"
+                            multiline
+                            rows={r}
+                            label={parsed.qsubtext}
+                        />
     
+                        </>
+                    )
+                } else{
+                    return (
+                        <>
+                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                        <TextField id="standard-basic" sx={{width:`${parsed.inWidth}%`}} label={parsed.qsubtext} variant="standard" />
+    
+                        </>
+                    )
+    
+                }
+                
+            }else if (parsed.qtype == "check"){
+                var renoc = [];
+                if(parsed.qoptions){
+                    for (var i = 0; i < parsed.qoptions.length; i++) {renoc.push(<FormControlLabel control={<Checkbox />} label={parsed.qoptions[i]} />)}
+                }
+                return (
+                    <>
+                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                        <FormLabel >{parsed.qsubtext}</FormLabel>
+                        <FormGroup>
+                            {renoc}
+                        </FormGroup>
+    
+                    </>
+                )
+            }else if (parsed.qtype == "radio"){
+                //if text box height is given, set it, else 1 line
+                var renor = [];
+                if(parsed.qoptions){
+                    
+                    for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
+                }
+                    ////okok the component below has to be a unique identifier, right?
+                return (
+                    <>
+                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
+                        <FormControl>
+                            <FormLabel >{parsed.qsubtext}</FormLabel>
+                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label"  name="radio-buttons-group">
+                                {renor}
+                            </RadioGroup>
+                        </FormControl>
+                    </>
+                )
+            }else {
+                return (
+                    <div>
+                        <h4> A qtypeless question appeared in the wild</h4>
+                    </div>    
+                )
+
+            }
+
         }
+
+        
     }else {
         return (
             <div>
@@ -391,6 +423,13 @@ const Titler = ({form}) => {
         pieceArrRef.current = d;
     }
 
+    const [confirm, _setConfirm] = useState({clear:"no", delete:"no"});
+    const confirmRef = useRef(confirm);
+    const setConfirm = (f) => {
+        _setConfirm(f);
+        confirmRef.current = f;
+    }
+
     const [aPiece, _setAPiece] = useState({});
     const pieceRef = useRef(aPiece);
     const setAPiece = (c) => {
@@ -399,10 +438,15 @@ const Titler = ({form}) => {
     }
 
     const optionRef = useRef({});
-    const publishedRef = useRef({});
+    
 
 
-    const [titledesc, setTitleDesc] = useState({});
+    const [form, _setForm] = useState({});
+    const formRef = useRef(form);
+    const setForm = (d) => {
+        _setForm(d);
+        formRef.current = d;
+    }
     
 
     const [editing, _setEditing] = useState('');
@@ -750,8 +794,8 @@ const Titler = ({form}) => {
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
             >
-                <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
-                <Typography sx={{...fontsx,...normsx,...gray}}>Add Question</Typography>
+                <AddIcon sx={plussx} fontSize={"medium"} />
+                <Typography sx={{...fontsx,...normsx}}>Add Question</Typography>
             </Box>
             <Menu
               id="basic-menu"
@@ -789,27 +833,20 @@ const Titler = ({form}) => {
     const Toolbar = ({location})=> {
         return(
             <Card sx={toolssx}>
-                    <Box sx={toolboxsx} >
-                        <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
-                        <Typography sx={{...fontsx,...normsx,...gray}}>Add Question</Typography>
-                    </Box>
+                    
                     <Box sx={toolboxsx} onClick={()=>{addPiece("header",location)}}>
-                        <TitleRounded sx={{...plussx,...gray}} fontSize={"medium"} />
-                        <Typography sx={{...fontsx,...normsx,...gray}}>Add Header</Typography>  
+                        <TitleRounded sx={plussx} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx}}>Add Header</Typography>  
                     </Box>
                     <Box sx={toolboxsx} onClick={()=>{addPiece("break",location)}}>
-                        <MoreHorizFilled sx={{...plussx,...gray}} fontSize={"medium"} />
-                        <Typography sx={{...fontsx,...normsx,...gray}}>Add Divider</Typography>  
-                    </Box>
-                    <Box sx={toolboxsx} onClick={()=>{logPieces()}}>
-                        <AddIcon sx={{...plussx,...gray}} fontSize={"medium"} />
-                        <Typography sx={{...fontsx,...normsx,...gray}}>log pieces</Typography>
+                        <MoreHorizFilled sx={plussx} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx}}>Add Divider</Typography>  
                     </Box>
                     <BasicMenu l={location}/>
                     
 
     
-                </Card>
+            </Card>
         )
     }
 
@@ -825,23 +862,46 @@ const Titler = ({form}) => {
     }
     function publishform () {
         //set published = true, then
-        publishedRef.current=true
+        setForm({ 
+            _id: form._id, 
+            title: form.title, 
+            description: form.description, 
+            published: true
+        })
         saveform();
         console.log("saved and published")
     }
     function unpublishform () {
         //set published = true, then
-        publishedRef.current=false
+        setForm({ 
+            _id: form._id, 
+            title: form.title, 
+            description: form.description, 
+            published: false
+        })
         saveform();
-        console.log("saved and published")
+        console.log("saved and unpublished")
     }
     function clearformconf () {
-        //get confirmation!!
+        setConfirm({clear:"yes", delete:"no"})
         console.log("are you sure?, all your questions will be erased.")
     }
     function deleteformconf () {
-        //get confirmation!!
+        setConfirm({clear:"no", delete:"yes"})
         console.log("are you sure?, all your questions will be erased.")
+    }
+    function cancel () {
+        setConfirm({clear:"no", delete:"no"})
+    }
+    
+    function clearform () {
+        setConfirm({clear:"no", delete:"no"})
+        setPieces([])
+        console.log("are you sure?, all your questions will be erased.")
+    }
+    function deleteform () {///////////////////////////////////////////////////////////////////db call here!!!!!!!!!!!!!!!!!!!
+        
+        console.log("exterminate")
     }
     function responseslinkconf () {
         //get confirmation??
@@ -852,42 +912,67 @@ const Titler = ({form}) => {
         console.log("do you want to save your changes?")
     }
 
+    function ButtonsTwo ({conf}) {
 
-    function ButtonsOne ({published}) {
+        if(conf.clear=="no"&conf.delete=="no"){
+            return(
+                <Stack spacing={2} direction="column">
+                    <Button variant="outlined" onClick={clearformconf} color="error">CLEAR FORM </Button>
+                    <Button variant="contained" onClick={deleteformconf} color="error">DELETE FORM</Button><br/><br/><br/><br/><br/>
+                </Stack>
+            )
+        }else if (conf.clear=="yes"){
+            return(
+                <Stack spacing={2} direction="column">
+                    <Button variant="contained" onClick={clearform} color="error">CONFIRM CLEAR </Button>
+                    <Typography sx={{...fontsx,...normsx,...gray}}>All questions will be deleted in form and responses.</Typography>
+                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br/><br/>
+                </Stack>
+            )
 
-        if(!published){
+        }else{
+            return(
+                <Stack spacing={2} direction="column">
+                    <Button variant="contained" onClick={deleteform} color="error">CONFIRM DELETE </Button>
+                    <Typography sx={{...fontsx,...normsx,...gray}}>Form, response link, and responses will be deleted.</Typography>
+                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br/><br/>
+                </Stack>
+            )
+
+        }
+
+
+
+    }
+
+
+    function ButtonsOne ({form}) {
+
+        if(form.published==false){
             return(
 
-                <Stack spacing={2} direction="column">,
+                <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={saveform}>SAVE FORM </Button>
-                    <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
-                    <Typography sx={{...fontsx,...normsx,...gray}}>Form is currently not available to respondents</Typography>
-                    <Divider variant="middle" /><br/>
-                    <Divider variant="middle" />
-                    <Button variant="outlined" onClick={clearformconf}>CLEAR FORM </Button>
-                    <Button variant="contained" onClick={deleteformconf}>DELETE FORM</Button>
-                    <Divider variant="middle" /><br/>
-                    <Divider variant="middle" />
                     <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
                     <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
+                    <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
+                    <Typography sx={{...fontsx,...normsx,...gray}}>Form is currently not available to respondents</Typography><br/><br/>
+                    <Divider variant="middle" />
+                    
                 </Stack>
 
             )
         } else {
             return(
-                <Stack spacing={2} direction="column">,
+                <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={saveform}>SAVE FORM </Button>
-                    <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
-                    <Typography sx={{...fontsx,...normsx,...gray}}>Form is currently published at:</Typography> 
-                    <Typography sx={{...fontsx,...normsx,...gray}}>{respondlink}</Typography>
-                    <Divider variant="middle" /><br/>
-                    <Divider variant="middle" />
-                    <Button variant="outlined" onClick={clearformconf}>CLEAR FORM </Button>
-                    <Button variant="contained" onClick={deleteformconf}>DELETE FORM</Button>
-                    <Divider variant="middle" /><br/>
-                    <Divider variant="middle" />
                     <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
                     <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
+                    <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
+                    <Typography sx={{...fontsx,...normsx,...gray}}>Form currently published at:</Typography> 
+                    <Typography sx={{...fontsx,...normsx,...gray}}>{respondlink}</Typography>
+                    
+                    
                 </Stack>
             )
         }
@@ -960,7 +1045,16 @@ const Titler = ({form}) => {
     
     }
 
+  
+
+    
+
     useEffect(() => {
+
+        
+        
+
+      
 
         ///dummy data///////////////////////////////////////////////////////////////
 
@@ -993,8 +1087,15 @@ const Titler = ({form}) => {
         
 
         //setPieces(form1.pieces);//replace this line with setPieces(<get pieces of this form>)/SEE AT BOTTOM /////////////////////////******************
-        publishedRef.current=form1.published
-        setTitleDesc({title: form1.title, description: form1.description})
+        
+
+        setForm({ 
+            _id: form1._id, 
+            title: form1.title, 
+            description: form1.description, 
+            published: form1.published
+        })
+
         setPieces(form1.pieces.map((piece)=>{
                 let z = {
                     _id: piece._id,
@@ -1041,6 +1142,10 @@ const Titler = ({form}) => {
     
     function logPieces(){
         console.log(pieces);
+    }
+
+    function logForm(){
+        console.log(form);
     }
 /////////////////////////////////////////////////////////////CHANGE THESES VALUES, WE DON"T WANT GOATS TO SHOW UP IF THEY LEAVE IT BLANK!!///OR NOT////
     function addPiece(type,loc,qt="-1"){
@@ -1104,30 +1209,45 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
     return(
         <>
         <CssBaseline />
-        <Box  display="flex" flexDirection="column" sx={{height:"100%", backgroundColor:"rgb(250,250,250)"}}>
+        <Box  display="flex" flexDirection="row" sx={{height:"100%", backgroundColor:"rgb(250,250,250)"}}>
             
-        <Box sx={{ padding: "118px 0 0 4%",maxWidth: "275px",height: "100%",display: "block",margin: "0 4% 0 0"}}>
-                            <Typography variant="h6" height={55} sx={fontsx}>
-                                {(() => {return dayTime() + " " + Auth.getProfile()?.name ?? "User"})()}
-                                <br />
-                            </Typography>
-                            <Typography variant="h4"  height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
-                                {titledesc.title}
-                                <br />
-                            </Typography>
-                            <Typography variant="body1" width={216} height={48} sx={fontsx}>
-                                {'Edit your form by clicking on the toolbar icons.'}
-                            </Typography>
+            <Box sx={{ padding: "118px 0 0 4%",maxWidth: "275px",height: "100%",display: "block",margin: "0 4% 0 0"}}>
+                <Typography variant="h6" height={55} sx={fontsx}>
+                    {(() => {return dayTime() + " " + Auth.getProfile()?.name ?? "User"})()}
+                    <br />
+                </Typography>
+                <Typography variant="h4"  height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
+                    {form.title}
+                    <br />
+                </Typography>
+                <Typography variant="body1" width={216} height={48} sx={fontsx}>
+                    {'Edit your form by clicking on the toolbar icons.'}
+                </Typography>
+
+                <Box sx={toolboxsx} onClick={()=>{logPieces()}}>
+                        <AddIcon sx={plussx} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx}}>log pieces</Typography>
+                </Box>
+                <Box sx={toolboxsx} onClick={()=>{logForm()}}>
+                        <AddIcon sx={plussx} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx}}>log form</Typography>
+                </Box>
             </Box>
+
+            
             <Card sx={formsx}>
-                <Titler form={titledesc} sx={{borderLeft: "5px solid white"}}/>
+                <Titler form={form} sx={{borderLeft: "5px solid white"}}/>
                 <Editor pieces={pieceArrRef.current}/>
             </Card>
-            <Box sx={{ padding: "118px 0 0 4%",maxWidth: "275px",height: "100%",display: "block",margin: "0 4% 0 0"}}>
-                <ButtonsOne published={publishedRef.current}/>
-            </Box>
+            
+
+            <Card sx={buttonssx}>
+                <ButtonsTwo conf={confirm} key={"buttons2"}/>
+                <ButtonsOne form={form} key={"buttons1"}/>
+            </Card>
             
         </Box>
+
         </>
         
         
