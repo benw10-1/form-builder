@@ -45,7 +45,6 @@ const typeDefs = gql`
     creator: User!
     piece_refs: [ID!]!
     createdAt: String!
-    props: [Prop!]!
   }
 
   type Response {
@@ -60,6 +59,7 @@ const typeDefs = gql`
     getPiecesByID(id: ID!): [Piece!]!
     getPiecesByEndpoint(ep: String!): [Piece!]!
     getResponsesByForm(id: ID!): [Response!]!
+    getFormByID(id: ID!): Form
   }
 
   type Mutation {

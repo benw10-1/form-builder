@@ -13,13 +13,23 @@ async function getMe(parent, args, context) {
 
 async function getMyForms(parent, args, context) {
     // guard clause for cached login
-    console.log(context.user)
     if (!context.user) throw new AuthenticationError("Not logged in")
     const user = await User.findOne({ _id: context.user._id })
 
     const forms = await Form.find({ creator: user._id })
 
     return forms
+}
+
+async function getFormByID(parent, { id }, context) {
+    if (!context.user) throw new AuthenticationError("Not logged in")
+    const user = await User.findOne({ _id: context.user._id })
+    if (!user) throw new AuthenticationError("Incorrect id")
+
+    const form = await Form.findOne({ _id: id })
+    if (form && context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
+
+    return form
 }
 
 async function getPiecesByID(parent, { id }, context) {
@@ -55,4 +65,4 @@ async function getResponsesByForm(parent, { id }, context) {
 }
 
 
-module.exports = { getMe, getMyForms, getResponsesByForm, getPiecesByID, getPiecesByEndpoint }
+module.exports = { getFormByID, getMe, getMyForms, getResponsesByForm, getPiecesByID, getPiecesByEndpoint }

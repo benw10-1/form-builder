@@ -127,4 +127,33 @@ async function getResponsesByForm(id) {
     })
 }
 
+async function getFormByID(id) {
+    const query = `
+    query Query($id: ID!) {
+        getFormByID(id: $id) {
+            _id
+            title
+            description
+            endpoint
+            published
+            creator {
+                _id
+            }
+            piece_refs
+            createdAt
+        }
+    }
+    `
+
+    const variables = { "id": id }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getFormByID
+        }
+    })
+}
+
 export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint }
