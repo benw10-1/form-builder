@@ -31,9 +31,9 @@ const typeDefs = gql`
 
   input PieceInp {
     _id: ID
-    _type: String!
+    _type: String
     form_ref: ID
-    props: [PropInp!]!
+    props: [PropInp]!
   }
 
   type Form {
@@ -65,7 +65,7 @@ const typeDefs = gql`
   type Mutation {
     createForm(title: String!, description: String): Form!
     updateFormMeta(id: ID!, title: String!, description: String): Form
-    updateFormPieces(id: ID!, pieces: [PieceInp!]!): Form
+    updateFormPieces(id: ID!, pieces: [PieceInp]!): Form
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
     respond(id: ID!, responses: [PropInp!]!): Response!

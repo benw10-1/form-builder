@@ -156,4 +156,4 @@ async function getFormByID(id) {
     })
 }
 
-export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint }
+export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint, getFormByID}

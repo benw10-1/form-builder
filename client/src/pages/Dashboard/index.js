@@ -48,7 +48,7 @@ function AllForms({ forms=[], modal }) {
         forms.forEach(x => {
             const { _id, title, description, createdAt, published } = x
             const editclick = (event) => {
-                window.location.assign(window.location.origin + "/editForm/" + _id)
+                window.location.assign(window.location.origin + "/alteditForm/" + _id)
             }
             const prevclick = (event) => {
                 window.location.assign(window.location.origin + "/preview/" + _id)
@@ -152,7 +152,7 @@ function Dashboard() {
         }
         handleClose()
         reloadPage()
-        window.location.assign(window.location.origin + "/editform/" + newForm._id)
+        window.location.assign(window.location.origin + "/alteditform/" + newForm._id)
     }
 
     // main render logic

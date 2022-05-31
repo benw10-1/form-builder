@@ -334,8 +334,14 @@ const NormalRender = ( {piece} ) => {
             }else if (parsed.qtype == "check"){
                 var renoc = [];
                 if(parsed.qoptions){
-                    for (var i = 0; i < parsed.qoptions.length; i++) {renoc.push(<FormControlLabel control={<Checkbox />} label={parsed.qoptions[i]} />)}
+                    for (var i = 0; i < piece.props.length; i++) {
+                        let aa= piece.props[i].value;
+                        if(piece.props[i].key=="qoptions"){
+                            renoc.push(<FormControlLabel control={<Checkbox />} label={aa} />)
+                        }
+                    }
                 }
+                
                 return (
                     <>
                         <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
@@ -349,10 +355,15 @@ const NormalRender = ( {piece} ) => {
             }else if (parsed.qtype == "radio"){
                 //if text box height is given, set it, else 1 line
                 var renor = [];
-                if(parsed.qoptions){
-                    
-                    for (var i = 0; i < parsed.qoptions.length; i++) {renor.push( <FormControlLabel  control={<Radio />} value={parsed.qoptions[i]} label={parsed.qoptions[i]}/>)}
+                if(parsed.qoptions){    
+                    for (var i = 0; i < piece.props.length; i++) {
+                        let aa= piece.props[i].value;
+                        if(piece.props[i].key=="qoptions"){
+                            renor.push(<FormControlLabel control={<Radio />} label={aa} value={aa}/>)
+                        }
+                    }
                 }
+                
                     ////okok the component below has to be a unique identifier, right?
                 return (
                     <>
@@ -857,29 +868,28 @@ const Titler = ({form}) => {
     //need to add edit detector if am going to ask for save or not for every link
 
     let respondlink = "somelink";
-    function saveform () {
-        console.log("save")
+
+    async function saveform (xx) {
+        let zz = removeIds(xx);
+        await mutations.updateFormPieces(id, zz);
+
+
+        console.log(zz)
     }
     function publishform () {
-        //set published = true, then
-        setForm({ 
-            _id: form._id, 
-            title: form.title, 
-            description: form.description, 
-            published: true
-        })
-        saveform();
+        
+        let f = form;
+        f.published = true;
+        setForm(f)
+        //saveform();NOT the pieces call it saveMeta idk
         console.log("saved and published")
     }
     function unpublishform () {
         //set published = true, then
-        setForm({ 
-            _id: form._id, 
-            title: form.title, 
-            description: form.description, 
-            published: false
-        })
-        saveform();
+        let f = form;
+        f.published = false;
+        setForm(f)
+        //saveform(); NOT the pieces call it saveMeta idk
         console.log("saved and unpublished")
     }
     function clearformconf () {
@@ -952,7 +962,7 @@ const Titler = ({form}) => {
             return(
 
                 <Stack spacing={2} direction="column">
-                    <Button variant="contained" onClick={saveform}>SAVE FORM </Button>
+                    <Button variant="contained" onClick={()=>{saveform(pieceArrRef.current)}}>SAVE FORM </Button>
                     <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
                     <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
@@ -965,7 +975,7 @@ const Titler = ({form}) => {
         } else {
             return(
                 <Stack spacing={2} direction="column">
-                    <Button variant="contained" onClick={saveform}>SAVE FORM </Button>
+                    <Button variant="contained" onClick={()=>{saveform(pieceArrRef.current)}}>SAVE FORM </Button>
                     <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
                     <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
@@ -1048,13 +1058,36 @@ const Titler = ({form}) => {
   
 
     
+    const { id } = useParams();
+    let [loading, setLoading] = useState(true)
+    //let [pieces, setPieces] = useState([])
 
     useEffect(() => {
 
-        
+        async function req() {
+            let loggedIn = Auth.loggedIn()
+            if (!loggedIn) {
+                window.location.replace(window.location.origin + "/login")
+                return
+            }
+            let reqForm = (await queries.getFormByID(id)).result ?? {}
+            let reqPieces = (await queries.getPiecesByID(id)).result ?? []
+            setForm(reqForm)
+            setPieces(reqPieces.map((piece)=>{
+                    let z = {...piece,
+                        piid: uuid.v4()
+                    }
+                    return z;   
+            }));
+            console.log(formRef.current)
+            console.log("yo this one")
+            console.log(pieceArrRef.current)
+            setLoading(false)
+            
+        }
+        req()
         
 
-      
 
         ///dummy data///////////////////////////////////////////////////////////////
 
@@ -1088,46 +1121,47 @@ const Titler = ({form}) => {
 
         //setPieces(form1.pieces);//replace this line with setPieces(<get pieces of this form>)/SEE AT BOTTOM /////////////////////////******************
         
-
+/*
         setForm({ 
             _id: form1._id, 
             title: form1.title, 
             description: form1.description, 
             published: form1.published
         })
-
+*/
+/*
         setPieces(form1.pieces.map((piece)=>{
-                let z = {
-                    _id: piece._id,
-                    piid: uuid.v4(), 
-                    _type: piece._type, 
-                    props: piece.props
+                let z = {...piece,
+                    piid: uuid.v4()
                 }
                 return z;   
         }));
-
+*/
         setEditing('-1');
         
         
     }, [])
 
-    function removeIds(){
-        setPieces(pieces.map(  (piece)=>{
+    function removeIds(zz){
+        return zz.map(  (piece)=>{
             if(piece._id){
                 let z = {
                     _id: piece._id,
                     _type: piece._type, 
+                    form_ref: id,
                     props: piece.props
                 };
                 return z;
             }else{
                 let z = { 
-                    type: piece.type, 
+                    
+                    _type: piece._type, 
+                    form_ref: id,
                     props: piece.props
                 };
                 return z;
             }   
-        }));
+        });
     }
 
 
@@ -1205,6 +1239,17 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
     
     ////////////////////////end scratch/function area/////////////////////////////////////////////////////////////////////
 
+    
+    let sampleForm={
+        _id: "62957d6b1ff7cd229d54ebb5",
+        createdAt: "1653964139558",
+        creator: { _id: "62945f2c19fc4ab989b6bda9" },
+        description: "werte",
+        endpoint: null,
+        piece_refs: [],
+        published: false,
+        title: "qwretrt"
+    }
 
     return(
         <>
@@ -1266,27 +1311,11 @@ export default ALTEditForm;
 /*
 let { id } = useParams()
 
-    let [loading, setLoading] = useState(true)
-    let [pieces, setPieces] = useState([])
+    
 
     // same logic as Dashboard.js
     useEffect(() => {
-        async function req() {
-            let loggedIn = Auth.loggedIn()
-            if (!loggedIn) {
-                window.location.replace(window.location.origin + "/login")
-                return
-            }
-            let reqPieces = (await queries.getPiecesByID(id)).result ?? []
-            if (!reqPieces) {
-                window.location.replace(window.location.origin + "/dashboard")
-            }
-            else {
-                setPieces(reqPieces)
-                setLoading(false)
-            }
-        }
-        req()
+        
     }, [])
 */
 
