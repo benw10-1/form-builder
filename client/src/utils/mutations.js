@@ -79,11 +79,8 @@ async function createForm(title, description) {
  * @returns Response object created
  */
 async function respond(id, responses) {
-  if (responses.length) responses = parseProps(responses)
-
-  responses = Object.keys(responses).map(key => {
-    return { "key": key, "value": responses[key] }
-  })
+ 
+  /*[{key: pieceid, value: ""},{key: pieceid, value: ["",""]},]*/
 
   const variables = { id, responses }
   const query = `
@@ -132,7 +129,7 @@ async function updateFormMeta(id, title, description) {
 
 async function updateFormPieces(id, pieces) {
   const query = `
-    mutation UpdateFormPieces($id: ID!, pieces: [PieceInp!]!) {
+    mutation UpdateFormPieces($id: ID!, $pieces: [PieceInp!]!) {
       updateFormPieces(id: $id, pieces: $pieces) {
         _id
         title
