@@ -51,7 +51,7 @@ async function setPublished(parent, { id, publish }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
-    if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
+    if (context.user._id !== String(form.creator._id)) throw new AuthenticationError("Not creator")
 
     const updated = await Form.updateOne({ _id: id }, { published: publish }).exec()
 
@@ -110,5 +110,6 @@ module.exports = {
     createForm,
     respond,
     updateFormMeta,
-    updateFormPieces
+    updateFormPieces,
+    setPublished
 }
