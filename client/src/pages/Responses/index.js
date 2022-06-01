@@ -33,7 +33,7 @@ const responses = [
         ],
     },
     {
-        createdAt: 1654065883136,
+        createdAt: 1654065883137,
         response: [
             {
                 key: "_somepieceid",
@@ -41,26 +41,90 @@ const responses = [
             },
             {
                 key: "_somepieceid1",
-                value: "dis, value"
+                value: "dis, value1"
             },
             {
                 key: "_somepieceid2",
-                value: "dis, value"
+                value: "dis, value1"
             },
             {
                 key: "_somepieceid3",
-                value: "dis, value"
+                value: "dis, value1"
             },
             {
                 key: "_somepieceid4",
+                value: "dis, value1"
+            },
+        ],
+    },
+    {
+        createdAt: 1654065883138,
+        response: [
+            {
+                key: "_somepieceid",
                 value: "dis, value"
+            },
+            {
+                key: "_somepieceid1",
+                value: "dis, value1"
+            },
+            {
+                key: "_somepieceid2",
+                value: "dis, value1"
+            },
+            {
+                key: "_somepieceid3",
+                value: "dis, value1"
+            },
+            {
+                key: "_somepieceid4",
+                value: "dis, value1"
+            },
+        ],
+    },
+    {
+        createdAt: 1654065883139,
+        response: [
+            {
+                key: "_somepieceid",
+                value: "dis, value"
+            },
+            {
+                key: "_somepieceid1",
+                value: "dis, value1"
+            },
+            {
+                key: "_somepieceid2",
+                value: "dis, value1"
+            },
+            {
+                key: "_somepieceid3",
+                value: "dis, value1"
+            },
+            {
+                key: "_somepieceid4",
+                value: "dis, value1"
             },
         ],
     },
 ]
 
-function parseResponseData(data) {
+async function parseResponseData(data) {
+    let parsed = {}
 
+    data.forEach(res => {
+        const { createdAt, response } = res
+        let temp = {}
+        response.forEach(r => {
+            const { key, value } = r
+            
+        })
+    })
+
+    return {
+        columns: Object.keys(parsed),
+        rows: Object.values(parsed)
+    }
 }
 
 function ResponseView({ id }) {
@@ -71,10 +135,12 @@ function ResponseView({ id }) {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        queries.getResponsesByForm(id).then(res => {
-            setData(parseResponseData(res.result))
-            setLoading(false)
-        })
+        // queries.getResponsesByForm(id).then(res => {
+        //     setData(await parseResponseData(res.result))
+        //     setLoading(false)
+        // })
+        setData(await parseResponseData(responses))
+        setLoading(false)
     }, [])
 
     const contsx = {

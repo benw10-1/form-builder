@@ -1050,8 +1050,8 @@ const Titler = ({form}) => {
                 window.location.replace(window.location.origin + "/login")
                 return
             }
-            let reqForm = (await queries.getFormByID(id)).result ?? {}
-            let reqPieces = (await queries.getPiecesByID(id)).result ?? []
+            let reqForm = (await queries.getFormByID(id))?.result ?? {}
+            let reqPieces = (await queries.getPiecesByID(id))?.result ?? []
             setForm(reqForm)
             setPieces(reqPieces.map((piece)=>{
                     let z = {...piece,

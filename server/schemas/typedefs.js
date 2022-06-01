@@ -70,6 +70,7 @@ const typeDefs = gql`
     login(login: String!, password: String!): Auth
     respond(id: ID!, responses: [PropInp!]!): Response!
     setPublished(id: ID!, published: Boolean!): Form
+    deleteForm(id: ID!): Form
   }
 `;
 

@@ -172,4 +172,24 @@ async function setPublished(id, published) {
   })
 }
 
-export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished }
+async function deleteForm(id) {
+  const variables = { id }
+  const query = `
+    mutation DeleteForm($id: ID!) {
+      deleteForm(id: $id) {
+        _id
+        title
+      }
+    }
+    `
+
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.deleteForm
+    }
+  })
+}
+
+export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished, deleteForm }
