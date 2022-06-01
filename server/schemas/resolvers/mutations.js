@@ -47,6 +47,17 @@ async function updateFormMeta(parent, { id, title, description }, context) {
     return updated
 }
 
+async function setPublished(parent, { id, publish }, context) {
+    if (!context.user) throw new AuthenticationError("Not logged in")
+    const form = await Form.findById(id)
+    if (!form) throw new Error("Form not found")
+    if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
+
+    const updated = await Form.updateOne({ _id: id }, { published: publish }).exec()
+
+    return updated
+}
+
 async function updateFormPieces(parent, { id, pieces }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
     const form = await Form.findById(id)
