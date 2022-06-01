@@ -31,7 +31,7 @@ function App() {
                 <Route path="/preview/:id" element={<Form/>} />
 
                 {/*testing route*/}
-                <Route path="/alteditform" element={<ALTEditForm/>} />
+                <Route path="/alteditform/:id" element={<ALTEditForm/>} />
 
                 {/* wrong route route */}
                 <Route path="*" element={<FourOFour />}/>

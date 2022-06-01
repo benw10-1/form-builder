@@ -1,0 +1,37 @@
+html{
+    background-color:rgb(250,250,250);
+}
+
+
+.positioning {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: right;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.rightButtons{
+    
+    padding: 63px 61px 63px 61px;
+        
+    overflow: auto;
+    
+    position: fixed;
+    max-width: 575px;
+    height: 100%;
+    left: 1182px;
+    top: 0px ;
+    
+}
+
+.leftDisplay{
+    position: fixed;
+    padding: 118px 0 0 4%;
+    max-width: 275px;
+    height: 100%;
+    display: block;
+    margin: 0 4% 0 0;
+}

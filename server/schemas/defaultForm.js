@@ -36,13 +36,15 @@ async function defaultForm(title, creator, description) {
 
     const newForm = await Form.create(formObj)
 
-    let piece_refs = await defaultPieces(title, newForm._id, description)
+    //let piece_refs = await defaultPieces(title, newForm._id, description)
 
-    const uptForm = await Form.findOneAndUpdate({ _id: newForm._id }, { piece_refs })
+    //const uptForm = await Form.findOneAndUpdate({ _id: newForm._id }, { piece_refs })
 
-    console.log(uptForm)
+    //console.log(uptForm)
 
-    return uptForm
+    //return uptForm
+
+    return newForm
 }
 
 module.exports = defaultForm
