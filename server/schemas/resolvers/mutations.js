@@ -28,7 +28,7 @@ async function login(parent, { login, password }) {
 }
 
 async function createForm(parent, { title, description }, context) {
-    const user = await User.findOne({ _id: context.user._id })
+    const user = await User.findOne({ _id: context.user._id }).exec()
     
     if (!user) new AuthenticationError("Not logged in!")
     // creates default form for use in editing
@@ -38,24 +38,24 @@ async function createForm(parent, { title, description }, context) {
 
 async function updateFormMeta(parent, { id, title, description }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
-    const form = await Form.findById(id)
+    const form = await Form.findById(id).exec()
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
 
-    const updated = await Form.updateOne({ _id: id }, { title, description }).exec()
+    const updated = await Form.findOneAndUpdate({ _id: id }, { title, description }).exec()
 
     return updated
 }
 
-async function setPublished(parent, { id, publish }, context) {
+async function setPublished(parent, { id, published }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
-    const form = await Form.findById(id)
+    const form = await Form.findById(id).exec()
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
 
     let updated
-    if (form.endpoint) updated = await Form.updateOne({ _id: id }, { published: publish }).exec()
-    else updated = await Form.updateOne({ _id: id }, { published: publish, endpoint: form._id }).exec()
+    if (form.endpoint) updated = await Form.findOneAndUpdate({ _id: id }, { published }).exec()
+    else updated = await Form.findOneAndUpdate({ _id: id }, { published, endpoint: form._id }).exec()
 
     return updated
 }
@@ -76,7 +76,7 @@ async function updateFormPieces(parent, { id, pieces }, context) {
 
     const deleted = await Piece.deleteMany({ form_ref: id }).exec()
 
-    const updated = await Form.updateOne({ _id: id }, { piece_refs: parsedPieces }).exec()
+    const updated = await Form.findOneAndUpdate({ _id: id }, { piece_refs: parsedPieces }).exec()
 
     return updated
 }
@@ -85,6 +85,10 @@ async function respond(parent, { id, responses }, context) {
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
     if (!form.published) throw new Error("Form not published")
+
+    for (const x of responses) {
+
+    }
 
     const newResponse = await Response.create({ form_ref: id, responses })
 

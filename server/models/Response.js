@@ -10,6 +10,9 @@ const responseSchema = new Schema(
             type: Object,
             required: true
         }]
+    },
+    {
+        timestamps: true
     }
 )
 

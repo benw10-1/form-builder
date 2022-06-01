@@ -69,7 +69,7 @@ const typeDefs = gql`
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
     respond(id: ID!, responses: [PropInp!]!): Response!
-    setPublished(id: ID!, publish: Boolean!): Form
+    setPublished(id: ID!, published: Boolean!): Form
   }
 `;
 

@@ -4,7 +4,7 @@ const { AuthenticationError } = require('apollo-server-express')
 async function getMe(parent, args, context) {
     // get user and also return full forms object
     if (context.user) {
-        let user = await User.findOne({ _id: context.user._id })
+        let user = await User.findOne({ _id: context.user._id }).exec()
         delete user.password
         return user
     }
@@ -14,9 +14,9 @@ async function getMe(parent, args, context) {
 async function getMyForms(parent, args, context) {
     // guard clause for cached login
     if (!context.user) throw new AuthenticationError("Not logged in")
-    const user = await User.findOne({ _id: context.user._id })
+    const user = await User.findOne({ _id: context.user._id }).exec()
 
-    const forms = await Form.find({ creator: user._id })
+    const forms = await Form.find({ creator: user._id }).exec()
 
     return forms
 }
@@ -34,7 +34,7 @@ async function getFormByID(parent, { id }, context) {
 
 async function getPiecesByID(parent, { id }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
-    const form = await Form.findById(id).populate("piece_refs")
+    const form = await Form.findById(id).populate("piece_refs").exec()
     if (!form) throw new Error("Form not found")
 
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Can't access by ID")
@@ -43,7 +43,7 @@ async function getPiecesByID(parent, { id }, context) {
 }
 
 async function getPiecesByEndpoint(parent, { endpoint }, context) {
-    const form = await Form.findOne({ "endpoint": endpoint }).populate("piece_refs")
+    const form = await Form.findOne({ "endpoint": endpoint }).populate("piece_refs").exec()
     if (!form) throw new Error("Form not found")
     if (!form.published) throw new Error("Form not published")
 
@@ -52,14 +52,14 @@ async function getPiecesByEndpoint(parent, { endpoint }, context) {
 
 async function getResponsesByForm(parent, { id }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
-    const user = await User.findOne({ _id: context.user._id })
+    const user = await User.findOne({ _id: context.user._id }).exec()
     if (!user) throw new AuthenticationError("Incorrect id")
 
-    const form = await Form.findOne({ _id: id })
+    const form = await Form.findOne({ _id: id }).exec()
     if (!form) throw new AuthenticationError("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
 
-    const responses = await Response.find({ form_ref: id })
+    const responses = await Response.find({ form_ref: id }).sort({ createdAt: -1 }).exec()
 
     return responses
 }
