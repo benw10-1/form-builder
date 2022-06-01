@@ -156,4 +156,22 @@ async function getFormByID(id) {
     })
 }
 
-export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint, getFormByID}
+async function getPiecesQuestionTitle(ids) {
+    const query = `
+    query Query($ids: [ID!]!) {
+        getPiecesQuestionTitle(ids: $ids) 
+    }
+    `
+
+    const variables = { "ids": ids }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getPiecesQuestionTitle
+        }
+    })
+}
+
+export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint, getFormByID, getPiecesQuestionTitle }

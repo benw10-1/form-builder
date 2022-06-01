@@ -92,6 +92,7 @@ async function respond(parent, { id, responses }, context) {
         const piece = await Piece.findById(key).exec()
         if (!piece) throw new Error("Piece not found")
         if (piece.form_ref !== form._id) throw new Error("Piece not in form")
+        // if (piece._type === "break") throw new Error("Break piece cannot be responded to")
         // if (piece._type === "singleselect") {
         //     if (!piece.props.some(y => y.value === value)) throw new Error(`Value ${value} not in piece ${key}`)
         // }

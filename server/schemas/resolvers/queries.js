@@ -42,6 +42,21 @@ async function getPiecesByID(parent, { id }, context) {
     return form.piece_refs
 }
 
+// async function getPiecesQuestionTitle(parent, { ids }, context) {
+//     if (!context.user) throw new AuthenticationError("Not logged in")
+    
+//     return ids.map(id => {
+//         const piece = await Piece.findOne({ _id: id }).exec()
+//         if (!piece) return "Not found: " + id
+
+//         return piece.props.reduce((prev, curr) => {
+//             if (curr.key === "qtext") prev = curr.value
+            
+//             return prev
+//         })
+//     })
+// }
+
 async function getPiecesByEndpoint(parent, { endpoint }, context) {
     const form = await Form.findOne({ "endpoint": endpoint }).populate("piece_refs").exec()
     if (!form) throw new Error("Form not found")

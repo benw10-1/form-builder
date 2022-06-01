@@ -7,7 +7,8 @@ import {
     LoginSignup,
     Form,
     EditForm,
-    ALTEditForm
+    ALTEditForm,
+    Responses
 } from "./pages"
 
 import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
@@ -32,6 +33,13 @@ function App() {
 
                 {/*testing route*/}
                 <Route path="/alteditform/:id" element={<ALTEditForm/>} />
+                <Route path="/testResponse" element={(
+                    <div style={{ width: "100%", display: "grid", placeItems: "center" }}>
+                        <div style={{ width: "60%" }}>
+                            <Responses/>
+                        </div>
+                    </div>
+                )} />
 
                 {/* wrong route route */}
                 <Route path="*" element={<FourOFour />}/>

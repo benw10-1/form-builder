@@ -39,6 +39,7 @@ async function genQuery(q, variables) {
         // TODO: network error handler
         if (data.errors) return {
             __status__: "error",
+            with: q,
             errors: data.errors
         }
         // otherwise success
