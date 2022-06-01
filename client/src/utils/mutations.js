@@ -152,4 +152,26 @@ async function updateFormPieces(id, pieces) {
   })
 }
 
-export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces }
+async function setPublished(id, published) {
+  const variables = { id, published }
+  const query = `
+    mutation SetPublished($id: ID!, $published: Boolean!) {
+      setPublished(id: $id, published: $published) {
+        _id
+        title
+        description
+        published
+      }
+    }
+    `
+
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.setPublished
+    }
+  })
+}
+
+export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished }
