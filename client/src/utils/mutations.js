@@ -79,11 +79,8 @@ async function createForm(title, description) {
  * @returns Response object created
  */
 async function respond(id, responses) {
-  if (responses.length) responses = parseProps(responses)
-
-  responses = Object.keys(responses).map(key => {
-    return { "key": key, "value": responses[key] }
-  })
+ 
+  /*[{key: pieceid, value: ""},{key: pieceid, value: ["",""]},]*/
 
   const variables = { id, responses }
   const query = `
@@ -161,6 +158,7 @@ async function setPublished(id, published) {
         title
         description
         published
+        endpoint
       }
     }
     `

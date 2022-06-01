@@ -158,7 +158,7 @@ const formsx = {
 
     position: "absolute",
     width: "800px",
-    // height: "1040px",
+    minHeight: "100vh",
     left: "382px",
     top:"0px",
 
@@ -170,20 +170,7 @@ const formsx = {
     borderRadius: "4px"
 }
 
-const buttonssx = {
-    /* Auto layout */
-    padding: "63px 61px 63px 61px",
-    
-    overflow: "auto",
 
-    position: "absolute",
-    maxWidth: "575px",
-    //height: "100%",
-    left: "1182px",
-    top:"0px",
-
-   
-}
 
 
 
@@ -877,20 +864,13 @@ const Titler = ({form}) => {
         console.log(zz)
     }
     function publishform () {
-        
-        let f = form;
-        f.published = true;
-        setForm(f)
-        //saveform();NOT the pieces call it saveMeta idk
-        console.log("saved and published")
+        setForm({...formRef.current, published:true});
+        mutations.setPublished(id, true);
     }
     function unpublishform () {
         //set published = true, then
-        let f = form;
-        f.published = false;
-        setForm(f)
-        //saveform(); NOT the pieces call it saveMeta idk
-        console.log("saved and unpublished")
+        setForm({...formRef.current, published:false});
+        mutations.setPublished(id, false);
     }
     function clearformconf () {
         setConfirm({clear:"yes", delete:"no"})
@@ -917,9 +897,9 @@ const Titler = ({form}) => {
         //get confirmation??
         console.log("do you want to save your changes?")
     }
-    function gotodash () {
-        //get confirmation??
-        console.log("do you want to save your changes?")
+    function gotodash (yy) {
+        saveform (yy);
+        window.location.assign(window.location.origin  )
     }
 
     function ButtonsTwo ({conf}) {
@@ -964,7 +944,7 @@ const Titler = ({form}) => {
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={()=>{saveform(pieceArrRef.current)}}>SAVE FORM </Button>
                     <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
-                    <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
+                    <Button variant="outlined" onClick={()=>{gotodash(pieceArrRef.current)}}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
                     <Typography sx={{...fontsx,...normsx,...gray}}>Form is currently not available to respondents</Typography><br/><br/>
                     <Divider variant="middle" />
@@ -1181,6 +1161,10 @@ const Titler = ({form}) => {
     function logForm(){
         console.log(form);
     }
+
+    function logId(){
+        console.log(id);
+    }
 /////////////////////////////////////////////////////////////CHANGE THESES VALUES, WE DON"T WANT GOATS TO SHOW UP IF THEY LEAVE IT BLANK!!///OR NOT////
     function addPiece(type,loc,qt="-1"){
 
@@ -1254,9 +1238,9 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
     return(
         <>
         <CssBaseline />
-        <Box  display="flex" flexDirection="row" sx={{height:"100%", backgroundColor:"rgb(250,250,250)"}}>
+        <Box  display="flex" flexDirection="row" sx={{height:"100%"}}>
             
-            <Box sx={{ padding: "118px 0 0 4%",maxWidth: "275px",height: "100%",display: "block",margin: "0 4% 0 0"}}>
+            <div className="leftDisplay">
                 <Typography variant="h6" height={55} sx={fontsx}>
                     {(() => {return dayTime() + " " + Auth.getProfile()?.name ?? "User"})()}
                     <br />
@@ -1277,7 +1261,11 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
                         <AddIcon sx={plussx} fontSize={"medium"} />
                         <Typography sx={{...fontsx,...normsx}}>log form</Typography>
                 </Box>
-            </Box>
+                <Box sx={toolboxsx} onClick={()=>{logId()}}>
+                        <AddIcon sx={plussx} fontSize={"medium"} />
+                        <Typography sx={{...fontsx,...normsx}}>log id</Typography>
+                </Box>
+            </div>
 
             
             <Card sx={formsx}>
@@ -1286,10 +1274,10 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
             </Card>
             
 
-            <Card sx={buttonssx}>
+            <div className="rightButtons">
                 <ButtonsTwo conf={confirm} key={"buttons2"}/>
-                <ButtonsOne form={form} key={"buttons1"}/>
-            </Card>
+                <ButtonsOne form={formRef.current} key={"buttons1"}/>
+            </div>
             
         </Box>
 
