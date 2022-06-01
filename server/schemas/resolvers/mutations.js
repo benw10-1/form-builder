@@ -1,6 +1,7 @@
 const { AuthenticationError } = require('apollo-server-express')
 const { User, Form, Response, Piece } = require("../../models")
-const { signToken, generateEndpoint } = require('../../utils')
+const { uuid } = require("uuidv4")
+const { signToken } = require('../../utils')
 const defaultForm = require("../defaultForm")
 
 async function signup(parent, args, context) {
@@ -55,7 +56,7 @@ async function setPublished(parent, { id, publish }, context) {
 
     let updated
     if (form.endpoint) updated = await Form.updateOne({ _id: id }, { published: publish }).exec()
-    else updated = await Form.updateOne({ _id: id }, { published: publish, endpoint: generateEndpoint() }).exec()
+    else updated = await Form.updateOne({ _id: id }, { published: publish, endpoint: form._id }).exec()
 
     return updated
 }

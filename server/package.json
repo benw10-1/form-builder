@@ -18,6 +18,6 @@
     "graphql": "^16.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.3",
-    "shuffle-array": "^1.0.1"
+    "uuidv4": "^6.2.13"
   }
 }
