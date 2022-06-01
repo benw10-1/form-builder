@@ -108,5 +108,6 @@ module.exports = {
     createForm,
     respond,
     updateFormMeta,
-    updateFormPieces
+    updateFormPieces,
+    setPublished
 }
