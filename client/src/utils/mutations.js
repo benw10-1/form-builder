@@ -149,19 +149,19 @@ async function updateFormPieces(id, pieces) {
   })
 }
 
-async function setPublished(id, publish) {
+async function setPublished(id, published) {
+  const variables = { id, published }
   const query = `
-    mutation SetPublished($id: ID!, $publish: Boolean!) {
-      setPublished(id: $id, publish: $publish) {
+    mutation SetPublished($id: ID!, $published: Boolean!) {
+      setPublished(id: $id, published: $published) {
         _id
         title
         description
-        endpoint
         published
+        endpoint
       }
-    }      
+    }
     `
-  const variables = { id, publish }
 
   return genQuery(query, variables).then(data => {
     if (data.__status__ === "error") return data
