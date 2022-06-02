@@ -45,6 +45,8 @@ import "./nstyle.css"
 
 function ALTEditForm() {
 
+const hurl = "http://localhost:3000/";
+
 const gray = {
     color: "rgba(0,0,0,0.5)"
 }
@@ -854,7 +856,7 @@ const Titler = ({form}) => {
 
     //need to add edit detector if am going to ask for save or not for every link
 
-    let respondlink = "somelink";
+    
 
     async function saveform (xx) {
         let zz = removeIds(xx);
@@ -938,6 +940,8 @@ const Titler = ({form}) => {
 
     function ButtonsOne ({form}) {
 
+        let rlink = `${hurl}respond/${id}`
+
         if(form.published==false){
             return(
 
@@ -960,7 +964,7 @@ const Titler = ({form}) => {
                     <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
                     <Typography sx={{...fontsx,...normsx,...gray}}>Form currently published at:</Typography> 
-                    <Typography sx={{...fontsx,...normsx,...gray}}>{respondlink}</Typography>
+                    <Typography sx={{...fontsx,...normsx,...gray}}><a href={rlink}>{rlink}</a></Typography>
                     
                     
                 </Stack>
