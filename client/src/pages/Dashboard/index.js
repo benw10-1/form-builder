@@ -66,14 +66,14 @@ function AllForms({ forms=[], modal }) {
                         </Typography>
                         {(() => {
                             if (description) return (
-                                <Typography variant="body1" sx={{ fontSize: "14px" }}>
+                                <Typography className="description" variant="body1" sx={{ fontSize: "14px" }}>
                                     {description}
                                 </Typography>
                             )
                         })()}
                     </Box>
                     <Box sx={{ width: "248px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "13px" }}>
-                        <Typography variant="body1" sx={{ fontSize: "14px" }} h={"20px"} w={"100%"}>
+                        <Typography className="created" variant="body1" sx={{ fontSize: "14px" }} h={"20px"} w={"100%"}>
                             {"Created " + moment(Number(createdAt)).format("LL")}
                         </Typography>
                         <Link onClick={prevclick} sx={hoversx}>Preview</Link>

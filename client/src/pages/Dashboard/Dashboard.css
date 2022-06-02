@@ -3,6 +3,15 @@
     background-color: #FAFAFA;
     overflow: hidden;
 }
+
+.description {
+    opacity: 60%;
+}
+
+.created {
+    opacity: 45%;
+}
+
 .dash-positioning {
     display: flex;
     width: 100%;
