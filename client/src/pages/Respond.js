@@ -387,7 +387,7 @@ const RespondRender = ( {piece, response} ) => {
                         <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
                         <FormControl>
                             <FormLabel >{parsed.qsubtext}</FormLabel>
-                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label"  name={a} onChange={handleChange} >
+                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue={response.value} name={a} onChange={handleChange} >
                                 {renor}
                             </RadioGroup>
                         </FormControl>
