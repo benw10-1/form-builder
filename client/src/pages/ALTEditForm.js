@@ -891,8 +891,8 @@ const Titler = ({form}) => {
         setPieces([])
         console.log("are you sure?, all your questions will be erased.")
     }
-    function deleteform () {///////////////////////////////////////////////////////////////////db call here!!!!!!!!!!!!!!!!!!!
-        
+    async function deleteform () {///////////////////////////////////////////////////////////////////db call here!!!!!!!!!!!!!!!!!!!
+        await mutations.deleteForm(id);
         console.log("exterminate")
     }
     function responseslinkconf () {

@@ -247,25 +247,60 @@ const hoversx = {
 }
 
 
+    const [pieces, _setPieces] = useState([]);
+    const pieceArrRef = useRef(pieces);
+    const setPieces = (d) => {
+        _setPieces(d);
+        pieceArrRef.current = d;
+    }
 
+    const [form, _setForm] = useState({});
+    const formRef = useRef(form);
+    const setForm = (f) => {
+        _setForm(f);
+        formRef.current = f;
+    }
 
-const RespondRender = ( {piece, response} ) => {
+    const [responses, _setResponses] = useState({});
+    const responsesRef = useRef(responses);
+    const setResponses = (g) => {
+        _setResponses(g);
+        responsesRef.current = g;
+    }
 
-   /* let rr =response;
-    const handleClick = (xx) => {
-        setResp(xx);
+    const [resp, _setResp] = useState({});
+    const respRef = useRef(resp);
+    const setResp = (c) => {
+        _setResp(c);
+        respRef.current = c;
+    }
 
-    }*/
+const handleChange = (e) => {
+    let loc =e.target.name
+    const index = responsesRef.current.map(ob => ob.key).indexOf(loc);
+    let P = {key: loc, value: e.target.value}
+    responsesRef.current=[...responsesRef.current.slice(0,index), P, ...responsesRef.current.slice(index+1)];
     
+};
 
-    const handleChange = (e) => {
-        setResp(response)
-        let P = respRef.current;
-        P.value = e.target.value
-        setResp(P);
-        
-    };
+const handleChangeR = (e) => {
+    let loc =e.target.name
+    const index = responsesRef.current.map(ob => ob.key).indexOf(loc);
+    let P = responsesRef.current[index]
+    P.value={...P.value, [e.target.value]:e.target.checked}
+    responsesRef.current=[...responsesRef.current.slice(0,index), P, ...responsesRef.current.slice(index+1)];
+    
+};
 
+
+
+
+
+
+
+const RespondRender = ( {piece} ) => {
+
+    
 
 
 
@@ -320,15 +355,13 @@ const RespondRender = ( {piece, response} ) => {
                     return (
                         <>
                         <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography><br/>
-                        <TextField sx={{width:`${parsed.inWidth}%`}}
-                            id="outlined-multiline-static"
+                        <TextField 
+                            sx={{width:`${parsed.inWidth}%`}}
                             multiline
                             rows={r}
                             name={a}
-                            //onClick={()=>{handleClick(rr)}}
                             label={parsed.qsubtext}
                             onChange={handleChange}
-                            defaultValue={response.value}
                             
                             
                         />
@@ -340,7 +373,12 @@ const RespondRender = ( {piece, response} ) => {
                     return (
                         <>
                         <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                        <TextField id="standard-basic" sx={{width:`${parsed.inWidth}%`}} label={parsed.qsubtext}  defaultValue={response.value} variant="standard" name={a} onChange={handleChange} />
+                        <TextField  
+                            sx={{width:`${parsed.inWidth}%`}} 
+                            label={parsed.qsubtext}  
+                            variant="standard" 
+                            name={a} 
+                            onChange={handleChange} />
     
                         </>
                     )
@@ -348,13 +386,24 @@ const RespondRender = ( {piece, response} ) => {
                 }
                 
             }else if (parsed.qtype == "check"){
+                let L
+
+                const handleChangeL = (e) =>{
+                    if(e.target.checked){
+                        L = true
+                    }else {
+                        L = false
+                    }
+                    handleChangeR(e);
+
+                } 
                 var renoc = [];
                 
                 if(parsed.qoptions){
                     for (var i = 0; i < piece.props.length; i++) {
                         let aa= piece.props[i].value;
                         if(piece.props[i].key=="qoptions"){
-                            renoc.push(<FormControlLabel control={<Checkbox />} label={aa} value={aa} name={a} onChange={handleChangeR}/>)
+                            renoc.push(<FormControlLabel control={<Checkbox />} label={aa} checked={L} value={aa} name={a} onChange={handleChangeL} />)
                         }
                     }
                 }
@@ -387,7 +436,7 @@ const RespondRender = ( {piece, response} ) => {
                         <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
                         <FormControl>
                             <FormLabel >{parsed.qsubtext}</FormLabel>
-                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue={response.value} name={a} onChange={handleChange} >
+                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label"  name={a} onChange={handleChange} >
                                 {renor}
                             </RadioGroup>
                         </FormControl>
@@ -435,85 +484,34 @@ const Titler = ({form}) => {
 
 
 
-
-
-
-
-
-    
-
-    ////////////////////////scratch/function area/////////////////////////////////////////////////////////////////////
-
-    const [pieces, _setPieces] = useState([]);
-    const pieceArrRef = useRef(pieces);
-    const setPieces = (d) => {
-        _setPieces(d);
-        pieceArrRef.current = d;
-    }
-
-    const [form, _setForm] = useState({});
-    const formRef = useRef(form);
-    const setForm = (f) => {
-        _setForm(f);
-        formRef.current = f;
-    }
-
-    const [responses, _setResponses] = useState([]);
-    const responsesRef = useRef(responses);
-    const setResponses = (g) => {
-        _setResponses(g);
-        responsesRef.current = g;
-    }
-
-    const [resp, _setResp] = useState({});
-    const respRef = useRef(resp);
-    const setResp = (c) => {
-        _setResp(c);
-        respRef.current = c;
-    }
-
-
-
-   /*function handleChange (e){
-
-        let P = {key:e.target.name, value:e.target.value}
-        const index = responses.map(e => e.key).indexOf(e.target.name);
-        setResponses([...responses.slice(0,index), P, ...responses.slice(index+1)]);
-   }*/
-
-   function handleChangeR (e){
-       /*let currArr = responsesRef.current.filter(r => r.key=e.target.name)[0].value;
-       if( currArr.length ==0 ){
-           currArr=[e.target.value]
-       }else {
-            
-            if(!e.target.checked){
-                for (let i=0; i<currArr.length; i++){
-                    if(currArr[i]==e.target.value){
-                        currArr=[...currArr.slice(0,i),...currArr.slice(i+1)]
-                    }
-                }   
-
-           }else{
-                let flag = 1
-                for (let i=0; i<currArr.length; i++){
-                    if(currArr[i]==e.target.value){
-                        flag=0
-                    }
-                } 
-                if(flag==1){
-                    currArr.push(e.target.value)
-                }
-           }   
-       }
-       setResponses([...responsesRef.current.filter(r => r.key!=e.target.name),{key:e.target.name, value: currArr}]);
-*/
-
-    }
-
     async function submit () {
 
-        console.log("yoo send it");
+        let ans = [...responsesRef.current];
+        
+        for (let h=0; h<ans.length; h++){
+            if(typeof(ans[h].value)!= 'string'){
+                /*
+                let newval = [];
+                for (const key in ans[h].value) {
+                    if(ans[h].value[key]==true){
+                        newval.push(key)
+                    }   
+                }
+                ans[h].value=newval; 
+                */
+
+                let newval = "";
+                for (const key in ans[h].value) {
+                    if(ans[h].value[key]==true){
+                        newval= newval + " / " + key
+                    }   
+                }
+                ans[h].value=newval + " / "; 
+            } 
+        }
+        
+        console.log(ans);
+        await mutations.respond(id,ans);
         
     }
 
@@ -524,14 +522,15 @@ const Titler = ({form}) => {
     }
 
     function logResponses () {
-        console.log(responsesRef.current)
+        console.log(responsesRef.current);
+        
     }
 
 
 
 
 
-    function Renderer ({pieces, responses}) {
+    function Renderer ({pieces}) {
 
         var renP = [];
         for (var i = 0; i < pieces.length; i++) {
@@ -540,9 +539,10 @@ const Titler = ({form}) => {
                 <> 
                     <Box sx={noneditboxsx}  >
                         <Box sx={boxsx}   > 
-                            <RespondRender piece={pieces[i]} response={responses[i]} />
+                            <RespondRender piece={pieces[i]} />
                         </Box>
                     </Box> 
+                    <br/>
                 </>
             );
   
@@ -574,27 +574,21 @@ const Titler = ({form}) => {
             setResponses(reqPieces.map((piece)=>{
                 if(piece._type=="question"){
                     if(piece.props[0].value=="check"){
-                        let v = [];
-                        
+                        let y = {};
                         for (let j=0; j<piece.props.length; j++){
                             if(piece.props[j].key=="qoptions"){
-                                v.push(piece.props[j].value)
+                                y={...y, [piece.props[j].value]: false}
                             }
                         }
-                        let A = [];
-                        for (let k=0; k<v.length; k++){
-                            A = [...A,{key:v[k], value:false}]
-                        }
-
-
-                        let z={key:piece._id, value: A};
+                        
+                        let z={key:piece._id, value: y};
                         return z;
                     }else{
                         let z={key:piece._id, value: ""};
                         return z;
                     }
                 }else{
-                    let z={key:piece._id, value: ""};
+                    let z={key:piece._id, value:""};
                     return z;
                 }
                 
@@ -634,7 +628,7 @@ const Titler = ({form}) => {
         <Box  display="flex" flexDirection="row" sx={{height:"100%"}}>
             <Card sx={formsx}>
                 <Titler form={form} sx={{borderLeft: "5px solid white"}}/>
-                <Renderer pieces={pieces} responses={responsesRef.current}/>
+                <Renderer pieces={pieces} />
                 <br/>
                 <SubButton/>
                 <br/>
