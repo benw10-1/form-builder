@@ -26,17 +26,18 @@ function App() {
                 <Route path="/login" element={<LoginSignup switchState={false}/>} />
                 <Route path="/signup" element={<LoginSignup switchState={true}/>} />
                 <Route path="/form/:endpoint" element={<Form/>} />
+                <Route path="/responses/:id" element={<Responses/>} />
 
                 {/* routes that require user to be logged in */}
                 <Route path="/dashboard" element={<Dashboard/>} />
                 {/* View responses and edit form in one page */}
-                <Route path="/editform/:id" element={<EditForm />} />
+                <Route path="/editform/:id" element={<ALTEditForm/>} />
                 <Route path="/preview/:id" element={<Form/>} />
 
                 {/*testing route*/}
                 <Route path="/alteditform/:id" element={<ALTEditForm/>} />
                 <Route path="/respond/:id" element={<Respond/>} />
-                <Route path="/testResponse" element={<Responses/>} />
+                {/* <Route path="/testResponse" element={<Responses/>} /> */}
 
                 {/* wrong route route */}
                 <Route path="*" element={<FourOFour />}/>

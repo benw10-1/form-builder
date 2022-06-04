@@ -30,17 +30,19 @@ module.exports = {
         } catch {
             console.log('Invalid token')
         }
-        let found = inMemoryIPS[req.ip]
-        if (!found) {
-            inMemoryIPS[req.ip] = {
-                count: 1,
-                last: Date.now()
+        if (req.body.query && req.body.query.match(/^mutation/)) {
+            let found = inMemoryIPS[req.ip]
+            if (!found) {
+                inMemoryIPS[req.ip] = {
+                    count: 1,
+                    last: Date.now()
+                }
+            } else {
+                if (found.last < Date.now() - 5000) found.count = 0
+                else if (found.count > 20) throw new Error("Too many requests, wait 5 seconds")
+                found.count++
+                found.last = Date.now()
             }
-        } else {
-            if (found.last < Date.now() - 5000) found.count = 0
-            else if (found.count > 10) throw new Error("Too many requests, wait 5 seconds")
-            found.count++
-            found.last = Date.now()
         }
 
         return req

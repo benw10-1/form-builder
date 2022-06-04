@@ -513,7 +513,7 @@ function parseResponseData(responses, pieces) {
     }))
     let rows = responses.map((r, i) => {
         const rs = {}
-        r.response.forEach(p => {
+        r.responses.forEach(p => {
             if (rs[p.key]) rs[p.key] += `, ${p.value}`
             else rs[p.key] = p.value
         })
@@ -539,17 +539,17 @@ function ResponseView({ }) {
     const { id } = useParams()
 
     useEffect(() => {
-        // queries.getFormByID(id).then(form => {
-        //     setForm(form)
-        //     queries.getResponsesByForm(id).then(async res => {
-        //         const pieces = (await queries.getPiecesByID(id))?.result ?? []
-        //         setData(parseResponseData(res.result, pieces))
-        //         setLoading(false)
-        //     })
-        // })
-        const data = parseResponseData(responses, pieces)
-        setData(data)
-        setLoading(false)
+        queries.getFormByID(id).then(form => {
+            setForm(form)
+            queries.getResponsesByForm(id).then(async res => {
+                const pieces = (await queries.getPiecesByID(id))?.result ?? []
+                setData(parseResponseData(res.result, pieces))
+                setLoading(false)
+            })
+        })
+        // const data = parseResponseData(responses, pieces)
+        // setData(data)
+        // setLoading(false)
     }, [])
 
     const contsx = {
@@ -645,7 +645,11 @@ function ResponseView({ }) {
                     window.location.assign(`/editform/${id}`)
                 }} sx={{ ...buttonsx, margin: "100px 0 24px 0"}}>Edit Form</Button>
                 <Divider flexItem={true}  />
-                <Button variant="outlined" color="secondary" onClick={() => {}} sx={{ ...buttonsx, margin: "24px 0 12px 0"}}>Preview</Button>
+                <Button variant="outlined" color="secondary" disabled={!!form.endpoint} onClick={() => {
+                    if (form.endpoint) {
+                        window.location.assign("/form/" + form.endpoint)
+                    }
+                }} sx={{ ...buttonsx, margin: "24px 0 12px 0"}}>Preview</Button>
                 <Button variant="outlined" color="primary" onClick={() => {}} sx={{ ...buttonsx, margin: "0 0 12px 0"}}>Export Responses</Button>
             </Box>
         </Container>

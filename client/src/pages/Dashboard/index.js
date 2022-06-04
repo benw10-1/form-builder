@@ -25,11 +25,11 @@ import "./Dashboard.css"
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
-function AllForms({ forms=[], modal }) {
+function AllForms({ forms = [], modal }) {
     // main render logic
     const render = () => {
         let renderedForms = []
-        
+
         const cardsx = {
             width: "280px",
             height: "160px",
@@ -49,12 +49,10 @@ function AllForms({ forms=[], modal }) {
             "&:hover": { cursor: "pointer" }
         }
 
-        const Hurl = "http://localhost:3000/";
-
         // maybe add form pages if forms exceed certain count
         forms.forEach(x => {
             const { _id, title, description, createdAt, published } = x
-            const Rlink =  `${window.location.origin}/respond/${_id}`
+            const Rlink = `${window.location.origin}/respond/${_id}`
             const editclick = (event) => {
                 window.location.assign(window.location.origin + "/alteditForm/" + _id)
             }
@@ -64,8 +62,8 @@ function AllForms({ forms=[], modal }) {
 
             renderedForms.push((
                 <Paper sx={{ ...cardsx, background: "#FFFFFF", padding: "16px 16px 0 16px" }}>
-                    
-                    <Box h={"64px"} w={"248px"}  sx={{ overflow: "hidden" }}>
+
+                    <Box h={"64px"} w={"248px"} sx={{ overflow: "hidden" }}>
                         <Typography variant="h4" sx={{ margin: "0 0 4px 0", fontSize: "24px" }}>
                             {title}
                         </Typography>
@@ -82,56 +80,52 @@ function AllForms({ forms=[], modal }) {
                             {"Created " + moment(Number(createdAt)).format("LL")}
                         </Typography>
                         {published ? (
-                        <PopupState variant="popover" popupId="demo-popup-popover">
-                        {(popupState) => (
-                          <div>
-                            <Typography {...bindTrigger(popupState)} sx={{ ...hoversx, fontSize: "12px", color: "#4CAF50", textDecoration: "underline"}}>
-                            Published
-                            </Typography>
-                            <Popover
-                              {...bindPopover(popupState)}
-                              anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                              }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'center',
-                              }}
-                            >
-                              <Typography sx={{ p: 2 }}><a href={Rlink}>{Rlink}</a></Typography>
-                            </Popover>
-                          </div>
-                        )}
-                      </PopupState>
-                        
-                    ) : (
-                        
-                        <Typography sx={{ fontSize: "12px", color: "#949494"}}>
-                            Unpublished
-                        </Typography>
+                            <PopupState variant="popover" popupId="demo-popup-popover">
+                                {(popupState) => (
+                                    <div>
+                                        <Typography {...bindTrigger(popupState)} sx={{ ...hoversx, fontSize: "12px", color: "#4CAF50", textDecoration: "underline" }}>
+                                            Published
+                                        </Typography>
+                                        <Popover
+                                            {...bindPopover(popupState)}
+                                            anchorOrigin={{
+                                                vertical: 'bottom',
+                                                horizontal: 'center',
+                                            }}
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'center',
+                                            }}
+                                        >
+                                            <Typography sx={{ p: 2 }}><a href={Rlink}>{Rlink}</a></Typography>
+                                        </Popover>
+                                    </div>
+                                )}
+                            </PopupState>
 
-                    )}
-                    
-                        
+                        ) : (
+                            <Typography sx={{ fontSize: "12px", color: "#949494" }}>
+                                Unpublished
+                            </Typography>
+                        )}
                     </Box>
-                    
-                    <Box sx={{ width: "240px", height: "10px", position: "absolute", bottom: "45px", left:"20px" }}>
+
+                    <Box sx={{ width: "100%", height: "10px", position: "absolute", bottom: "45px" }}>
                         <Divider variant="middle" />
                     </Box>
 
-                    <Box sx={{ width: "240px", height: "37px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "8px", left:"20px" }}>
-                    
-                        
+                    <Box sx={{ width: "240px", height: "37px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "8px", left: "20px" }}>
+
+
                         <Button variant="outlined" onClick={editclick} >EDIT</Button>
                         <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
-                        
+
                     </Box>
 
                 </Paper>
             ))
         })
-        
+
         renderedForms.push((
             <Paper sx={{ ...cardsx, background: "#0000000A", ...centered }}>
                 <Avatar variant={"circular"} size={"40px"} sx={{ padding: "13px", ...hoversx }} onClick={modal}>
@@ -208,8 +202,8 @@ function Dashboard() {
     // main render logic
     const pageRender = () => {
 
-        const fontsx = { 
-            fontFamily: "Roboto", 
+        const fontsx = {
+            fontFamily: "Roboto",
             fontStyle: "normal",
             width: "100%"
         }
@@ -232,7 +226,7 @@ function Dashboard() {
             },
             maxHeight: {
                 xs: "40%",
-               
+
             },
             width: {
                 xs: "100%",
@@ -244,7 +238,7 @@ function Dashboard() {
             position: "relative",
             margin: {
                 xs: "0 0 0 0",
-                sm:"0 4% 0 0",
+                sm: "0 4% 0 0",
             },
         }
         const boxsx2 = {
@@ -263,7 +257,7 @@ function Dashboard() {
             boxShadow: 24,
             padding: "25px 20px",
             border: 0,
-            "&:focus" : {
+            "&:focus": {
                 outline: "none"
             }
         }
@@ -283,7 +277,7 @@ function Dashboard() {
                         </Typography>
                         <TextField onChange={handleNameChange} value={formName} label="Title" variant="standard" fullWidth={false} sx={{ margin: "5px 0 10px 0" }}></TextField>
                         <TextField onChange={handleDescChange} value={formDesc} label="Short description" variant="standard" fullWidth={true}></TextField>
-                        <Button width={"42px"} variant={"contained"} onClick={addForm} sx={{ margin: "25px 0 0 0"}} >Create Form</Button>
+                        <Button width={"42px"} variant={"contained"} onClick={addForm} sx={{ margin: "25px 0 0 0" }} >Create Form</Button>
                     </Box>
                 </Modal>
                 <Signout />
@@ -293,7 +287,7 @@ function Dashboard() {
                     <div className="dash-positioning">
                         <Box sx={boxsx}>
                             <Typography variant="h6" height={55} sx={fontsx}>
-                                {(() => {return dayTime() + " " + Auth.getProfile()?.name ?? "User"})()}
+                                {(() => { return dayTime() + " " + Auth.getProfile()?.name ?? "User" })()}
                                 <br />
                             </Typography>
                             <Typography variant="h4" width={73} height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
@@ -312,14 +306,14 @@ function Dashboard() {
                                 {(() => {
                                     if (loading) {
                                         let arr = []
-                                        for (let i=0; i < 4; i++) {
+                                        for (let i = 0; i < 4; i++) {
                                             arr.push(<Skeleton variant="rectangular" sx={{ borderRadius: "5px", width: "280px", height: "136px", margin: "26px 51px 0 0" }} animation="wave" />)
                                         }
                                         return arr
                                     }
                                     return <AllForms forms={forms} modal={handleOpen} />
                                 })()}
-                                
+
                             </Box>
                         </Paper>
                     </div>

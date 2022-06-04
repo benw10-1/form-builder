@@ -29,7 +29,7 @@ async function login(parent, { login, password }) {
 
 async function createForm(parent, { title, description }, context) {
     const user = await User.findOne({ _id: context.user._id }).exec()
-    
+
     if (!user) new AuthenticationError("Not logged in!")
     // creates default form for use in editing
     const newForm = await defaultForm(title, user._id, description)
@@ -66,14 +66,29 @@ async function updateFormPieces(parent, { id, pieces }, context) {
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
 
-    const deleted = await Piece.deleteMany({ form_ref: id }).exec()
-
     const parsedPieces = []
     for (const x of pieces) {
         if (!x.props || !x._type) throw new Error("No props or type passed to: " + x._type ?? "Untyped")
 
-        const newPiece = await Piece.create({ _type: x._type, form_ref: id, props: x.props })
-        parsedPieces.push(newPiece._id)
+        if (x._id) {
+            const piece = await Piece.findByIdAndUpdate(x._id, { ...x }).exec()
+            if (!piece) throw new Error("Piece not found")
+            parsedPieces.push(piece._id)
+        }
+        else {
+            const newPiece = await Piece.create({ _type: x._type, form_ref: id, props: x.props })
+            parsedPieces.push(newPiece._id)
+            console.log("CREATED!")
+        }
+    }
+
+    const refSet = new Set(parsedPieces)
+    console.log(refSet, form.piece_refs)
+    for (const x of form.piece_refs) {
+        if (!refSet.has(x)) {
+            console.log("DEleted!")
+            await Piece.findByIdAndDelete(x).exec()
+        }
     }
 
     const updated = await Form.findOneAndUpdate({ _id: id }, { piece_refs: parsedPieces }).exec()
@@ -85,22 +100,22 @@ async function respond(parent, { id, responses }, context) {
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
     if (!form.published) throw new Error("Form not published")
-/*
-    for (const x of responses) {
-        const { key, value } = x
-        if (!key || !value) throw new Error("No key or value passed to: " + key ?? "Untyped")
-        const piece = await Piece.findById(key).exec()
-        if (!piece) throw new Error("Piece not found")
-        if (piece.form_ref !== form._id) throw new Error("Piece not in form")////////////////////////  <=THIS WAS THROWING  /////////////////
-        // if (piece._type === "break") throw new Error("Break piece cannot be responded to")
-        // if (piece._type === "singleselect") {
-        //     if (!piece.props.some(y => y.value === value)) throw new Error(`Value ${value} not in piece ${key}`)
-        // }
-        // // if (piece._type === "multiselect") {
-        // //     if (!piece.props.some(y => y.some(j => j === value))) throw new Error(`Value ${value} not in piece ${key}`)
-        // // }
-    }
-*/
+    /*
+        for (const x of responses) {
+            const { key, value } = x
+            if (!key || !value) throw new Error("No key or value passed to: " + key ?? "Untyped")
+            const piece = await Piece.findById(key).exec()
+            if (!piece) throw new Error("Piece not found")
+            if (piece.form_ref !== form._id) throw new Error("Piece not in form")////////////////////////  <=THIS WAS THROWING  /////////////////
+            // if (piece._type === "break") throw new Error("Break piece cannot be responded to")
+            // if (piece._type === "singleselect") {
+            //     if (!piece.props.some(y => y.value === value)) throw new Error(`Value ${value} not in piece ${key}`)
+            // }
+            // // if (piece._type === "multiselect") {
+            // //     if (!piece.props.some(y => y.some(j => j === value))) throw new Error(`Value ${value} not in piece ${key}`)
+            // // }
+        }
+    */
     const newResponse = await Response.create({ form_ref: id, responses })
 
     return newResponse

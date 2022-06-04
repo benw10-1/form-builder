@@ -7,7 +7,7 @@ import Auth from "./auth"
  * @returns Builds the request for gql. 
  */
 async function genQuery(q, variables) {
-    const url = "http://localhost:3001/graphql"
+    const url = window.location.origin + "/graphql"
     // https://graphql.org/learn/serving-over-http/#post-request
     const body = {
         "query": q,

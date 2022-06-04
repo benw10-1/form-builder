@@ -51,6 +51,7 @@ const typeDefs = gql`
     _id: ID!
     form_ref: ID!
     responses: [Prop!]!
+    createdAt: String
   }
 
   type Query {
