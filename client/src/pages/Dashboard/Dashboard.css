@@ -3,6 +3,15 @@
     background-color: #FAFAFA;
     overflow: hidden;
 }
+
+.description {
+    opacity: 60%;
+}
+
+.created {
+    opacity: 45%;
+}
+
 .dash-positioning {
     display: flex;
     width: 100%;
@@ -17,8 +26,27 @@
 }
 .forms-container {
     display: flex;
-    height: 100%;
+    height: auto;
+    max-height: 100%;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: start;
+}
+
+@media screen and (max-width: 767px) {
+    .dash-positioning {
+        /* flex-direction: column; */
+        align-items: flex-start;
+    }
+
+    .forms-container {
+        /* flex-direction: column; */
+    }
+}
+
+@media screen and (max-width: 899px) {
+    .dash-positioning {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
