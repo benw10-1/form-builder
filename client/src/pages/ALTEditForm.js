@@ -1280,7 +1280,7 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
 
             <div className="rightButtons">
                 <ButtonsTwo conf={confirm} key={"buttons2"}/>
-                <ButtonsOne form={pieces} key={"buttons1"}/>
+                <ButtonsOne form={form} key={"buttons1"}/>
             </div>
             
         </Box>
