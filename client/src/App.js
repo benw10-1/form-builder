@@ -14,6 +14,7 @@ import {
 
 import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { Auth } from "./utils"
+import "./App.css";
 
 function App() {
     return (
@@ -35,13 +36,7 @@ function App() {
                 {/*testing route*/}
                 <Route path="/alteditform/:id" element={<ALTEditForm/>} />
                 <Route path="/respond/:id" element={<Respond/>} />
-                <Route path="/testResponse" element={(
-                    <div style={{ width: "100%", display: "grid", placeItems: "center" }}>
-                        <div style={{ width: "60%" }}>
-                            <Responses/>
-                        </div>
-                    </div>
-                )} />
+                <Route path="/testResponse" element={<Responses/>} />
 
                 {/* wrong route route */}
                 <Route path="*" element={<FourOFour />}/>
