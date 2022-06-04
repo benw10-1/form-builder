@@ -34,9 +34,11 @@
 }
 
 @media screen and (max-width: 767px) {
+    .MuiContainer-root {
+        min-width: 500px;
+    }
     .dash-positioning {
-        /* flex-direction: column; */
-        align-items: flex-start;
+        /* align-items: flex-start; */
     }
 
     .forms-container {
