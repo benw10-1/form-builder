@@ -61,6 +61,7 @@ const typeDefs = gql`
     getResponsesByForm(id: ID!): [Response!]!
     getFormByID(id: ID!): Form
     getPiecesQuestionTitle(ids: [ID!]!): [String!]!
+    getFormByEndpoint(ep: String!): Form
   }
 
   type Mutation {
