@@ -84,7 +84,7 @@ async function respond(id, responses) {
 
   const variables = { id, responses }
   const query = `
-    mutation Respond($id: ID!, $responses: [Prop!]!) {
+    mutation Respond($id: ID!, $responses: [PropInp]!) {
       respond(id: $id, responses: $responses) {
         _id
         form_ref

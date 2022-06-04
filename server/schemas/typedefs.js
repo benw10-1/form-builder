@@ -13,8 +13,8 @@ const typeDefs = gql`
   }
 
   type Prop {
-    key: String
-    value: String
+    key: String!
+    value: String!
   }
 
   type Piece {
@@ -25,8 +25,8 @@ const typeDefs = gql`
   }
 
   input PropInp {
-    key: String
-    value: String
+    key: String!
+    value: String!
   }
 
   input PieceInp {
@@ -61,6 +61,7 @@ const typeDefs = gql`
     getResponsesByForm(id: ID!): [Response!]!
     getFormByID(id: ID!): Form
     getPiecesQuestionTitle(ids: [ID!]!): [String!]!
+    getFormByEndpoint(ep: String!): Form
   }
 
   type Mutation {
@@ -69,7 +70,7 @@ const typeDefs = gql`
     updateFormPieces(id: ID!, pieces: [PieceInp]!): Form
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
-    respond(id: ID!, responses: [PropInp!]!): Response!
+    respond(id: ID!, responses: [PropInp]!): Response!
     setPublished(id: ID!, published: Boolean!): Form
     deleteForm(id: ID!): Form
   }
