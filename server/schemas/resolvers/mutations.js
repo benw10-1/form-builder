@@ -73,19 +73,19 @@ async function updateFormPieces(parent, { id, pieces }, context) {
         if (x._id) {
             const piece = await Piece.findByIdAndUpdate(x._id, { ...x }).exec()
             if (!piece) throw new Error("Piece not found")
-            parsedPieces.push(piece._id)
+            parsedPieces.push(piece._id.toString())
         }
         else {
             const newPiece = await Piece.create({ _type: x._type, form_ref: id, props: x.props })
-            parsedPieces.push(newPiece._id)
+            parsedPieces.push(newPiece._id.toString())
             console.log("CREATED!")
         }
     }
 
     const refSet = new Set(parsedPieces)
-    console.log(refSet, form.piece_refs)
+    console.log(refSet, parsedPieces)
     for (const x of form.piece_refs) {
-        if (!refSet.has(x)) {
+        if (!refSet.has(x.toString())) {
             console.log("DEleted!")
             await Piece.findByIdAndDelete(x).exec()
         }
@@ -93,7 +93,7 @@ async function updateFormPieces(parent, { id, pieces }, context) {
 
     const updated = await Form.findOneAndUpdate({ _id: id }, { piece_refs: parsedPieces }).exec()
 
-    return updated
+    return parsedPieces.map(x => x.toString())
 }
 
 async function respond(parent, { id, responses }, context) {

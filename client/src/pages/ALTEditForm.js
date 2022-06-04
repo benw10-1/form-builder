@@ -868,9 +868,13 @@ function ALTEditForm() {
     async function saveform(xx) {
         console.log(xx)
         let zz = removeIds(xx);
-        await mutations.updateFormPieces(id, zz);
+        const ids = await mutations.updateFormPieces(id, zz);
+        setPieces(xx.map((x, i) => {
+            x._id = ids[i];
+            return x;
+        }));
 
-        console.log(zz)
+        // console.log(zz)
     }
     async function publishform() {
         await saveform(pieceArrRef.current);
