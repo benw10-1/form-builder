@@ -889,18 +889,14 @@ const Titler = ({form}) => {
     function clearform () {
         setConfirm({clear:"no", delete:"no"})
         setPieces([])
-        console.log("are you sure?, all your questions will be erased.")
     }
     async function deleteform () {///////////////////////////////////////////////////////////////////db call here!!!!!!!!!!!!!!!!!!!
         await mutations.deleteForm(id);
-        console.log("exterminate")
+        window.location.assign(window.location.origin )
     }
-    function responseslinkconf () {
-        //get confirmation??
-        console.log("do you want to save your changes?")
-    }
-    function gotodash (yy) {
-        saveform (yy);
+    
+    async function gotodash (yy) {
+        await saveform (yy);
         window.location.assign(window.location.origin  )
     }
 
@@ -947,11 +943,10 @@ const Titler = ({form}) => {
 
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={()=>{saveform(pieceArrRef.current)}}>SAVE FORM </Button>
-                    <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
                     <Button variant="outlined" onClick={()=>{gotodash(pieceArrRef.current)}}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
                     <Typography sx={{...fontsx,...normsx,...gray}}>Form is currently not available to respondents</Typography><br/><br/>
-                    <Divider variant="middle" />
+                    
                     
                 </Stack>
 
@@ -960,8 +955,7 @@ const Titler = ({form}) => {
             return(
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={()=>{saveform(pieceArrRef.current)}}>SAVE FORM </Button>
-                    <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
-                    <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
+                    <Button variant="outlined" onClick={()=>{gotodash(pieceArrRef.current)}}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
                     <Typography sx={{...fontsx,...normsx,...gray}}>Form currently published at:</Typography> 
                     <Typography sx={{...fontsx,...normsx,...gray}}><a href={rlink}>{rlink}</a></Typography>

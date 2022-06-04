@@ -521,10 +521,7 @@ const Titler = ({form}) => {
         )
     }
 
-    function logResponses () {
-        console.log(responsesRef.current);
-        
-    }
+    
 
 
 
@@ -567,8 +564,8 @@ const Titler = ({form}) => {
 
         async function req() {
             
-            let reqForm = (await queries.getFormByID(id)).result ?? {}
-            let reqPieces = (await queries.getPiecesByID(id)).result ?? []
+            let reqForm = (await queries.getFormByEndpoint(id)).result ?? {}
+            let reqPieces = (await queries.getPiecesByEndpoint(id)).result ?? []
             setForm(reqForm)
             setPieces(reqPieces)
             setResponses(reqPieces.map((piece)=>{
@@ -621,10 +618,7 @@ const Titler = ({form}) => {
     return(
         <>
         <CssBaseline />
-        <Box sx={toolboxsx} onClick={()=>{logResponses()}}>
-                        <AddIcon sx={plussx} fontSize={"medium"} />
-                        <Typography sx={{...fontsx,...normsx}}>log responses</Typography>
-                </Box>
+        
         <Box  display="flex" flexDirection="row" sx={{height:"100%"}}>
             <Card sx={formsx}>
                 <Titler form={form} sx={{borderLeft: "5px solid white"}}/>

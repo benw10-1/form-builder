@@ -65,7 +65,7 @@ function AllForms({ forms=[], modal }) {
             renderedForms.push((
                 <Paper sx={{ ...cardsx, background: "#FFFFFF", padding: "16px 16px 0 16px" }}>
                     
-                    <Box h={"64px"} w={"248px"}  sx={{ ...hoversx, overflow: "hidden" }}>
+                    <Box h={"64px"} w={"248px"}  sx={{ overflow: "hidden" }}>
                         <Typography variant="h4" sx={{ margin: "0 0 4px 0", fontSize: "24px" }}>
                             {title}
                         </Typography>
