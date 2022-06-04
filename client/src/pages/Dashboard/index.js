@@ -158,19 +158,50 @@ function Dashboard() {
     // main render logic
     const pageRender = () => {
 
-        const fontsx = { fontFamily: "Roboto", fontStyle: "normal" }
+        const fontsx = { 
+            fontFamily: "Roboto", 
+            fontStyle: "normal",
+            width: {
+                xs: "500px",
+                sm: "100%",
+                md: "216px",
+            },
+        }
         const papersx = {
             width: "100%",
             minHeight: "100%",
+            maxHeight: "100vh",
             overflow: "auto",
-            borderRadius: "0"
+            borderRadius: "0",
+            paddingBottom: "300px",
         }
         const boxsx = {
-            padding: "118px 0 0 4%",
-            maxWidth: "275px",
+            padding: {
+                xs: "36px 0 36px 4%",
+                md: "118px 0 0 4%",
+            },
+            maxWidth: {
+                xs: "500px",
+                md: "275px",
+            },
+            width: {
+                xs: "100%",
+                sm: "275",
+                md: "275px",
+            },
             height: "100%",
             display: "block",
-            margin: "0 4% 0 0"
+            position: "relative",
+            margin: {
+                xs: "0 0 0 0",
+                sm:"0 4% 0 0",
+            },
+        }
+        const boxsx2 = {
+            padding: {
+                xs: "28px 0 0 64px",
+                md: "128px 0 0 64px",
+            },
         }
         const modalsx = {
             position: 'absolute',
@@ -206,6 +237,8 @@ function Dashboard() {
                     </Box>
                 </Modal>
                 <Signout />
+
+                {/* Dashboard Sidebar */}
                 <Container maxWidth={false} disableGutters={true} >
                     <div className="dash-positioning">
                         <Box sx={boxsx}>
@@ -218,11 +251,11 @@ function Dashboard() {
                                 <br />
                             </Typography>
                             <Typography variant="body1" width={216} height={48} sx={fontsx}>
-                                {'Create a new form by clicking the plus on the right side.'}
+                                {'Create a new form by clicking the plus sign on the dashboard.'}
                             </Typography>
                         </Box>
                         <Paper sx={papersx}>
-                            <Box p={"128px 0 0 64px"}>
+                            <Box sx={boxsx2}>
                                 <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)" }}>
                                     {(forms && forms.length > 0) ? 'Click on a form to edit or view responses.' : "No forms available, click on the + button below."}
                                 </Typography>
