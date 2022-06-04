@@ -70,7 +70,7 @@ const typeDefs = gql`
     updateFormPieces(id: ID!, pieces: [PieceInp]!): Form
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
-    respond(id: ID!, responses: [PropInp!]!): Response!
+    respond(id: ID!, responses: [PropInp]!): Response!
     setPublished(id: ID!, published: Boolean!): Form
     deleteForm(id: ID!): Form
   }
