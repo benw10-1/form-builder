@@ -85,13 +85,13 @@ async function respond(parent, { id, responses }, context) {
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
     if (!form.published) throw new Error("Form not published")
-
+/*
     for (const x of responses) {
         const { key, value } = x
         if (!key || !value) throw new Error("No key or value passed to: " + key ?? "Untyped")
         const piece = await Piece.findById(key).exec()
         if (!piece) throw new Error("Piece not found")
-        if (piece.form_ref !== form._id) throw new Error("Piece not in form")
+        if (piece.form_ref !== form._id) throw new Error("Piece not in form")////////////////////////  <=THIS WAS THROWING  /////////////////
         // if (piece._type === "break") throw new Error("Break piece cannot be responded to")
         // if (piece._type === "singleselect") {
         //     if (!piece.props.some(y => y.value === value)) throw new Error(`Value ${value} not in piece ${key}`)
@@ -100,7 +100,7 @@ async function respond(parent, { id, responses }, context) {
         // //     if (!piece.props.some(y => y.some(j => j === value))) throw new Error(`Value ${value} not in piece ${key}`)
         // // }
     }
-
+*/
     const newResponse = await Response.create({ form_ref: id, responses })
 
     return newResponse
@@ -109,7 +109,7 @@ async function respond(parent, { id, responses }, context) {
 async function deleteForm(parent, { id }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
     const user = await User.findOne({ _id: context.user._id }).exec()
-    if (user) throw new AuthenticationError("Not logged in")
+    if (!user) throw new AuthenticationError("Not logged in")
 
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")

@@ -8,7 +8,8 @@ import {
     Form,
     EditForm,
     ALTEditForm,
-    Responses
+    Responses,
+    Respond
 } from "./pages"
 
 import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
@@ -33,6 +34,7 @@ function App() {
 
                 {/*testing route*/}
                 <Route path="/alteditform/:id" element={<ALTEditForm/>} />
+                <Route path="/respond/:id" element={<Respond/>} />
                 <Route path="/testResponse" element={(
                     <div style={{ width: "100%", display: "grid", placeItems: "center" }}>
                         <div style={{ width: "60%" }}>

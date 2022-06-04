@@ -45,6 +45,8 @@ import "./nstyle.css"
 
 function ALTEditForm() {
 
+const hurl = "http://localhost:3000/";
+
 const gray = {
     color: "rgba(0,0,0,0.5)"
 }
@@ -854,7 +856,7 @@ const Titler = ({form}) => {
 
     //need to add edit detector if am going to ask for save or not for every link
 
-    let respondlink = "somelink";
+    
 
     async function saveform (xx) {
         let zz = removeIds(xx);
@@ -887,18 +889,14 @@ const Titler = ({form}) => {
     function clearform () {
         setConfirm({clear:"no", delete:"no"})
         setPieces([])
-        console.log("are you sure?, all your questions will be erased.")
     }
-    function deleteform () {///////////////////////////////////////////////////////////////////db call here!!!!!!!!!!!!!!!!!!!
-        
-        console.log("exterminate")
+    async function deleteform () {///////////////////////////////////////////////////////////////////db call here!!!!!!!!!!!!!!!!!!!
+        await mutations.deleteForm(id);
+        window.location.assign(window.location.origin )
     }
-    function responseslinkconf () {
-        //get confirmation??
-        console.log("do you want to save your changes?")
-    }
-    function gotodash (yy) {
-        saveform (yy);
+    
+    async function gotodash (yy) {
+        await saveform (yy);
         window.location.assign(window.location.origin  )
     }
 
@@ -938,16 +936,17 @@ const Titler = ({form}) => {
 
     function ButtonsOne ({form}) {
 
+        let rlink = `${hurl}respond/${id}`
+
         if(form.published==false){
             return(
 
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={()=>{saveform(pieceArrRef.current)}}>SAVE FORM </Button>
-                    <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
                     <Button variant="outlined" onClick={()=>{gotodash(pieceArrRef.current)}}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
                     <Typography sx={{...fontsx,...normsx,...gray}}>Form is currently not available to respondents</Typography><br/><br/>
-                    <Divider variant="middle" />
+                    
                     
                 </Stack>
 
@@ -956,11 +955,10 @@ const Titler = ({form}) => {
             return(
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={()=>{saveform(pieceArrRef.current)}}>SAVE FORM </Button>
-                    <Button variant="outlined" onClick={responseslinkconf}>VIEW RESPONSES </Button>
-                    <Button variant="outlined" onClick={gotodash}>BACK TO MY FORMS </Button>
+                    <Button variant="outlined" onClick={()=>{gotodash(pieceArrRef.current)}}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
                     <Typography sx={{...fontsx,...normsx,...gray}}>Form currently published at:</Typography> 
-                    <Typography sx={{...fontsx,...normsx,...gray}}>{respondlink}</Typography>
+                    <Typography sx={{...fontsx,...normsx,...gray}}><a href={rlink}>{rlink}</a></Typography>
                     
                     
                 </Stack>
@@ -1276,7 +1274,7 @@ This is unnecessary (and doesn't work) because shallow references? disconcerting
 
             <div className="rightButtons">
                 <ButtonsTwo conf={confirm} key={"buttons2"}/>
-                <ButtonsOne form={pieces} key={"buttons1"}/>
+                <ButtonsOne form={form} key={"buttons1"}/>
             </div>
             
         </Box>
