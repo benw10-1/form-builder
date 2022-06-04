@@ -11,14 +11,19 @@ import {
     Skeleton,
     Modal,
     TextField,
-    Button
+    Button,
+    Divider,
 } from "@mui/material";
 
 import AddIcon from '@mui/icons-material/Add';
+import Stack from '@mui/material/Stack';
 
 import Signout from "../Signout";
 import moment from "moment";
 import "./Dashboard.css"
+
+import Popover from '@mui/material/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 function AllForms({ forms=[], modal }) {
     // main render logic
@@ -27,7 +32,7 @@ function AllForms({ forms=[], modal }) {
         
         const cardsx = {
             width: "280px",
-            height: "136px",
+            height: "160px",
             "&:hover": { boxShadow: 15 },
             position: "relative",
             margin: "26px 51px 0 0"
@@ -44,23 +49,23 @@ function AllForms({ forms=[], modal }) {
             "&:hover": { cursor: "pointer" }
         }
 
+        const Hurl = "http://localhost:3000/";
+
         // maybe add form pages if forms exceed certain count
         forms.forEach(x => {
             const { _id, title, description, createdAt, published } = x
+            const Rlink =  `${window.location.origin}/respond/${_id}`
             const editclick = (event) => {
                 window.location.assign(window.location.origin + "/alteditForm/" + _id)
             }
-            const prevclick = (event) => {
-                window.location.assign(window.location.origin + "/preview/" + _id)
+            const responsesclick = (event) => {
+                window.location.assign(window.location.origin + "/responses/" + _id)
             }
+
             renderedForms.push((
                 <Paper sx={{ ...cardsx, background: "#FFFFFF", padding: "16px 16px 0 16px" }}>
-                    {published ? (
-                        <Typography sx={{ fontSize: "12px", color: "#4CAF50", position: "absolute", right: "16px", top: "17px" }}>
-                            Published
-                        </Typography>
-                    ) : null}
-                    <Box h={"64px"} w={"248px"} onClick={editclick} sx={{ ...hoversx, overflow: "hidden" }}>
+                    
+                    <Box h={"64px"} w={"248px"}  sx={{ ...hoversx, overflow: "hidden" }}>
                         <Typography variant="h4" sx={{ margin: "0 0 4px 0", fontSize: "24px" }}>
                             {title}
                         </Typography>
@@ -72,12 +77,57 @@ function AllForms({ forms=[], modal }) {
                             )
                         })()}
                     </Box>
-                    <Box sx={{ width: "248px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "13px" }}>
+                    <Box sx={{ width: "248px", height: "40px", display: "flex", justifyContent: "space-between", position: "absolute", top: "75px" }}>
                         <Typography className="created" variant="body1" sx={{ fontSize: "14px" }} h={"20px"} w={"100%"}>
                             {"Created " + moment(Number(createdAt)).format("LL")}
                         </Typography>
-                        <Link onClick={prevclick} sx={hoversx}>Preview</Link>
+                        {published ? (
+                        <PopupState variant="popover" popupId="demo-popup-popover">
+                        {(popupState) => (
+                          <div>
+                            <Typography {...bindTrigger(popupState)} sx={{ ...hoversx, fontSize: "12px", color: "#4CAF50", textDecoration: "underline"}}>
+                            Published
+                            </Typography>
+                            <Popover
+                              {...bindPopover(popupState)}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                              }}
+                            >
+                              <Typography sx={{ p: 2 }}><a href={Rlink}>{Rlink}</a></Typography>
+                            </Popover>
+                          </div>
+                        )}
+                      </PopupState>
+                        
+                    ) : (
+                        
+                        <Typography sx={{ fontSize: "12px", color: "#949494"}}>
+                            Unpublished
+                        </Typography>
+
+                    )}
+                    
+                        
                     </Box>
+                    
+                    <Box sx={{ width: "240px", height: "10px", position: "absolute", bottom: "45px", left:"20px" }}>
+                        <Divider variant="middle" />
+                    </Box>
+
+                    <Box sx={{ width: "240px", height: "37px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "8px", left:"20px" }}>
+                    
+                        
+                        <Button variant="outlined" onClick={editclick} >EDIT</Button>
+                        <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
+                        
+                    </Box>
+
                 </Paper>
             ))
         })
@@ -161,11 +211,7 @@ function Dashboard() {
         const fontsx = { 
             fontFamily: "Roboto", 
             fontStyle: "normal",
-            width: {
-                xs: "500px",
-                sm: "100%",
-                md: "216px",
-            },
+            width: "100%"
         }
         const papersx = {
             width: "100%",
@@ -183,6 +229,10 @@ function Dashboard() {
             maxWidth: {
                 xs: "500px",
                 md: "275px",
+            },
+            maxHeight: {
+                xs: "40%",
+               
             },
             width: {
                 xs: "100%",
@@ -250,7 +300,7 @@ function Dashboard() {
                                 {'My Forms'}
                                 <br />
                             </Typography>
-                            <Typography variant="body1" width={216} height={48} sx={fontsx}>
+                            <Typography variant="body1" width={216} height={84} sx={fontsx}>
                                 {'Create a new form by clicking the plus sign on the dashboard.'}
                             </Typography>
                         </Box>
