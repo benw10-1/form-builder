@@ -135,6 +135,7 @@ async function getResponsesByForm(id) {
                 key
                 value
             }
+            createdAt
         }
     }
     `
