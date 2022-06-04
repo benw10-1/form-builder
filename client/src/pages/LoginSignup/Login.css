@@ -25,3 +25,26 @@
     justify-content: space-between;
     width: 173px;
 }
+
+@media screen and (max-width: 925px) {
+    .login-positioning {
+        padding: 100px 0px;
+    }
+    .login-text h4 {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .MuiContainer-root {
+        min-width: 500px;
+    }
+
+    .login-text {
+        margin-left: 70px;
+    }
+    .login-text h6 {
+        font-size: 1rem;
+    }
+    
+}
