@@ -109,7 +109,7 @@ async function respond(parent, { id, responses }, context) {
 async function deleteForm(parent, { id }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
     const user = await User.findOne({ _id: context.user._id }).exec()
-    if (user) throw new AuthenticationError("Not logged in")
+    if (!user) throw new AuthenticationError("Not logged in")
 
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")

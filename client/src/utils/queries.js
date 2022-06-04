@@ -103,6 +103,29 @@ async function getPiecesByEndpoint(endpoint) {
     })
 }
 
+async function getFormByEndpoint(endpoint) {
+    const query = `
+    query Query($ep: String!) {
+        getFormByEndpoint(ep: $ep) {
+            title
+            description
+            endpoint
+            published
+        }
+    }
+    `
+
+    const variables = { "ep": endpoint }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getFormByEndpoint
+        }
+    })
+}
+
 async function getResponsesByForm(id) {
     const query = `
     query Query($id: ID!) {
@@ -174,4 +197,4 @@ async function getPiecesQuestionTitle(ids) {
     })
 }
 
-export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint, getFormByID, getPiecesQuestionTitle }
+export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint, getFormByID, getPiecesQuestionTitle, getFormByEndpoint }

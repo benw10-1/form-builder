@@ -32,6 +32,14 @@ async function getFormByID(parent, { id }, context) {
     return form
 }
 
+async function getFormByEndpoint(parent, { ep }, context) {
+    const form = await Form.findOne({ "endpoint": ep }).exec()
+    if (!form) throw new Error("Form not found")
+    if (!form.published) throw new Error("Form not published")
+
+    return form
+}
+
 async function getPiecesByID(parent, { id }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
     const form = await Form.findById(id).populate("piece_refs").exec()
@@ -57,8 +65,8 @@ async function getPiecesByID(parent, { id }, context) {
 //     })
 // }
 
-async function getPiecesByEndpoint(parent, { endpoint }, context) {
-    const form = await Form.findOne({ "endpoint": endpoint }).populate("piece_refs").exec()
+async function getPiecesByEndpoint(parent, { ep }, context) {
+    const form = await Form.findOne({ "endpoint": ep }).populate("piece_refs").exec()
     if (!form) throw new Error("Form not found")
     if (!form.published) throw new Error("Form not published")
 
@@ -80,4 +88,4 @@ async function getResponsesByForm(parent, { id }, context) {
 }
 
 
-module.exports = { getFormByID, getMe, getMyForms, getResponsesByForm, getPiecesByID, getPiecesByEndpoint }
+module.exports = { getFormByID, getMe, getMyForms, getResponsesByForm, getPiecesByID, getPiecesByEndpoint, getFormByEndpoint }
