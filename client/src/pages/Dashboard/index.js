@@ -244,7 +244,7 @@ function Dashboard() {
         const boxsx2 = {
             padding: {
                 xs: "28px 0 0 64px",
-                md: "128px 0 0 64px",
+                md: "10px 0 0 64px",
             },
         }
         const modalsx = {
