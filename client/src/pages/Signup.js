@@ -4,8 +4,8 @@ import { queries, mutations, Auth } from "../utils"
 function Signup() {
     // regex matching the correct password
     const allowed = {
-        login: /[\w\d!@#$%&.\-]+/,
-        password: /[^\s\[\]'"\\./()`~<>;:\-]+/
+        login: /[\w\d!@#$%&.-]+/,
+        password: /[^\s[\]'"\\./()`~<>;:-]+/
     }
 
     let [loading, setLoading] = useState(true)
@@ -15,11 +15,14 @@ function Signup() {
     let [passVal, setPassVal] = useState("")
 
     // same logic as Dashboard.js
-    useEffect(async () => {
-        let loggedIn = Auth.loggedIn()
-        if (loggedIn) window.location.replace(window.location.origin + "/dashboard")
-        else setLoading(false)
-    }, [1])
+    useEffect(() => {
+        async function req() {
+            let loggedIn = Auth.loggedIn()
+            if (loggedIn) window.location.replace(window.location.origin + "/dashboard")
+            else setLoading(false)
+        }
+        req()
+    }, [])
 
     // on login edit
     const handleNameChange = (event) => {

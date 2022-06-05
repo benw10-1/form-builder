@@ -1,3 +1,5 @@
+import Auth from "./auth"
+
 /**
  * Utility function for generating gql requests
  * @param {String} q GraphQL query
@@ -12,8 +14,12 @@ async function genQuery(q, variables) {
         variables
     }
 
-    let token = localStorage.getItem('id_token')
-    // if (token) token = Auth.isTokenExpired(token) ? null : token
+    let token = Auth.getToken()
+
+    if (token && Auth.isTokenExpired(token)) {
+        Auth.logout()
+        return
+    }
     
     // fetch options
     const opt = {
@@ -33,6 +39,7 @@ async function genQuery(q, variables) {
         // TODO: network error handler
         if (data.errors) return {
             __status__: "error",
+            with: q,
             errors: data.errors
         }
         // otherwise success
@@ -43,6 +50,9 @@ async function genQuery(q, variables) {
     }).then(data => {
         console.log(data)
         return data
+    }).catch(err => {
+        console.log(err)
+        return err
     })
 }
 

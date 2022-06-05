@@ -39,6 +39,7 @@ async function getMyForms() {
             description
             endpoint
             published
+            createdAt
         }
     }
     `
@@ -52,10 +53,10 @@ async function getMyForms() {
     })
 }
 
-async function getPiecesForRender(id) {
+async function getPiecesByID(id) {
     const query = `
     query Query($id: ID!) {
-        getPiecesForRender(id: $id) {
+        getPiecesByID(id: $id) {
             _id
             _type
             props {
@@ -72,7 +73,55 @@ async function getPiecesForRender(id) {
         if (data.__status__ === "error") return null
         return {
             __status__: data.__status__,
-            result: data.getPiecesForRender
+            result: data.getPiecesByID
+        }
+    })
+}
+
+async function getPiecesByEndpoint(endpoint) {
+    const query = `
+    query Query($ep: String!) {
+        getPiecesByEndpoint(ep: $ep) {
+            _id
+            _type
+            props {
+                key
+                value
+            }
+        }
+    }
+    `
+
+    const variables = { "ep": endpoint }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getPiecesByEndpoint
+        }
+    })
+}
+
+async function getFormByEndpoint(endpoint) {
+    const query = `
+    query Query($ep: String!) {
+        getFormByEndpoint(ep: $ep) {
+            title
+            description
+            endpoint
+            published
+        }
+    }
+    `
+
+    const variables = { "ep": endpoint }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getFormByEndpoint
         }
     })
 }
@@ -82,10 +131,11 @@ async function getResponsesByForm(id) {
     query Query($id: ID!) {
         getResponsesByForm(id: $id) {
             _id
-            answers {
+            responses {
                 key
                 value
             }
+            createdAt
         }
     }
     `
@@ -101,4 +151,51 @@ async function getResponsesByForm(id) {
     })
 }
 
-export default { getMe, getMyForms, getPiecesForRender, getResponsesByForm }
+async function getFormByID(id) {
+    const query = `
+    query Query($id: ID!) {
+        getFormByID(id: $id) {
+            _id
+            title
+            description
+            endpoint
+            published
+            creator {
+                _id
+            }
+            piece_refs
+            createdAt
+        }
+    }
+    `
+
+    const variables = { "id": id }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getFormByID
+        }
+    })
+}
+
+async function getPiecesQuestionTitle(ids) {
+    const query = `
+    query Query($ids: [ID!]!) {
+        getPiecesQuestionTitle(ids: $ids) 
+    }
+    `
+
+    const variables = { "ids": ids }
+
+    return genQuery(query, variables).then(data => {
+        if (data.__status__ === "error") return null
+        return {
+            __status__: data.__status__,
+            result: data.getPiecesQuestionTitle
+        }
+    })
+}
+
+export default { getMe, getMyForms, getPiecesByID, getResponsesByForm, getPiecesByEndpoint, getFormByID, getPiecesQuestionTitle, getFormByEndpoint }

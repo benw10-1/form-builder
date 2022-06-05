@@ -5,7 +5,6 @@ const typeDefs = gql`
     _id: ID!
     name: String!
     email: String!
-    forms: [Form!]!
   }
 
   type Auth {
@@ -14,8 +13,8 @@ const typeDefs = gql`
   }
 
   type Prop {
-    key: String
-    value: String
+    key: String!
+    value: String!
   }
 
   type Piece {
@@ -23,6 +22,18 @@ const typeDefs = gql`
     _type: String!
     form_ref: ID!
     props: [Prop!]!
+  }
+
+  input PropInp {
+    key: String!
+    value: String!
+  }
+
+  input PieceInp {
+    _id: ID
+    _type: String
+    form_ref: ID
+    props: [PropInp]!
   }
 
   type Form {
@@ -33,25 +44,36 @@ const typeDefs = gql`
     published: Boolean!
     creator: User!
     piece_refs: [ID!]!
+    createdAt: String!
   }
 
   type Response {
     _id: ID!
     form_ref: ID!
-    answers: [Prop!]!
+    responses: [Prop!]!
+    createdAt: String
   }
 
   type Query {
     getMe: User
     getMyForms: [Form!]!
-    getPiecesForRender(id: ID!): [Piece!]!
+    getPiecesByID(id: ID!): [Piece!]!
+    getPiecesByEndpoint(ep: String!): [Piece!]!
     getResponsesByForm(id: ID!): [Response!]!
+    getFormByID(id: ID!): Form
+    getPiecesQuestionTitle(ids: [ID!]!): [String!]!
+    getFormByEndpoint(ep: String!): Form
   }
 
   type Mutation {
     createForm(title: String!, description: String): Form!
+    updateFormMeta(id: ID!, title: String!, description: String): Form
+    updateFormPieces(id: ID!, pieces: [PieceInp]!): [ID!]
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
+    respond(id: ID!, responses: [PropInp]!): Response!
+    setPublished(id: ID!, published: Boolean!): Form
+    deleteForm(id: ID!): Form
   }
 `;
 

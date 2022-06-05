@@ -1,0 +1,51 @@
+.MuiContainer-root {
+    height: 100vh;
+    background-color: #FAFAFA;
+    overflow: hidden;
+}
+
+.description {
+    opacity: 60%;
+}
+
+.created {
+    opacity: 45%;
+}
+
+.dash-positioning {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: right;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.side-text {
+    width: 382;
+}
+.forms-container {
+    display: flex;
+    height: auto;
+    max-height: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+
+@media screen and (max-width: 767px) {
+    .dash-positioning {
+        /* flex-direction: column; */
+        /* align-items: flex-start; */
+    }
+
+    .forms-container {
+        /* flex-direction: column; */
+    }
+}
+
+@media screen and (max-width: 899px) {
+    .dash-positioning {
+        flex-direction: column;
+        /* align-items: flex-start; */
+    }
+}

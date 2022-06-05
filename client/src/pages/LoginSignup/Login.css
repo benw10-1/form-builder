@@ -1,0 +1,50 @@
+.MuiContainer-root {
+    height: 100vh;
+    background-color: #FAFAFA;
+}
+.login-positioning {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    /* not working well for whatever reason */
+    flex-wrap: wrap;
+}
+.login-text {
+    margin-right: 102px;
+}
+.button-block {
+    display: flex;
+    width: 100%;
+    justify-content: right;
+}
+.button-cont {
+    display: flex;
+    justify-content: space-between;
+    width: 173px;
+}
+
+@media screen and (max-width: 925px) {
+    .login-positioning {
+        padding: 100px 0px;
+    }
+    .login-text h4 {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .MuiContainer-root {
+        min-width: 500px;
+    }
+
+    .login-text {
+        margin-left: 70px;
+    }
+    .login-text h6 {
+        font-size: 1rem;
+    }
+    
+}

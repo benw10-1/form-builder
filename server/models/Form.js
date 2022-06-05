@@ -39,7 +39,10 @@ const formSchema = new Schema(
                 ref: "Piece"
             }],
             default: []
-        }
+        },
+    },
+    {
+        timestamps: true
     }
 )
 

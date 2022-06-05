@@ -1,6 +1,6 @@
 // where users edit their owned forms (for now just renders form from db)
 import React, { useState, useEffect } from "react";
-import { queries, mutations, Auth } from "../utils"
+import { queries, mutations, Auth, parseProps } from "../utils"
 import { useParams } from "react-router-dom"
 
 function HeaderEl({ title, subtitle }) {
@@ -41,28 +41,31 @@ function InputEl({ id, props }) {
     }
 }
 
-function Form() {
+function EditForm() {
     let { id } = useParams()
 
     let [loading, setLoading] = useState(true)
     let [pieces, setPieces] = useState([])
 
     // same logic as Dashboard.js
-    useEffect(async () => {
-        let loggedIn = Auth.loggedIn()
-        if (!loggedIn) {
-            window.location.replace(window.location.origin + "/login")
-            return
+    useEffect(() => {
+        async function req() {
+            let loggedIn = Auth.loggedIn()
+            if (!loggedIn) {
+                window.location.replace(window.location.origin + "/login")
+                return
+            }
+            let reqPieces = (await queries.getPiecesByID(id)).result ?? []
+            if (!reqPieces) {
+                window.location.replace(window.location.origin + "/dashboard")
+            }
+            else {
+                setPieces(reqPieces)
+                setLoading(false)
+            }
         }
-        let reqPieces = (await queries.getPiecesForRender(id)).result ?? []
-        if (!reqPieces) {
-            window.location.replace(window.location.origin + "/dashboard")
-        }
-        else {
-            setPieces(reqPieces)
-            setLoading(false)
-        }
-    }, [1])
+        req()
+    }, [])
 
     // main render logic
     const pageRender = () => {
@@ -71,17 +74,7 @@ function Form() {
         let renderedPieces = []
         pieces.forEach(x => {
             const { _id, _type, props } = x
-            const parsed = {}
-            props.forEach(x => {
-                let { key, value } = x
-                let found = parsed[key]
-                if (found) {
-                    if (typeof found !== "object") value = [found, value]
-                    else value = [...found, value]
-                }
-                parsed[x.key] = value
-            })
-
+            const parsed = parseProps(props)
             console.log(parsed)
 
             let element
@@ -110,4 +103,4 @@ function Form() {
     );
 }
 
-export default Form;
+export default EditForm;
