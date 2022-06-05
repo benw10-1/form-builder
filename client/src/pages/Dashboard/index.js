@@ -32,7 +32,9 @@ function AllForms({ forms = [], modal }) {
 
         const cardsx = {
             width: "280px",
-            height: "160px",
+            minHeight: "300px",
+            height: "auto",
+            display: "flex",
             "&:hover": { boxShadow: 15 },
             position: "relative",
             margin: "26px 51px 0 0"
@@ -75,7 +77,7 @@ function AllForms({ forms = [], modal }) {
                             )
                         })()}
                     </Box>
-                    <Box sx={{ width: "248px", height: "40px", display: "flex", justifyContent: "space-between", position: "absolute", top: "75px" }}>
+                    <Box sx={{ width: "248px", height: "40px", display: "flex", justifyContent: "space-between", position: "absolute", top: "220px" }}>
                         <Typography className="created" variant="body1" sx={{ fontSize: "14px" }} h={"20px"} w={"100%"}>
                             {"Created " + moment(Number(createdAt)).format("LL")}
                         </Typography>
