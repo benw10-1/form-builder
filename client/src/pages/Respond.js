@@ -41,6 +41,23 @@ import Stack from '@mui/material/Stack';
 
 import "./nstyle.css"
 
+
+function Success({ }) {
+    return (
+        <Box sx={{ width: "100%" }}>
+            <Typography variant="h6" gutterBottom>
+                Success!
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+                Your response has been submitted.
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+                Thank you for your contribution.
+            </Typography>
+        </Box>
+    );
+}
+
 function Respond() {
 
 const gray = {
@@ -465,7 +482,6 @@ const RespondRender = ( {piece} ) => {
 };
 
 const Titler = ({form}) => {
-
     
 
     return (
@@ -479,10 +495,7 @@ const Titler = ({form}) => {
     
     )
 };
-
-
-
-
+    const [disabled, setDisabled] = useState(false);
 
     async function submit () {
 
@@ -512,20 +525,15 @@ const Titler = ({form}) => {
         
         console.log(ans);
         await mutations.respond(id,ans);
-        
+        setDisabled(true);
     }
 
-    function SubButton () {
+    function SubButton ({ disabled }) {
+        if (disabled) return
         return(        
-            <Button variant="outlined" onClick={submit} color="error">SUBMIT</Button>   
+            <Button variant="outlined" onClick={submit} color="error" disabled={disabled}>SUBMIT</Button>   
         )
     }
-
-    
-
-
-
-
 
     function Renderer ({pieces}) {
 
@@ -546,7 +554,7 @@ const Titler = ({form}) => {
         }
         return (
             <>
-            {renP}
+            {disabled ? <Success /> : renP}
             </>
         )
         
@@ -624,7 +632,7 @@ const Titler = ({form}) => {
                 <Titler form={form} sx={{borderLeft: "5px solid white"}}/>
                 <Renderer pieces={pieces} />
                 <br/>
-                <SubButton/>
+                <SubButton disabled={disabled}/>
                 <br/>
                 <br/>
             </Card>

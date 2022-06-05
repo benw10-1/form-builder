@@ -83,7 +83,7 @@ async function updateFormPieces(parent, { id, pieces }, context) {
     }
 
     const refSet = new Set(parsedPieces)
-    console.log(refSet, parsedPieces)
+    // console.log(refSet, parsedPieces)
     for (const x of form.piece_refs) {
         if (!refSet.has(x.toString())) {
             console.log("DEleted!")

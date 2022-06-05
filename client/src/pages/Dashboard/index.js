@@ -118,7 +118,6 @@ function AllForms({ forms = [], modal }) {
 
                     <Box sx={{ width: "240px", height: "37px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "8px", left: "20px" }}>
 
-
                         <Button variant="outlined" onClick={editclick} >EDIT</Button>
                         <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
 

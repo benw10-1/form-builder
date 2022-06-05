@@ -41,6 +41,8 @@ import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 
+import Signout from "./Signout";
+
 import "./nstyle.css"
 
 function ALTEditForm() {
@@ -866,15 +868,15 @@ function ALTEditForm() {
 
 
     async function saveform(xx) {
-        console.log(xx)
+        // console.log(xx)
         let zz = removeIds(xx);
-        const ids = await mutations.updateFormPieces(id, zz);
+        const ids = (await mutations.updateFormPieces(id, zz))?.result;
         setPieces(xx.map((x, i) => {
             x._id = ids[i];
             return x;
         }));
 
-        // console.log(zz)
+        console.log(zz)
     }
     async function publishform() {
         await saveform(pieceArrRef.current);
@@ -1233,7 +1235,8 @@ function ALTEditForm() {
     }
 
     return (
-        <>
+        <>  
+            <Signout />
             <CssBaseline />
             <Box display="flex" flexDirection="row" sx={{ height: "100%" }}>
 
@@ -1250,7 +1253,7 @@ function ALTEditForm() {
                         {'Edit your form by clicking on the toolbar icons.'}
                     </Typography>
 
-                    <Box sx={toolboxsx} onClick={() => { logPieces() }}>
+                    {/* <Box sx={toolboxsx} onClick={() => { logPieces() }}>
                         <AddIcon sx={plussx} fontSize={"medium"} />
                         <Typography sx={{ ...fontsx, ...normsx }}>log pieces</Typography>
                     </Box>
@@ -1261,7 +1264,7 @@ function ALTEditForm() {
                     <Box sx={toolboxsx} onClick={() => { logId() }}>
                         <AddIcon sx={plussx} fontSize={"medium"} />
                         <Typography sx={{ ...fontsx, ...normsx }}>log id</Typography>
-                    </Box>
+                    </Box> */}
                 </div>
 
 
