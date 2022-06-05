@@ -32,6 +32,10 @@
     justify-content: start;
 }
 
+.forms-container h4 {
+    display: flex;
+}
+
 @media screen and (max-width: 767px) {
     .dash-positioning {
         /* flex-direction: column; */
