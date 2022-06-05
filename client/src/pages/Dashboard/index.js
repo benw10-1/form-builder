@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { queries, mutations, Auth, dayTime } from "../../utils"
+import { queries, mutations, Auth, dayTime } from "../../utils";
 import {
     Container,
     CssBaseline,
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 
 import AddIcon from '@mui/icons-material/Add';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Stack from '@mui/material/Stack';
 
 import Signout from "../Signout";
@@ -32,7 +33,8 @@ function AllForms({ forms = [], modal }) {
 
         const cardsx = {
             width: "280px",
-            height: "160px",
+            minHeight: "300px",
+            height: "auto",
             "&:hover": { boxShadow: 15 },
             position: "relative",
             margin: "26px 51px 0 0"
@@ -47,6 +49,35 @@ function AllForms({ forms = [], modal }) {
         }
         const hoversx = {
             "&:hover": { cursor: "pointer" }
+        }
+
+        const copysx = {
+            fontSize: "18px !important",
+            margin: 0,
+            textDecoration: "none",
+            left: "110px",
+            color: "#242424",
+        }
+
+        const poposx = {
+            marginTop: "3px",
+            left: {
+                xs: "51px",
+                md: "72px",
+            },
+            display: "flex", 
+            alignItems: "center",
+        }
+
+        const buttonsx = {
+            backgroundColor: "#FFF", 
+            borderRadius: "0px",
+            height: "30px",
+            minWidth: "20px", 
+            width: "30px", 
+            padding: 0, 
+            margin: 0, 
+            display: "flex",
         }
 
         // maybe add form pages if forms exceed certain count
@@ -75,43 +106,75 @@ function AllForms({ forms = [], modal }) {
                             )
                         })()}
                     </Box>
-                    <Box sx={{ width: "248px", height: "40px", display: "flex", justifyContent: "space-between", position: "absolute", top: "75px" }}>
+                    <Box sx={{ width: "248px", height: "291px", display: "flex", justifyContent: "space-between", position: "absolute", top: "186px" }}>
                         <Typography className="created" variant="body1" sx={{ fontSize: "14px" }} h={"20px"} w={"100%"}>
                             {"Created " + moment(Number(createdAt)).format("LL")}
                         </Typography>
                         {published ? (
                             <PopupState variant="popover" popupId="demo-popup-popover">
                                 {(popupState) => (
-                                    <div>
-                                        <Typography {...bindTrigger(popupState)} sx={{ ...hoversx, fontSize: "12px", color: "#4CAF50", textDecoration: "underline" }}>
+                                    <div className="popover-style">
+                                        <Typography {...bindTrigger(popupState)} sx={{ ...hoversx, fontSize: "14px", color: "#4CAF50", textDecoration: "underline" }}>
                                             Published
                                         </Typography>
-                                        <Popover
+                                        <Popover className="pop" elevation={0} sx={poposx}
+                                            anchorReference="anchorOrigin"
+                                            anchorEl={ popupState }
                                             {...bindPopover(popupState)}
                                             anchorOrigin={{
                                                 vertical: 'bottom',
-                                                horizontal: 'center',
+                                                horizontal: 'left',
                                             }}
                                             transformOrigin={{
                                                 vertical: 'top',
-                                                horizontal: 'center',
+                                                horizontal: 'right',
                                             }}
-                                        >
-                                            <Typography sx={{ p: 2 }}><a href={Rlink}>{Rlink}</a></Typography>
+                                        >                                            
+                                            <Box 
+                                                className="link-container" 
+                                                sx={{ 
+                                                    width: "270px", 
+                                                    fontSize: "12px", 
+                                                    backgroundColor: "transparent", 
+                                                    display: "flex", 
+                                                    alignItems: "center" 
+                                                    }}
+                                            >   
+                                                <Button variant="contained" sx={{ ...hoversx, ...buttonsx}} onClick={() => {navigator.clipboard.writeText(Rlink)}}>
+                                                    <ContentCopyIcon 
+                                                        sx={copysx} 
+                                                    />
+                                                </Button>
+                                                <input
+                                                    style={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none" }}
+                                                    type="text"
+                                                    value={Rlink}
+                                                    disabled="true"
+                                                />
+                                                {/* <a 
+                                                    className="copyLink" 
+                                                    style={{ overflowWrap: 'break-word' }} 
+                                                    href={Rlink}
+                                                >
+                                                    <Typography className="rLink">
+                                                        {Rlink}
+                                                    </Typography>
+                                                </a> */}
+                                            </Box>
                                         </Popover>
                                     </div>
                                 )}
                             </PopupState>
 
                         ) : (
-                            <Typography sx={{ fontSize: "12px", color: "#949494" }}>
+                            <Typography disabled sx={{ fontSize: "12px", color: "#949494" }}>
                                 Unpublished
                             </Typography>
                         )}
                     </Box>
 
-                    <Box sx={{ width: "100%", height: "10px", position: "absolute", bottom: "45px" }}>
-                        <Divider variant="middle" />
+                    <Box sx={{ width: "100%", position: "absolute", bottom: "52px", right: "0px" }}>
+                        <Divider variant="left" />
                     </Box>
 
                     <Box sx={{ width: "240px", height: "37px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "8px", left: "20px" }}>
@@ -151,6 +214,7 @@ function Dashboard() {
     const [formName, setFormName] = useState("")
     const [formDesc, setFormDesc] = useState("")
     const [reload, setReload] = useState(false)
+    // const [inputValue, setInputValue] = useState("")
 
     const reloadPage = () => {
         setLoading(true)
