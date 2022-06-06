@@ -1250,7 +1250,7 @@ function ALTEditForm() {
 
                 <Card sx={formsx}>
                     <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
-                    <Editor pieces={pieceArrRef.current} />
+                    <Editor pieces={pieces} />
                 </Card>
 
 
