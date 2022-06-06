@@ -221,10 +221,8 @@ function Dashboard() {
                 xs: "36px 0 36px 4%",
                 md: "118px 0 0 4%",
             },
-            maxWidth: {
-                xs: "500px",
-                md: "275px",
-            },
+            maxWidth:"320px",
+            
             maxHeight: {
                 xs: "40%",
 

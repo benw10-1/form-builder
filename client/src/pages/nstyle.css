@@ -30,7 +30,7 @@ html{
 .leftDisplay{
     position: fixed;
     padding: 118px 0 0 4%;
-    max-width: 275px;
+    max-width: 320px;
     height: 100%;
     display: block;
     margin: 0 4% 0 0;
