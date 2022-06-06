@@ -371,7 +371,7 @@ function Dashboard() {
             maxHeight: "100vh",
             overflow: "auto",
             borderRadius: "0",
-            paddingBottom: "300px",
+            // paddingBottom: "300px",
         }
         const boxsx = {
             padding: {
