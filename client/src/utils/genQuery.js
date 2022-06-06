@@ -6,7 +6,8 @@ import Auth from "./auth"
  * @param {String[]} variables GraphQL variables to pass
  * @returns Builds the request for gql. 
  */
-async function genQuery(q, variables) {
+ async function genQuery(q, variables) {
+    // const url = "/graphql"
     const url = "http://localhost:3001/graphql"
     // https://graphql.org/learn/serving-over-http/#post-request
     const body = {
