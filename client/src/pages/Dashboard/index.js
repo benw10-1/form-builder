@@ -50,7 +50,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
         display: "flex",
         "&:hover": { boxShadow: 15 },
         margin: "26px 25px 0",
-        transition: "height 0.3s ease-in",
+        transition: "all 0.3s ease-in",
     }
     const hoversx = {
         "&:hover": { cursor: "pointer" }
@@ -280,7 +280,7 @@ function AllForms({ forms = [], modal }) {
         })
 
         renderedForms.push((
-            <Paper sx={{ ...cardsx, background: "#0000000A", ...centered }}>
+            <Paper sx={{ ...cardsx, background: "#0000000A", ...centered, height: "200px" }}>
                 <Avatar variant={"circular"} size={"40px"} sx={{ padding: "13px", ...hoversx }} onClick={modal}>
                     <AddIcon sx={plussx} fontSize={"medium"} />
                 </Avatar>
