@@ -42,11 +42,23 @@ import Stack from '@mui/material/Stack';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import Signout from "./Signout";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
 import "./n2style.css"
 
 function ALTEditFormMob() {
 
     const hurl = "http://localhost:3000/";
+
+    const buttonscontsx = {
+        width: "100vw"
+    }
+    const buttonscont2sx = {
+        width: "100vw",
+        display:"flex",
+        justifyContent: "center",
+    }
+
+    
 
     const rightbuttonsx = {
         position: "fixed",
@@ -78,11 +90,8 @@ function ALTEditFormMob() {
         top: "0px",
         right: "0px",
         fontSize: "30px",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
+        opacity: ".85",
+       
     }
 
     const iconboxsx = {
@@ -91,10 +100,8 @@ function ALTEditFormMob() {
         left: "0px",
         width: "100%",
         height: "100%",
-        opacity: ".0",
-        "&:hover": {
-            opacity: "1.0",
-        }
+        opacity: "1.0",
+       
     }
 
     const checkiconsx = {
@@ -102,11 +109,8 @@ function ALTEditFormMob() {
         top: "0px",
         right: "0px",
         fontSize: "30px",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
+        opacity: ".85",
+        
 
     }
     const deliconsx = {
@@ -114,11 +118,8 @@ function ALTEditFormMob() {
         top: "0px",
         right: "40px",
         fontSize: "30px",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
+        opacity: ".85",
+        
 
     }
     const checkiconboxsx = {
@@ -127,11 +128,8 @@ function ALTEditFormMob() {
         left: "0px",
         width: "100%",
         height: "100%",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
+        opacity: ".85",
+        
 
     }
 
@@ -187,16 +185,10 @@ function ALTEditFormMob() {
 
 
 
+    
     const toolbarsx = {
-        opacity: ".0",
-        "&:hover": {
-            opacity: "1.0",
-        }
 
-    }
-    const toolssx = {
-
-        maxWidth: "500px",
+        width: "100%",
         height: "40px",
         display: "flex",
         justifyContent: "space-evenly",
@@ -209,11 +201,8 @@ function ALTEditFormMob() {
         display: "flex",
         marginRight: "15px",
         marginLeft: "15px",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        },
+        opacity: ".85",
+        
     }
 
     const fontsx = {
@@ -806,8 +795,8 @@ function ALTEditFormMob() {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClick}
                 >
-                    <AddIcon sx={plussx} fontSize={"medium"} />
-                    <Typography sx={{ ...fontsx, ...normsx }}>Add Question</Typography>
+                    <AddBoxTwoToneIcon sx={plussx} color="primary" fontSize={"medium"} />
+                    
                 </Box>
                 <Menu
                     id="basic-menu"
@@ -820,20 +809,31 @@ function ALTEditFormMob() {
                 >
                     <MenuItem onClick={() => {
                         handleClose();
+                        addPiece("header", l);
+                    }}>Add Header</MenuItem>
+                    <MenuItem onClick={() => {
+                        handleClose();
+                        addPiece("break", l);
+                    }}>Add Divider</MenuItem>
+                    <MenuItem onClick={() => {
+                        handleClose();
                         addPiece("question", l, "ss");
-                    }}>Single Select</MenuItem>
+                    }}>Add Single Select Q</MenuItem>
                     <MenuItem onClick={() => {
                         handleClose();
                         addPiece("question", l, "ms");
-                    }}>Multiple Select</MenuItem>
+                    }}>Add Multiple Select Q</MenuItem>
                     <MenuItem onClick={() => {
                         handleClose();
                         addPiece("question", l, "st");
-                    }}>Single Line Text</MenuItem>
+                    }}>Add Single Line Text Q</MenuItem>
                     <MenuItem onClick={() => {
                         handleClose();
                         addPiece("question", l, "mt");
-                    }}>Multiple Line Text</MenuItem>
+                    }}>Add Multiple Line Text Q</MenuItem>
+                    <MenuItem onClick={() => {
+                        handleClose();
+                    }}>Close Menu</MenuItem>
                 </Menu>
             </div>
         );
@@ -842,25 +842,6 @@ function ALTEditFormMob() {
     //      /////////////////end popup menu stuff////////////////////////////////////////////////
 
 
-    const Toolbar = ({ location }) => {
-        return (
-            <Card sx={toolssx}>
-
-                <Box sx={toolboxsx} onClick={() => { addPiece("header", location) }}>
-                    <TitleRounded sx={plussx} fontSize={"medium"} />
-                    <Typography sx={{ ...fontsx, ...normsx }}>Add Header</Typography>
-                </Box>
-                <Box sx={toolboxsx} onClick={() => { addPiece("break", location) }}>
-                    <MoreHorizFilled sx={plussx} fontSize={"medium"} />
-                    <Typography sx={{ ...fontsx, ...normsx }}>Add Divider</Typography>
-                </Box>
-                <BasicMenu l={location} />
-
-
-
-            </Card>
-        )
-    }
 
     ///////////////////////////end toolbar stuff////////////////
 
@@ -872,17 +853,21 @@ function ALTEditFormMob() {
             <PopupState variant="popover" popupId="demo-popup-menu">
       {(popupState) => (
         <React.Fragment>
-          <Button variant="contained" {...bindTrigger(popupState)}>
-          <MenuTwoToneIcon sx={plussx} fontSize={"medium"} />
-          </Button>
+          
+          <MenuTwoToneIcon {...bindTrigger(popupState)} sx={plussx} fontSize={"medium"} color="primary"/>
+          
           <Menu {...bindMenu(popupState)}>
             <MenuItem onClick={popupState.open}>
-                <ButtonsTwo conf={confirm} key={"buttons2"} />
+                <Box sx={buttonscontsx}>
+                   <ButtonsTwo conf={confirm} key={"buttons2"} /> 
+                   <ButtonsOne form={form} key={"buttons1"} />
+                </Box>
+                
             </MenuItem>
-            <MenuItem onClick={popupState.open}>
-                <ButtonsOne form={form} key={"buttons1"} />
+            
+            <MenuItem onClick={popupState.close} >
+                <Box sx={buttonscont2sx}>CLOSE MENU</Box>
             </MenuItem>
-            <MenuItem onClick={popupState.close}>CLOSE MENU</MenuItem>
           </Menu>
         </React.Fragment>
       )}
@@ -997,7 +982,10 @@ function ALTEditFormMob() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={clearform} color="error">CONFIRM CLEAR </Button>
-                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography>
+                    <Box sx={{display:"flex"}}>
+                       <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography> 
+                    </Box>
+                    
                     <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
             )
@@ -1006,7 +994,10 @@ function ALTEditFormMob() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={deleteform} color="error">CONFIRM DELETE </Button>
-                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
+                    <Box sx={{display:"flex"}}>
+                        <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
+                    </Box>
+                    
                     <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
             )
@@ -1036,7 +1027,7 @@ function ALTEditFormMob() {
 
 
                     <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
-                    <Editor pieces={pieceArrRef.current} />
+                    <Editor pieces={pieces} />
                 </Card>
             </Box>
             )
@@ -1044,7 +1035,9 @@ function ALTEditFormMob() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={clearform} color="error">CONFIRM CLEAR </Button>
-                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography>
+                    <Box sx={{display:"flex"}}>
+                       <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography> 
+                    </Box>
                     <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
             )
@@ -1053,7 +1046,9 @@ function ALTEditFormMob() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={deleteform} color="error">CONFIRM DELETE </Button>
-                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
+                    <Box sx={{display:"flex"}}>
+                        <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
+                    </Box>
                     <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
             )
@@ -1075,7 +1070,11 @@ function ALTEditFormMob() {
                     <Button variant="contained" onClick={() => { saveform(pieceArrRef.current) }}>SAVE FORM </Button>
                     <Button variant="outlined" onClick={() => { gotodash(pieceArrRef.current) }}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
-                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form is currently not available to respondents</Typography><br /><br />
+                    <Box sx={{display:"flex"}}>
+                        <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form is currently not available to respondents</Typography>
+
+                    </Box>
+                    <br /><br />
 
 
                 </Stack>
@@ -1087,9 +1086,13 @@ function ALTEditFormMob() {
                     <Button variant="contained" onClick={() => { saveform(pieceArrRef.current) }}>SAVE FORM </Button>
                     <Button variant="outlined" onClick={() => { gotodash(pieceArrRef.current) }}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
-                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form currently published at:</Typography>
-                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}><a href={rlink}>{rlink}</a></Typography>
+                    <Box sx={{display:"flex"}}>
+                        <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form currently published at:</Typography>
+                        <Typography sx={{ ...fontsx, ...normsx, ...gray }}><a href={rlink}>{rlink}</a></Typography>
 
+
+                    </Box>
+                    
 
                 </Stack>
             )
@@ -1113,14 +1116,14 @@ function ALTEditFormMob() {
                     <>
                         <Box Key={a}>
                             <Box sx={toolbarsx}>
-                                <Toolbar location={a} />
+                                <BasicMenu l={a} />
                             </Box>
                             <Box sx={editboxsx} >
                                 <Box sx={boxsx}   >
                                     <Box sx={checkiconboxsx}>
                                         <DeleteIcon sx={deliconsx} onClick={() => { delPiece(a) }} />
                                         <CheckCircleIcon sx={checkiconsx} onClick={() => { edit('-1') }} />
-                                    </Box>
+                                    </Box><br/>
                                     <EditingRender piece={pieces[i]} />
                                 </Box>
                             </Box>
@@ -1135,13 +1138,13 @@ function ALTEditFormMob() {
                     <>
                         <Box Key={a}>
                             <Box sx={toolbarsx}>
-                                <Toolbar location={a} />
+                                <BasicMenu l={a} />
                             </Box>
                             <Box sx={noneditboxsx}  >
                                 <Box sx={boxsx}   >
                                     <Box sx={iconboxsx}>
                                         <EditIcon sx={editiconsx} onClick={() => { edit(a) }} />
-                                    </Box>
+                                    </Box><br/>
                                     <NormalRender piece={pieces[i]} />
                                 </Box>
                             </Box>
@@ -1156,7 +1159,10 @@ function ALTEditFormMob() {
             <>
                 {renP}
                 <br />
-                <Toolbar location={'-1'} />
+                <Box sx={toolbarsx}>
+                <BasicMenu l={'-1'} />
+                </Box>
+                
             </>
         )
 
