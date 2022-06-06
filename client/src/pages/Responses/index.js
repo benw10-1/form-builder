@@ -36,6 +36,7 @@ function parseResponseData(responses, pieces) {
             minWidth: 100,
             flex: 1,
             valueFormatter: (params) => {
+                if (!params.value) return ""
                 const split = params.value.split("__sep__")
                 return split.length > 1 ? split.join(", ") : params.value
             },
