@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { queries, mutations, Auth, parseProps, dayTime } from "../utils"
 import { useParams } from "react-router-dom"
@@ -40,70 +39,21 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
-
+import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import Signout from "./Signout";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import "./n2style.css"
 
-import "./nstyle.css"
-
-function ALTEditForm() {
+function ALTEditFormMob() {
 
     const hurl = "http://localhost:3000/";
 
-    const leftDisplaysx ={
+    const rightbuttonsx = {
         position: "fixed",
-        top:"0",
-        left:"0",
-        padding: "14vw 2vw 2vw 2vw",
-        width: "20vw",
-        height: "100%",
-        display: "block",
-        zIndex:"0",
-        
+        width:"20vh",
+        top: "10vh",
+        left: "50vh",
     }
-
-    const formsx = {
-        /* Auto layout */
-        zIndex:"2",
-        position: "absolute",
-        top:"0",
-        left:"20vw",
-
-        padding: "10vh 10vh 10vh 10vh",
-        overflow: "auto",
-
-        //position: "absolute",
-        width: "60vw",
-        minHeight: "100vh",
-        
-        //top: "0px",
-
-        /* Light/Background/Paper */
-        background: "#FFFFFF",
-
-        /* Elevation/1 */
-        boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
-        borderRadius: "4px"
-    }
-
-
-    const rightButtonssx = {
-        position: "fixed",
-        top:"0",
-        right:"0",
-    
-        padding: "16vh 2vw 2vw 2vw",
-            
-        overflow: "auto",
-        
-        //position: "fixed",
-        width: "20vw",
-        height: "100%",
-        zIndex:"0",
-
-
-        
-    }
-
 
     const gray = {
         color: "rgba(0,0,0,0.5)"
@@ -215,7 +165,23 @@ function ALTEditForm() {
 
     }
 
-    
+    const formsx = {
+        /* Auto layout */
+
+        padding: "10vh 10vh 10vh 10vh",
+        overflow: "auto",
+
+        position: "relative",
+        width: "100vw",
+        minHeight: "100vh",
+        
+
+        /* Light/Background/Paper */
+        background: "#FFFFFF",
+
+       
+    }
+
 
 
 
@@ -289,7 +255,7 @@ function ALTEditForm() {
         alignItems: "center"
     }
     const plussx = {
-        width: "20px"
+        width: "20vh"
     }
     const hoversx = {
         "&:hover": { cursor: "pointer" }
@@ -900,7 +866,74 @@ function ALTEditForm() {
 
     ///////////////////////////right side buttons stuff////////////////////////
 
-    //need to add edit detector if am going to ask for save or not for every link
+    const Rightbutton = ({})=> {
+        return (
+
+            <PopupState variant="popover" popupId="demo-popup-menu">
+      {(popupState) => (
+        <React.Fragment>
+          <Button variant="contained" {...bindTrigger(popupState)}>
+          <MenuTwoToneIcon sx={plussx} fontSize={"medium"} />
+          </Button>
+          <Menu {...bindMenu(popupState)}>
+            <MenuItem onClick={popupState.open}>
+                <ButtonsTwo conf={confirm} key={"buttons2"} />
+            </MenuItem>
+            <MenuItem onClick={popupState.open}>
+                <ButtonsOne form={form} key={"buttons1"} />
+            </MenuItem>
+            <MenuItem onClick={popupState.close}>CLOSE MENU</MenuItem>
+          </Menu>
+        </React.Fragment>
+      )}
+    </PopupState>
+        )
+
+        /*
+        
+        const [anchorEl2, setAnchorEl2] = React.useState(null);
+        const open2 = Boolean(anchorEl2);
+        const handleClick2 = (e) => {
+            setAnchorEl2(e.currentTarget);
+        };
+        const handleClose2 = () => {
+            setAnchorEl2(null);
+        };
+
+        return (
+            <div>
+                <Box 
+                    id="basic-button"
+                    aria-controls={open2 ? 'basic-menu2' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open2 ? 'true' : undefined}
+                    onClick={handleClick2}
+                >
+                    <MenuTwoToneIcon sx={plussx} fontSize={"medium"} />
+                    
+                </Box>
+                <Menu
+                    id="basic-menu2"
+                    anchorEl={anchorEl2}
+                    open={open2}
+                    onClose={handleClose2}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={handleClick2}>
+                        <ButtonsTwo conf={confirm} key={"buttons2"} />
+                    </MenuItem>
+                    <MenuItem onClick={handleClick2}>
+                        <ButtonsOne form={form} key={"buttons1"} /></MenuItem>
+                    <MenuItem onClick={() => { handleClose2();}}>
+                        CLOSE MENU
+                    </MenuItem>
+                    
+                </Menu>
+            </div>
+        );*/
+    }
 
 
 
@@ -957,8 +990,7 @@ function ALTEditForm() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="outlined" onClick={clearformconf} color="error">CLEAR FORM </Button>
-                    <Button variant="contained" onClick={deleteformconf} color="error">DELETE FORM</Button><br/>
-                    <Divider variant="middle" /><br/>
+                    <Button variant="contained" onClick={deleteformconf} color="error">DELETE FORM</Button><br /><br /><br /><br /><br />
                 </Stack>
             )
         } else if (conf.clear == "yes") {
@@ -966,8 +998,7 @@ function ALTEditForm() {
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={clearform} color="error">CONFIRM CLEAR </Button>
                     <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography>
-                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br/>
-                    <Divider variant="middle" /><br/>
+                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
             )
 
@@ -976,13 +1007,61 @@ function ALTEditForm() {
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={deleteform} color="error">CONFIRM DELETE </Button>
                     <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
-                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br/>
-                    <Divider variant="middle" /><br/>
+                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
             )
 
         }
     }
+
+    function XX({ conf }) {
+
+        if (conf.clear == "no" & conf.delete == "no") {
+            return (
+                <Box>
+
+
+            
+                <div className="mainmenu">
+                    <Rightbutton/>
+                </div>
+                
+
+                
+
+
+                <Card sx={formsx}>
+                    
+                    
+
+
+                    <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
+                    <Editor pieces={pieceArrRef.current} />
+                </Card>
+            </Box>
+            )
+        } else if (conf.clear == "yes") {
+            return (
+                <Stack spacing={2} direction="column">
+                    <Button variant="contained" onClick={clearform} color="error">CONFIRM CLEAR </Button>
+                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography>
+                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
+                </Stack>
+            )
+
+        } else {
+            return (
+                <Stack spacing={2} direction="column">
+                    <Button variant="contained" onClick={deleteform} color="error">CONFIRM DELETE </Button>
+                    <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
+                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
+                </Stack>
+            )
+
+        }
+    }
+
+
 
 
     function ButtonsOne({ form }) {
@@ -1089,7 +1168,7 @@ function ALTEditForm() {
 
     const { id } = useParams();
     let [loading, setLoading] = useState(true)
-    //let [pieces, setPieces] = useState([])
+    
 
     useEffect(() => {
 
@@ -1118,6 +1197,7 @@ function ALTEditForm() {
         req()
 
 
+       
         setEditing('-1');
 
 
@@ -1136,26 +1216,10 @@ function ALTEditForm() {
 
 
 
-    function saveToDb() {
-        removeIds();
-        console.log(pieces);//replace this line with a mutation to save pieces to form!!!!!!!!!!********************************************
-    }
 
 
 
-
-    function logPieces() {
-        console.log(pieces);
-    }
-
-    function logForm() {
-        console.log(form);
-    }
-
-    function logId() {
-        console.log(id);
-    }
-    /////////////////////////////////////////////////////////////CHANGE THESES VALUES, WE DON"T WANT GOATS TO SHOW UP IF THEY LEAVE IT BLANK!!///OR NOT////
+   
     function addPiece(type, loc, qt = "-1") {
 
         const P = { piid: uuid.v4(), _type: type, props: [] };
@@ -1190,14 +1254,7 @@ function ALTEditForm() {
         }
 
     }
-    /*
-    This is unnecessary (and doesn't work) because shallow references? disconcerting but ok...
-        function savePiece(loc){
-            const index = pieceArrRef.current.map(e => e.piid).indexOf(loc);
-            setPieces([...pieceArrRef.current.slice(0,index), pieceRef.current, ...pieceArrRef.current.slice(index+1)])
-            
-        };
-    */
+    
 
 
     function edit(a) {
@@ -1210,77 +1267,34 @@ function ALTEditForm() {
     }
 
 
+    
 
-    ////////////////////////end scratch/function area/////////////////////////////////////////////////////////////////////
 
-
-    let sampleForm = {
-        _id: "62957d6b1ff7cd229d54ebb5",
-        createdAt: "1653964139558",
-        creator: { _id: "62945f2c19fc4ab989b6bda9" },
-        description: "werte",
-        endpoint: null,
-        piece_refs: [],
-        published: false,
-        title: "qwretrt"
-    }
 
     return (
         <>  
             
             <CssBaseline />
-            <Box display="flex" flexDirection="row" sx={{ height: "100%", background:"rgb(250,250,250)"}}>
-
-                <Box sx={leftDisplaysx}>
-                    <Typography variant="h6" height={55} sx={fontsx}>
-                        {(() => { return dayTime() + " " + Auth.getProfile()?.name ?? "User" })()}
-                        <br />
-                    </Typography>
-                    <Typography variant="h5" height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
-                        {form.title}
-                        <br />
-                    </Typography>
-                    <Typography variant="body1" height={48} sx={fontsx}>
-                        {'Edit your form by clicking on the toolbar icons.'}
-                    </Typography>
-
-                    
-                </Box>
+            <XX form={form} pieces={pieces} conf={confirm}/>
+            
 
 
-                <Card sx={formsx}>
-                    <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
-                    <Editor pieces={pieceArrRef.current} />
-                </Card>
+                
 
-
-                <Box sx={rightButtonssx}>
-                <Signout />
-                    <ButtonsTwo conf={confirm} key={"buttons2"} />
-                    <ButtonsOne form={form} key={"buttons1"} />
-                </Box>
-
-            </Box>
+            
 
         </>
     )
 }
 
-export default ALTEditForm;
-
-
-
 /*
-let { id } = useParams()
-
-    
-
-    // same logic as Dashboard.js
-    useEffect(() => {
-        
-    }, [])
-*/
+<div className="rightButtons">
+                    <ButtonsTwo conf={confirm} key={"buttons2"} />
+                    <ButtonsOne form={form} key={"buttons1"} />
+                </div>
+                */
 
 
+export default ALTEditFormMob;
 
 
