@@ -68,7 +68,7 @@ const typeDefs = gql`
   type Mutation {
     createForm(title: String!, description: String): Form!
     updateFormMeta(id: ID!, title: String!, description: String): Form
-    updateFormPieces(id: ID!, pieces: [PieceInp]!): Form
+    updateFormPieces(id: ID!, pieces: [PieceInp]!): [ID!]
     signup(name: String!, password: String!, email: String!): Auth
     login(login: String!, password: String!): Auth
     respond(id: ID!, responses: [PropInp]!): Response!

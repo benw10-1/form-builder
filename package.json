@@ -1,0 +1,15 @@
+{
+    "name": "fullstackapp",
+    "version": "1.0.0",
+    "description": "Fullstack formbuilder app",
+    "main": "server/index.js",
+    "scripts": {
+      "deploy": "git pull origin main && npm install && npm run build && pm2 restart fullstackapp",
+      "install": "cd client && npm install && cd ../server && npm install",
+      "build": "cd client && npm run build",
+      "start": "cd server && node index.js"
+    },
+    "license": "ISC",
+    "dependencies": { }
+  }
+  

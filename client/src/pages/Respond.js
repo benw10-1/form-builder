@@ -17,8 +17,8 @@ import {
     TextField,
     Divider,
     Card,
-    
-    
+
+
 } from "@mui/material";
 
 import Button from '@mui/material/Button';
@@ -41,210 +41,236 @@ import Stack from '@mui/material/Stack';
 
 import "./nstyle.css"
 
+
+function Success({ err }) {
+    return (
+        <Box sx={{ width: "100%" }}>
+            {err ? <Typography variant="h6" color="error">There has been an error with your response</Typography> :
+                (<React.Fragment>
+                    <Typography variant="h6" gutterBottom>
+                        Success!
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        Your response has been submitted.
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        Thank you for your contribution.
+                    </Typography>
+                </React.Fragment>)}
+        </Box>
+    );
+}
+
 function Respond() {
 
-const gray = {
-    color: "rgba(0,0,0,0.5)"
-}
+    const gray = {
+        color: "rgba(0,0,0,0.5)"
+    }
 
-const pink = {
-    color: "rgba(200,0,0,0.5)"
+    const pink = {
+        color: "rgba(200,0,0,0.5)"
 
-}
-const sliderboxsx = {
-    width: "30%"
-}
+    }
+    const sliderboxsx = {
+        width: "30%"
+    }
 
-const deloptsx = {
-    display: "flex",
-}
+    const deloptsx = {
+        display: "flex",
+    }
 
-const editiconsx = {
+    const editiconsx = {
 
-    opacity:".9",
-    position: "absolute",
-    top: "0px",
-    right: "0px",
-    fontSize:"30px",
-    opacity: ".25",
-    "&:hover": {
-        opacity: ".85",
-        cursor: "pointer"  }
-} 
+        opacity: ".9",
+        position: "absolute",
+        top: "0px",
+        right: "0px",
+        fontSize: "30px",
+        opacity: ".25",
+        "&:hover": {
+            opacity: ".85",
+            cursor: "pointer"
+        }
+    }
 
-const iconboxsx = {
-    position: "absolute",
-    top: "0px",
-    left: "0px",
-    width: "100%",
-    height: "100%",
-    opacity: ".0",
-    "&:hover": { 
-        opacity: "1.0",
-        }    
-}
+    const iconboxsx = {
+        position: "absolute",
+        top: "0px",
+        left: "0px",
+        width: "100%",
+        height: "100%",
+        opacity: ".0",
+        "&:hover": {
+            opacity: "1.0",
+        }
+    }
 
-const checkiconsx = {
-    position: "absolute",
-    top: "0px",
-    right: "0px",
-    fontSize:"30px",
-    opacity: ".25",
-    "&:hover": {
-        opacity: ".85",
-        cursor: "pointer"  }
+    const checkiconsx = {
+        position: "absolute",
+        top: "0px",
+        right: "0px",
+        fontSize: "30px",
+        opacity: ".25",
+        "&:hover": {
+            opacity: ".85",
+            cursor: "pointer"
+        }
 
-}
-const deliconsx = {
-    position: "absolute",
-    top: "0px",
-    right: "40px",
-    fontSize:"30px",
-    opacity: ".25",
-    "&:hover": {
-        opacity: ".85",
-        cursor: "pointer"  }
+    }
+    const deliconsx = {
+        position: "absolute",
+        top: "0px",
+        right: "40px",
+        fontSize: "30px",
+        opacity: ".25",
+        "&:hover": {
+            opacity: ".85",
+            cursor: "pointer"
+        }
 
-}
-const checkiconboxsx = {
-    position: "absolute",
-    top: "0px",
-    left: "0px",
-    width: "100%",
-    height: "100%",
-    opacity: ".25",
-    "&:hover": {
-        opacity: ".85",
-        cursor: "pointer"  }
+    }
+    const checkiconboxsx = {
+        position: "absolute",
+        top: "0px",
+        left: "0px",
+        width: "100%",
+        height: "100%",
+        opacity: ".25",
+        "&:hover": {
+            opacity: ".85",
+            cursor: "pointer"
+        }
 
-}
+    }
 
-const freeiconsx = {
-    
-    opacity: ".25",
-    "&:hover": {
-        opacity: ".85",
-        cursor: "pointer"  }
+    const freeiconsx = {
 
-}
+        opacity: ".25",
+        "&:hover": {
+            opacity: ".85",
+            cursor: "pointer"
+        }
 
-const boxsx = {
-    
-    position:"relative", 
-    width:"100%",
-}
-const editboxsx = {
-    position:"relative", 
-    width:"100%",
-    borderLeft: "5px solid #42A5F5",
-    paddingLeft: "10px"
+    }
 
-}
-const noneditboxsx = {
-    position:"relative", 
-    width:"100%",
-    borderLeft: "5px solid white",
-    paddingLeft: "10px"
+    const boxsx = {
 
-}
+        position: "relative",
+        width: "100%",
+    }
+    const editboxsx = {
+        position: "relative",
+        width: "100%",
+        borderLeft: "5px solid #42A5F5",
+        paddingLeft: "10px"
 
-const formsx = {
-    /* Auto layout */
-    
-    padding: "63px 61px 63px 61px",
-    overflow: "auto",
+    }
+    const noneditboxsx = {
+        position: "relative",
+        width: "100%",
+        borderLeft: "5px solid white",
+        paddingLeft: "10px"
 
-    position: "absolute",
-    width: "800px",
-    minHeight: "100vh",
-    left: "382px",
-    top:"0px",
+    }
 
-    /* Light/Background/Paper */
-    background: "#FFFFFF",
+    const formsx = {
+        /* Auto layout */
 
-    /* Elevation/1 */
-    boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
-    borderRadius: "4px"
-}
+        padding: "63px 61px 63px 61px",
+        overflow: "auto",
 
+        position: "absolute",
+        width: "800px",
+        minHeight: "100vh",
+        left: "382px",
+        top: "0px",
 
+        /* Light/Background/Paper */
+        background: "#FFFFFF",
 
-
+        /* Elevation/1 */
+        boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
+        borderRadius: "4px"
+    }
 
 
-const toolbarsx = {
-    opacity: ".0",
-    "&:hover": { 
-        opacity: "1.0",
-     } 
 
-}
-const toolssx = {
 
-    maxWidth: "500px",
-    height: "40px",
-    display: "flex",
-    justifyContent: "space-evenly",
-    margin: "auto",
-    display:"flex",
-    alignItems: "center"
-}
 
-const toolboxsx = {
-    display:"flex",
-    marginRight: "15px",
-    marginLeft: "15px",
-    opacity: ".25",
-    "&:hover": { 
-        opacity: ".85",
-        cursor: "pointer" },
-}
 
-const fontsx = {
-    fontFamily: 'Roboto',
-    fontStyle: "normal",
-}
+    const toolbarsx = {
+        opacity: ".0",
+        "&:hover": {
+            opacity: "1.0",
+        }
 
-const titlesx = {
-    fontSize: "34px",
-    lineHeight: "123.5%",
-    letterSpacing: "0.25px"
+    }
+    const toolssx = {
 
-}
+        maxWidth: "500px",
+        height: "40px",
+        display: "flex",
+        justifyContent: "space-evenly",
+        margin: "auto",
+        display: "flex",
+        alignItems: "center"
+    }
 
-const headsx = {
-    fontSize: "24px",
-    lineHeight: "123.5%",
-    letterSpacing: "0.25px"
+    const toolboxsx = {
+        display: "flex",
+        marginRight: "15px",
+        marginLeft: "15px",
+        opacity: ".25",
+        "&:hover": {
+            opacity: ".85",
+            cursor: "pointer"
+        },
+    }
 
-}
+    const fontsx = {
+        fontFamily: 'Roboto',
+        fontStyle: "normal",
+    }
 
-const normsx = {
-    fontSize: "16px",
-    lineHeight: "150%",
-    letterSpacing: "0.15px"
+    const titlesx = {
+        fontSize: "34px",
+        lineHeight: "123.5%",
+        letterSpacing: "0.25px"
 
-}
+    }
 
-const subsx = {
-    fontSize: "12px",
-    lineHeight: "166%",
-    letterSpacing: "0.4px"
+    const headsx = {
+        fontSize: "24px",
+        lineHeight: "123.5%",
+        letterSpacing: "0.25px"
 
-}
+    }
 
-const centered = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-}
-const plussx = {
-    width: "20px"
-}
-const hoversx = {
-    "&:hover": { cursor: "pointer" }
-}
+    const normsx = {
+        fontSize: "16px",
+        lineHeight: "150%",
+        letterSpacing: "0.15px"
+
+    }
+
+    const subsx = {
+        fontSize: "12px",
+        lineHeight: "166%",
+        letterSpacing: "0.4px"
+
+    }
+
+    const centered = {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    }
+    const plussx = {
+        width: "20px"
+    }
+    const hoversx = {
+        "&:hover": { cursor: "pointer" }
+    }
 
 
     const [pieces, _setPieces] = useState([]);
@@ -275,32 +301,22 @@ const hoversx = {
         respRef.current = c;
     }
 
-const handleChange = (e) => {
-    let loc =e.target.name
-    const index = responsesRef.current.map(ob => ob.key).indexOf(loc);
-    let P = {key: loc, value: e.target.value}
-    responsesRef.current=[...responsesRef.current.slice(0,index), P, ...responsesRef.current.slice(index+1)];
-    
-};
+    const handleChange = (e) => {
+        let loc = e.target.name
+        const index = responsesRef.current.map(ob => ob.key).indexOf(loc);
+        let P = { key: loc, value: e.target.value }
+        responsesRef.current = [...responsesRef.current.slice(0, index), P, ...responsesRef.current.slice(index + 1)];
 
-const handleChangeR = (e) => {
-    let loc =e.target.name
-    const index = responsesRef.current.map(ob => ob.key).indexOf(loc);
-    let P = responsesRef.current[index]
-    P.value={...P.value, [e.target.value]:e.target.checked}
-    responsesRef.current=[...responsesRef.current.slice(0,index), P, ...responsesRef.current.slice(index+1)];
-    
-};
+    };
 
+    const handleChangeR = (e) => {
+        let loc = e.target.name
+        const index = responsesRef.current.map(ob => ob.key).indexOf(loc);
+        let P = responsesRef.current[index]
+        P.value = { ...P.value, [e.target.value]: e.target.checked }
+        responsesRef.current = [...responsesRef.current.slice(0, index), P, ...responsesRef.current.slice(index + 1)];
 
-
-
-
-
-
-const RespondRender = ( {piece} ) => {
-
-    
+    };
 
 
 
@@ -308,188 +324,195 @@ const RespondRender = ( {piece} ) => {
 
 
 
-    let a = piece._id;
+    const RespondRender = ({ piece }) => {
 
-    let parsed= parseProps(piece.props);
-    if(piece._type == "header"){
-        if(parsed.htext==""&&parsed.hsubtext==""){
-            return (
-                <>
-                <Typography sx={{...fontsx,...headsx,...pink}}>Empty Header</Typography>
-                </>
-            )
-        }else{
-            return (
-                <>
-                    <Typography sx={{...fontsx,...headsx}}>{parsed.htext}</Typography>
-                    {parsed.hsubtext && <Typography sx={{...fontsx,...normsx}}>{parsed.hsubtext}</Typography>}
-                   
-                </>
-            )
 
-        }
-        
-    }else if (piece._type == "break"){
-        return (
-            <>
-                <br/>
-                <Divider variant="middle" />
-                
-            </>    
-        )
-    }else if (piece._type == "question"){
-//{parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}<br/>
-        if(parsed.qtext==""&&parsed.qsubtext==""){
-            return (
-                <>
-                    <Typography sx={{...fontsx,...headsx,...pink}}>Empty Question</Typography>
-                </>
-            )
-        }else{
 
-            if(parsed.qtype == "text"){
-                //if text box height is given use box, else line
-                if(parsed.inLength && parsed.inLength!=1){
-                    let r = parsed.inLength;
-                    
-                    return (
-                        <>
-                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography><br/>
-                        <TextField 
-                            sx={{width:`${parsed.inWidth}%`}}
-                            multiline
-                            rows={r}
-                            name={a}
-                            label={parsed.qsubtext}
-                            onChange={handleChange}
-                            
-                            
-                        />
-                         
-    
-                        </>
-                    )
-                } else{
-                    return (
-                        <>
-                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                        <TextField  
-                            sx={{width:`${parsed.inWidth}%`}} 
-                            label={parsed.qsubtext}  
-                            variant="standard" 
-                            name={a} 
-                            onChange={handleChange} />
-    
-                        </>
-                    )
-    
-                }
-                
-            }else if (parsed.qtype == "check"){
-                let L
 
-                const handleChangeL = (e) =>{
-                    if(e.target.checked){
-                        L = true
-                    }else {
-                        L = false
-                    }
-                    handleChangeR(e);
 
-                } 
-                var renoc = [];
-                
-                if(parsed.qoptions){
-                    for (var i = 0; i < piece.props.length; i++) {
-                        let aa= piece.props[i].value;
-                        if(piece.props[i].key=="qoptions"){
-                            renoc.push(<FormControlLabel control={<Checkbox />} label={aa} checked={L} value={aa} name={a} onChange={handleChangeL} />)
-                        }
-                    }
-                }
-                
+
+
+
+
+        let a = piece._id;
+
+        let parsed = parseProps(piece.props);
+        if (piece._type == "header") {
+            if (parsed.htext == "" && parsed.hsubtext == "") {
                 return (
                     <>
-                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                        <FormLabel >{parsed.qsubtext}</FormLabel>
-                        <FormGroup>
-                            {renoc}
-                        </FormGroup>
-    
+                        <Typography sx={{ ...fontsx, ...headsx, ...pink }}>Empty Header</Typography>
                     </>
                 )
-            }else if (parsed.qtype == "radio"){
-                //if text box height is given, set it, else 1 line
-                var renor = [];
-                if(parsed.qoptions){    
-                    for (var i = 0; i < piece.props.length; i++) {
-                        let aa= piece.props[i].value;
-                        if(piece.props[i].key=="qoptions"){
-                            renor.push(<FormControlLabel control={<Radio />} label={aa} value={aa}/>)
-                        }
-                    }
-                }
-                
-                    ////okok the component below has to be a unique identifier, right?
+            } else {
                 return (
                     <>
-                        <Typography sx={{...fontsx,...normsx}}>{parsed.qtext}</Typography>
-                        <FormControl>
-                            <FormLabel >{parsed.qsubtext}</FormLabel>
-                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label"  name={a} onChange={handleChange} >
-                                {renor}
-                            </RadioGroup>
-                        </FormControl>
+                        <Typography sx={{ ...fontsx, ...headsx }}>{parsed.htext}</Typography>
+                        {parsed.hsubtext && <Typography sx={{ ...fontsx, ...normsx }}>{parsed.hsubtext}</Typography>}
+
                     </>
-                )
-            }else {
-                return (
-                    <div>
-                        <h4> A qtypeless question appeared in the wild</h4>
-                    </div>    
                 )
 
             }
 
+        } else if (piece._type == "break") {
+            return (
+                <>
+                    <br />
+                    <Divider variant="middle" />
+
+                </>
+            )
+        } else if (piece._type == "question") {
+            //{parsed.qsubtext  && <Typography sx={{...fontsx,...subsx}}>{parsed.qsubtext}</Typography>}<br/>
+            if (parsed.qtext == "" && parsed.qsubtext == "") {
+                return (
+                    <>
+                        <Typography sx={{ ...fontsx, ...headsx, ...pink }}>Empty Question</Typography>
+                    </>
+                )
+            } else {
+
+                if (parsed.qtype == "text") {
+                    //if text box height is given use box, else line
+                    if (parsed.inLength && parsed.inLength != 1) {
+                        let r = parsed.inLength;
+
+                        return (
+                            <>
+                                <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography><br />
+                                <TextField
+                                    sx={{ width: `${parsed.inWidth}%` }}
+                                    multiline
+                                    rows={r}
+                                    name={a}
+                                    label={parsed.qsubtext}
+                                    onChange={handleChange}
+
+
+                                />
+
+
+                            </>
+                        )
+                    } else {
+                        return (
+                            <>
+                                <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
+                                <TextField
+                                    sx={{ width: `${parsed.inWidth}%` }}
+                                    label={parsed.qsubtext}
+                                    variant="standard"
+                                    name={a}
+                                    onChange={handleChange} />
+
+                            </>
+                        )
+
+                    }
+
+                } else if (parsed.qtype == "check") {
+                    let L
+
+                    const handleChangeL = (e) => {
+                        if (e.target.checked) {
+                            L = true
+                        } else {
+                            L = false
+                        }
+                        handleChangeR(e);
+
+                    }
+                    var renoc = [];
+
+                    if (parsed.qoptions) {
+                        for (var i = 0; i < piece.props.length; i++) {
+                            let aa = piece.props[i].value;
+                            if (piece.props[i].key == "qoptions") {
+                                renoc.push(<FormControlLabel control={<Checkbox />} label={aa} checked={L} value={aa} name={a} onChange={handleChangeL} />)
+                            }
+                        }
+                    }
+
+                    return (
+                        <>
+                            <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
+                            <FormLabel >{parsed.qsubtext}</FormLabel>
+                            <FormGroup>
+                                {renoc}
+                            </FormGroup>
+
+                        </>
+                    )
+                } else if (parsed.qtype == "radio") {
+                    //if text box height is given, set it, else 1 line
+                    var renor = [];
+                    if (parsed.qoptions) {
+                        for (var i = 0; i < piece.props.length; i++) {
+                            let aa = piece.props[i].value;
+                            if (piece.props[i].key == "qoptions") {
+                                renor.push(<FormControlLabel control={<Radio />} label={aa} value={aa} />)
+                            }
+                        }
+                    }
+
+                    ////okok the component below has to be a unique identifier, right?
+                    return (
+                        <>
+                            <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
+                            <FormControl>
+                                <FormLabel >{parsed.qsubtext}</FormLabel>
+                                <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name={a} onChange={handleChange} >
+                                    {renor}
+                                </RadioGroup>
+                            </FormControl>
+                        </>
+                    )
+                } else {
+                    return (
+                        <div>
+                            <h4> A qtypeless question appeared in the wild</h4>
+                        </div>
+                    )
+
+                }
+
+            }
+
+
+        } else {
+            return (
+                <div>
+                    <h4> A typeless piece appeared in the wild</h4>
+                </div>
+
+            )
         }
+    };
 
-        
-    }else {
+    const Titler = ({ form }) => {
+
+
         return (
-            <div>
-                <h4> A typeless piece appeared in the wild</h4>
-            </div>
-            
+            <>
+                <Typography sx={{ ...fontsx, ...titlesx }}>{form.title}</Typography>
+                {form.description && <Typography sx={{ ...fontsx, ...normsx }}>{form.description}</Typography>}
+                <br />
+                <Divider variant="middle" />
+                <br />
+            </>
+
         )
-    } 
-};
+    };
+    const [disabled, setDisabled] = useState(false);
+    const [error, setError] = useState(false);
 
-const Titler = ({form}) => {
-
-    
-
-    return (
-        <>
-            <Typography sx={{...fontsx,...titlesx}}>{form.title}</Typography>
-            {form.description && <Typography sx={{...fontsx,...normsx}}>{form.description}</Typography>}
-            <br/>
-            <Divider variant="middle" />
-            <br/>
-        </>
-    
-    )
-};
-
-
-
-
-
-    async function submit () {
+    async function submit() {
 
         let ans = [...responsesRef.current];
-        
-        for (let h=0; h<ans.length; h++){
-            if(typeof(ans[h].value)!= 'string'){
+
+        for (let h = 0; h < ans.length; h++) {
+            if (typeof (ans[h].value) != 'string') {
                 /*
                 let newval = [];
                 for (const key in ans[h].value) {
@@ -501,61 +524,67 @@ const Titler = ({form}) => {
                 */
 
                 let newval = "";
+                let ch = 0;
+
                 for (const key in ans[h].value) {
+                    
+
                     if(ans[h].value[key]==true){
-                        newval= newval + " / " + key
+                        if (ch==0){
+                            newval= key;
+                            ch++;
+
+                        }else{
+                            newval= newval + "__sep__" + key
+                        }
+                        
                     }   
                 }
-                ans[h].value=newval + " / "; 
+                ans[h].value=newval; 
             } 
         }
-        
+
         console.log(ans);
-        await mutations.respond(id,ans);
-        
+        setError((await mutations.respond(id, ans)).errors)
+        setDisabled(true);
     }
 
-    function SubButton () {
-        return(        
-            <Button variant="outlined" onClick={submit} color="error">SUBMIT</Button>   
+    function SubButton({ disabled }) {
+        if (disabled) return
+        return (
+            <Button variant="outlined" onClick={submit} color="error" disabled={disabled}>SUBMIT</Button>
         )
     }
 
-    
-
-
-
-
-
-    function Renderer ({pieces}) {
+    function Renderer({ pieces }) {
 
         var renP = [];
         for (var i = 0; i < pieces.length; i++) {
-            
-            renP.push( 
-                <> 
+
+            renP.push(
+                <>
                     <Box sx={noneditboxsx}  >
-                        <Box sx={boxsx}   > 
+                        <Box sx={boxsx}   >
                             <RespondRender piece={pieces[i]} />
                         </Box>
-                    </Box> 
-                    <br/>
+                    </Box>
+                    <br />
                 </>
             );
-  
+
         }
         return (
             <>
-            {renP}
+                {disabled ? <Success err={error}/> : renP}
             </>
         )
-        
-    
+
+
     }
 
-  
 
-    
+
+
     const { id } = useParams();
     let [loading, setLoading] = useState(true)
     //let [pieces, setPieces] = useState([])
@@ -563,83 +592,83 @@ const Titler = ({form}) => {
     useEffect(() => {
 
         async function req() {
-            
+
             let reqForm = (await queries.getFormByEndpoint(id)).result ?? {}
             let reqPieces = (await queries.getPiecesByEndpoint(id)).result ?? []
             setForm(reqForm)
             setPieces(reqPieces)
-            setResponses(reqPieces.map((piece)=>{
-                if(piece._type=="question"){
-                    if(piece.props[0].value=="check"){
+            setResponses(reqPieces.map((piece) => {
+                if (piece._type == "question") {
+                    if (piece.props[0].value == "check") {
                         let y = {};
-                        for (let j=0; j<piece.props.length; j++){
-                            if(piece.props[j].key=="qoptions"){
-                                y={...y, [piece.props[j].value]: false}
+                        for (let j = 0; j < piece.props.length; j++) {
+                            if (piece.props[j].key == "qoptions") {
+                                y = { ...y, [piece.props[j].value]: false }
                             }
                         }
-                        
-                        let z={key:piece._id, value: y};
+
+                        let z = { key: piece._id, value: y };
                         return z;
-                    }else{
-                        let z={key:piece._id, value: ""};
+                    } else {
+                        let z = { key: piece._id, value: "" };
                         return z;
                     }
-                }else{
-                    let z={key:piece._id, value:""};
+                } else {
+                    let z = { key: piece._id, value: "" };
                     return z;
                 }
-                
+
             }))
 
             console.log(formRef.current)
             console.log(pieceArrRef.current)
             setLoading(false)
-            
+
         }
         req()
-        
+
 
 
         ///dummy data///////////////////////////////////////////////////////////////
 
-       
-        
+
+
     }, [])
 
-    
 
 
 
-    
+
+
     ////////////////////////end scratch/function area/////////////////////////////////////////////////////////////////////
 
-    
-   
-    return(
+
+
+    return (
         <>
-        <CssBaseline />
-        
-        <Box  display="flex" flexDirection="row" sx={{height:"100%"}}>
-            <Card sx={formsx}>
-                <Titler form={form} sx={{borderLeft: "5px solid white"}}/>
-                <Renderer pieces={pieces} />
-                <br/>
-                <SubButton/>
-                <br/>
-                <br/>
-            </Card>
-            
-        </Box>
+            <CssBaseline />
+
+            <Box display="flex" flexDirection="row" sx={{ height: "100%" }}>
+                <Card sx={formsx}>
+                    <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
+                    <Renderer pieces={pieces} />
+                    <br />
+                    <SubButton disabled={disabled} />
+                    <br />
+                    <br />
+                </Card>
+
+            </Box>
 
         </>
-        
-        
+
+
     )
 
 
-    
 
-    
+
+
 }
 
 export default Respond;

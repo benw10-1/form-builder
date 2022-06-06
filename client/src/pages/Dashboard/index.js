@@ -26,6 +26,13 @@ import "./Dashboard.css"
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
+//send to small device touchscreen version if screen less than minW wide or they are using touchscreen
+const minW = 1400;
+let touch = {a:false};
+function touchDetect (t) {t.a=true;}
+window.addEventListener('touchstart',()=>{touchDetect(touch)} );
+
+
 function AllForms({ forms = [], modal }) {
     // main render logic
     const render = () => {
@@ -35,6 +42,7 @@ function AllForms({ forms = [], modal }) {
             width: "280px",
             minHeight: "300px",
             height: "auto",
+            display: "flex",
             "&:hover": { boxShadow: 15 },
             position: "relative",
             margin: "26px 51px 0 0"
@@ -85,7 +93,11 @@ function AllForms({ forms = [], modal }) {
             const { _id, title, description, createdAt, published } = x
             const Rlink = `${window.location.origin}/respond/${_id}`
             const editclick = (event) => {
-                window.location.assign(window.location.origin + "/alteditForm/" + _id)
+                if (window.innerWidth<minW || touch.a == true){
+                    window.location.assign(window.location.origin + "/alteditformmob/" + _id)
+                }else{
+                    window.location.assign(window.location.origin + "/alteditform/" + _id)
+                }
             }
             const responsesclick = (event) => {
                 window.location.assign(window.location.origin + "/responses/" + _id)
@@ -179,7 +191,6 @@ function AllForms({ forms = [], modal }) {
 
                     <Box sx={{ width: "240px", height: "37px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "8px", left: "20px" }}>
 
-
                         <Button variant="outlined" onClick={editclick} >EDIT</Button>
                         <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
 
@@ -260,7 +271,13 @@ function Dashboard() {
         }
         handleClose()
         reloadPage()
-        window.location.assign(window.location.origin + "/alteditform/" + newForm._id)
+        if (window.innerWidth<minW || touch.a==true){
+            window.location.assign(window.location.origin + "/alteditformmob/" + newForm._id)
+        }else{
+            window.location.assign(window.location.origin + "/alteditform/" + newForm._id)
+        }
+        
+
     }
 
     // main render logic
@@ -284,10 +301,8 @@ function Dashboard() {
                 xs: "36px 0 36px 4%",
                 md: "118px 0 0 4%",
             },
-            maxWidth: {
-                xs: "500px",
-                md: "275px",
-            },
+            maxWidth:"320px",
+            
             maxHeight: {
                 xs: "40%",
 

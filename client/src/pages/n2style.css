@@ -20,16 +20,16 @@ html{
     overflow: auto;
     
     position: fixed;
-    width: 20vw;
+    max-width: 575px;
     height: 100%;
+    left: 1182px;
+    top: 0px ;
     
 }
 
-.leftDisplay{
+.mainmenu{
     position: fixed;
-    padding: 118px 0 0 4%;
-    width: 20vw;
-    height: 100%;
-    display: block;
-    margin: 0 4% 0 0;
+    top:10%;
+    right: 10%;
+    z-index:2;
 }
