@@ -524,13 +524,24 @@ function Respond() {
                 */
 
                 let newval = "";
+                let ch = 0;
+
                 for (const key in ans[h].value) {
-                    if (ans[h].value[key] == true) {
-                        newval = newval + " / " + key
-                    }
+                    
+
+                    if(ans[h].value[key]==true){
+                        if (ch==0){
+                            newval= key;
+                            ch++;
+
+                        }else{
+                            newval= newval + "__sep__" + key
+                        }
+                        
+                    }   
                 }
-                ans[h].value = newval + " / ";
-            }
+                ans[h].value=newval; 
+            } 
         }
 
         console.log(ans);
