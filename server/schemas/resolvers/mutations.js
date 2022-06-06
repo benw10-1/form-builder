@@ -53,7 +53,7 @@ async function setPublished(parent, { id, published }, context) {
     const form = await Form.findById(id).exec()
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
-    if (published && !form.pieces.length) throw new Error("No pieces in form")
+    if (published && !form.piece_refs.length) throw new Error("No pieces in form")
 
     let updated
     if (form.endpoint) updated = await Form.findOneAndUpdate({ _id: id }, { published }).exec()
@@ -107,7 +107,7 @@ async function respond(parent, { id, responses }, context) {
 
     for (const x of responses) {
         const { key, value } = x
-        if (!key || !value || value === '' || key === '') throw new Error("No key or value passed to: " + key ?? "Untyped")
+        // if (!key || !value || value === '' || key === '') throw new Error("No key or value passed to: " + key ?? "Untyped")
         const piece = await Piece.findById(key).exec()
         if (!piece) throw new Error("Piece not found")
         if (String(piece.form_ref) !== String(form._id)) throw new Error("Piece not in form")
@@ -121,11 +121,11 @@ async function respond(parent, { id, responses }, context) {
             console.log(value, qoptions)
             if (!qoptions.includes(value)) throw new Error("Value not in options")
         }
-        // if (qtype === "check") {
-        //     value.split("__sep__").forEach(x => {
-        //          if (!qoptions.includes(x)) throw new Error("Value not in options")
-        //     })
-        // }
+        if (qtype === "check") {
+            value.split("__sep__").forEach(x => {
+                 if (!qoptions.includes(x)) throw new Error("Value not in options")
+            })
+        }
 
         console.log("Found type " + qtype + " with text - " + qtext)
     }

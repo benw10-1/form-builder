@@ -34,7 +34,11 @@ function parseResponseData(responses, pieces) {
             editable: false,
             sortable: false,
             minWidth: 100,
-            flex: 1
+            flex: 1,
+            valueFormatter: (params) => {
+                const split = params.value.split("__sep__")
+                return split.length > 1 ? split.join(", ") : params.value
+            },
         }
     }))
     let rows = responses.map((r, i) => {
