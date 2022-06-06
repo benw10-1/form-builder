@@ -8,6 +8,7 @@ import {
     Form,
     EditForm,
     ALTEditForm,
+    ALTEditFormMob,
     Responses,
     Respond
 } from "./pages"
@@ -36,6 +37,7 @@ function App() {
 
                 {/*testing route*/}
                 <Route path="/alteditform/:id" element={<ALTEditForm/>} />
+                <Route path="/alteditformmob/:id" element={<ALTEditFormMob/>} />
                 <Route path="/respond/:id" element={<Respond/>} />
                 {/* <Route path="/testResponse" element={<Responses/>} /> */}
 
