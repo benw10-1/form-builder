@@ -5,8 +5,12 @@ const defaultForm = require("../defaultForm")
 const propReducer = require("../../utils/propReducer")
 
 async function signup(parent, args, context) {
+    if (await User.findOne({ name: args.name })) throw new Error("Username already taken")
+    if (await User.findOne({ email: args.email })) throw new Error("Email already used")
+    
     const user = await User.create({ ...args })
     const token = signToken(user)
+
     return { token, user }
 }
 
@@ -123,7 +127,7 @@ async function respond(parent, { id, responses }, context) {
         }
         if (qtype === "check") {
             value.split("__sep__").forEach(x => {
-                 if (!qoptions.includes(x)) throw new Error("Value not in options")
+                if (!qoptions.includes(x)) throw new Error("Value not in options")
             })
         }
 
