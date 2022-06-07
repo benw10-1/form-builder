@@ -6,8 +6,9 @@ import Auth from "./auth"
  * @param {String[]} variables GraphQL variables to pass
  * @returns Builds the request for gql. 
  */
-async function genQuery(q, variables) {
-    const url = "/graphql"
+ async function genQuery(q, variables) {
+    // const url = "/graphql"
+    const url = "http://localhost:3001/graphql"
     // https://graphql.org/learn/serving-over-http/#post-request
     const body = {
         "query": q,
@@ -40,7 +41,24 @@ async function genQuery(q, variables) {
         if (data.errors) return {
             __status__: "error",
             with: q,
-            errors: data.errors
+            errors: data.errors.reduce((acc, cur) => {
+                if (cur.message === "Incorrect password") {
+                    acc.pass = cur.message
+                }
+                else if (cur.message === "No user found") {
+                    acc.user = "User not found"
+                }
+                else if (cur.message === "Username already taken") {
+                    acc.user = "Username already taken"
+                }
+                else if (cur.message === "Email already used") {
+                    acc.email = "Email already used"
+                }
+                else {
+                    acc.rest.push(cur)
+                }
+                return acc
+            }, { rest: [] })
         }
         // otherwise success
         return {

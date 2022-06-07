@@ -2,10 +2,15 @@ const { AuthenticationError } = require('apollo-server-express')
 const { User, Form, Response, Piece } = require("../../models")
 const { signToken } = require('../../utils')
 const defaultForm = require("../defaultForm")
+const propReducer = require("../../utils/propReducer")
 
 async function signup(parent, args, context) {
+    if (await User.findOne({ name: args.name })) throw new Error("Username already taken")
+    if (await User.findOne({ email: args.email })) throw new Error("Email already used")
+    
     const user = await User.create({ ...args })
     const token = signToken(user)
+
     return { token, user }
 }
 
@@ -52,6 +57,7 @@ async function setPublished(parent, { id, published }, context) {
     const form = await Form.findById(id).exec()
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
+    if (published && !form.piece_refs.length) throw new Error("No pieces in form")
 
     let updated
     if (form.endpoint) updated = await Form.findOneAndUpdate({ _id: id }, { published }).exec()
@@ -100,22 +106,34 @@ async function respond(parent, { id, responses }, context) {
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
     if (!form.published) throw new Error("Form not published")
-    /*
-        for (const x of responses) {
-            const { key, value } = x
-            if (!key || !value) throw new Error("No key or value passed to: " + key ?? "Untyped")
-            const piece = await Piece.findById(key).exec()
-            if (!piece) throw new Error("Piece not found")
-            if (piece.form_ref !== form._id) throw new Error("Piece not in form")////////////////////////  <=THIS WAS THROWING  /////////////////
-            // if (piece._type === "break") throw new Error("Break piece cannot be responded to")
-            // if (piece._type === "singleselect") {
-            //     if (!piece.props.some(y => y.value === value)) throw new Error(`Value ${value} not in piece ${key}`)
-            // }
-            // // if (piece._type === "multiselect") {
-            // //     if (!piece.props.some(y => y.some(j => j === value))) throw new Error(`Value ${value} not in piece ${key}`)
-            // // }
+
+    const skipped = ["break", "header"]
+
+    for (const x of responses) {
+        const { key, value } = x
+        // if (!key || !value || value === '' || key === '') throw new Error("No key or value passed to: " + key ?? "Untyped")
+        const piece = await Piece.findById(key).exec()
+        if (!piece) throw new Error("Piece not found")
+        if (String(piece.form_ref) !== String(form._id)) throw new Error("Piece not in form")
+        if (skipped.includes(piece._type)) {
+            console.log("Skipping piece: " + piece._type)
+            continue
         }
-    */
+        const { qtype, qoptions, qtext } = propReducer(piece.props)
+
+        if (qtype === "radio") {
+            console.log(value, qoptions)
+            if (!qoptions.includes(value)) throw new Error("Value not in options")
+        }
+        if (qtype === "check") {
+            value.split("__sep__").forEach(x => {
+                if (!qoptions.includes(x)) throw new Error("Value not in options")
+            })
+        }
+
+        console.log("Found type " + qtype + " with text - " + qtext)
+    }
+
     const newResponse = await Response.create({ form_ref: id, responses })
 
     return newResponse

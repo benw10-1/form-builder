@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { queries, mutations, Auth, dayTime } from "../../utils"
+import React, { useState, useEffect, useRef } from "react";
+import { queries, mutations, Auth, dayTime } from "../../utils";
 import {
     Container,
     CssBaseline,
@@ -13,9 +13,11 @@ import {
     TextField,
     Button,
     Divider,
+    Collapse,
 } from "@mui/material";
 
 import AddIcon from '@mui/icons-material/Add';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Stack from '@mui/material/Stack';
 
 import Signout from "../Signout";
@@ -25,6 +27,183 @@ import "./Dashboard.css"
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
+//send to small device touchscreen version if screen less than minW wide or they are using touchscreen
+const minW = 900;
+let touch = { a: false };
+function touchDetect(t) { t.a = true; }
+window.addEventListener('touchstart', () => { touchDetect(touch) });
+
+function FormCard({ form: { _id, title, description, createdAt, published } }) {
+    const [open, setOpen] = useState(false);
+    const [openPop, setOpenPop] = useState(false);
+    const closeHandle = (event) => {
+        console.log("close", openPop)
+        setOpenPop(false);
+    }
+    const openRef = useRef(open);
+    const copyRef = useRef(false);
+
+    const cardsx = {
+        width: "280px",
+        // minHeight: "300px",
+        height: open ? "240px" : "200px",
+        display: "flex",
+        "&:hover": { boxShadow: 15 },
+        margin: {
+            xs: "26px 25px 0",
+            md: "26px 50px 0 0",
+        },
+        transition: "all 0.3s ease-in",
+    }
+    const hoversx = {
+        "&:hover": { cursor: "pointer" }
+    }
+
+    const copysx = {
+        fontSize: "18px !important",
+        margin: 0,
+        textDecoration: "none",
+        left: "110px",
+        color: "#242424",
+        "&:hover": { color: "#0288D1" },
+        transition: "color 0.15s ease-in"
+    }
+
+    const poposx = {
+        display: "flex",
+        alignItems: "center",
+        transition: "height 0.3s ease-in",
+        width: "100%",
+        overflow: "hidden",
+    }
+
+    const buttonsx = {
+        backgroundColor: "#FFF",
+        borderRadius: "0px",
+        height: "30px",
+        minWidth: "20px",
+        width: "30px",
+        padding: 0,
+        margin: 0,
+        display: "grid",
+        placeItems: "center",
+    }
+
+    const Rlink = `${window.location.origin}/respond/${_id}`
+    const editclick = (event) => {
+        if (window.innerWidth < minW || touch.a == true) {
+            window.location.assign(window.location.origin + "/alteditformmob/" + _id)
+        } else {
+            window.location.assign(window.location.origin + "/alteditform/" + _id)
+        }
+    }
+    const responsesclick = (event) => {
+        window.location.assign(window.location.origin + "/responses/" + _id)
+    }
+
+    const collapse = () => {
+        setOpen(!openRef.current);
+        openRef.current = !openRef.current;
+    }
+
+    useEffect(() => {
+        if (copyRef.current) {
+            copyRef.current.addEventListener("click", () => {
+                navigator?.clipboard.writeText(Rlink)
+                setOpenPop(true);
+            })
+        }
+    }, [copyRef.current])
+
+    return (
+        <Paper sx={{ ...cardsx, background: "#FFFFFF", padding: "16px 16px 0", display: "flex", flexDirection: "column" }}>
+            <Box sx={{ overflow: "hidden", height: "84px", paddingBottom: "12px", width: "100%", textOverflow: "ellipsis" }}>
+                <Typography variant="h4" sx={{ margin: "0 0 4px 0", fontSize: "24px" }}>
+                    {title}
+                </Typography>
+                {(() => {
+                    if (description) return (
+                        <Typography className="description" variant="body1" sx={{ fontSize: "14px" }}>
+                            {description}
+                        </Typography>
+                    )
+                })()}
+            </Box>
+            <Box sx={{ width: "100%", minHeight: "38px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Typography className="created" variant="body1" sx={{ fontSize: "14px", whiteSpace: "nowrap" }} h={"20px"}>
+                    {"Created " + moment(Number(createdAt)).format("LL")}
+                </Typography>
+                {published ? (
+                    <Typography onClick={collapse} sx={{ ...hoversx, fontSize: "14px", color: "#4CAF50", textDecoration: "underline", userSelect: "none" }}>
+                        Published
+                    </Typography>
+                ) : (
+                    <Typography disabled sx={{ fontSize: "12px", color: "#949494" }}>
+                        Unpublished
+                    </Typography>
+                )}
+            </Box>
+            <Box sx={{ ...poposx, ...(open ? { height: "40px" } : { height: "0" }) }}>
+                <Box
+                    className="link-container"
+                    sx={{
+                        fontSize: "12px",
+                        backgroundColor: "transparent",
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        height: "100%",
+                        padding: "6px 0",
+                    }}
+                >
+                    <Box
+                        sx={{ ...hoversx, ...buttonsx, background: "transparent", height: "100%", userSelect: "none" }}
+                        ref={copyRef}
+                    >
+                        <ContentCopyIcon
+                            sx={copysx}
+                        />
+                        <Popover
+                            anchorEl={copyRef.current}
+                            open={openPop}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            onClose={closeHandle}
+                        >
+                            <Box sx={{ width: "80px", display: "grid", placeItems: "center", height: "1.5rem", userSelect: "none" }} onClick={closeHandle}>
+                                Copied!
+                            </Box>
+                        </Popover>
+                    </Box>
+                    <input
+                        style={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%" }}
+                        type="text"
+                        value={Rlink}
+                        disabled="true"
+                    />
+                </Box>
+            </Box>
+
+            <Divider variant="center" />
+
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                <Box sx={{ height: "62px", display: "grid", placeItems: "center" }}>
+                    <Box sx={{ width: "240px", display: "flex", justifyContent: "space-between" }}>
+                        <Button variant="outlined" onClick={editclick} disabled={published}>EDIT</Button>
+                        <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
+                    </Box>
+                </Box>
+            </Box>
+        </Paper>
+    )
+}
+
 function AllForms({ forms = [], modal }) {
     // main render logic
     const render = () => {
@@ -32,12 +211,14 @@ function AllForms({ forms = [], modal }) {
 
         const cardsx = {
             width: "280px",
-            minHeight: "300px",
+            // minHeight: "300px",
             height: "auto",
             display: "flex",
             "&:hover": { boxShadow: 15 },
-            position: "relative",
-            margin: "26px 51px 0 0"
+            margin: {
+                xs: "26px 25px 0",
+                md: "26px 50px 0 0",
+            }
         }
         const centered = {
             display: "flex",
@@ -53,82 +234,11 @@ function AllForms({ forms = [], modal }) {
 
         // maybe add form pages if forms exceed certain count
         forms.forEach(x => {
-            const { _id, title, description, createdAt, published } = x
-            const Rlink = `${window.location.origin}/respond/${_id}`
-            const editclick = (event) => {
-                window.location.assign(window.location.origin + "/alteditForm/" + _id)
-            }
-            const responsesclick = (event) => {
-                window.location.assign(window.location.origin + "/responses/" + _id)
-            }
-
-            renderedForms.push((
-                <Paper sx={{ ...cardsx, background: "#FFFFFF", padding: "16px 16px 0 16px" }}>
-
-                    <Box h={"64px"} w={"248px"} sx={{ overflow: "hidden" }}>
-                        <Typography variant="h4" sx={{ margin: "0 0 4px 0", fontSize: "24px" }}>
-                            {title}
-                        </Typography>
-                        {(() => {
-                            if (description) return (
-                                <Typography className="description" variant="body1" sx={{ fontSize: "14px" }}>
-                                    {description}
-                                </Typography>
-                            )
-                        })()}
-                    </Box>
-                    <Box sx={{ width: "248px", height: "40px", display: "flex", justifyContent: "space-between", position: "absolute", top: "220px" }}>
-                        <Typography className="created" variant="body1" sx={{ fontSize: "14px" }} h={"20px"} w={"100%"}>
-                            {"Created " + moment(Number(createdAt)).format("LL")}
-                        </Typography>
-                        {published ? (
-                            <PopupState variant="popover" popupId="demo-popup-popover">
-                                {(popupState) => (
-                                    <div>
-                                        <Typography {...bindTrigger(popupState)} sx={{ ...hoversx, fontSize: "12px", color: "#4CAF50", textDecoration: "underline" }}>
-                                            Published
-                                        </Typography>
-                                        <Popover
-                                            {...bindPopover(popupState)}
-                                            anchorOrigin={{
-                                                vertical: 'bottom',
-                                                horizontal: 'center',
-                                            }}
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'center',
-                                            }}
-                                        >
-                                            <Typography sx={{ p: 2 }}><a href={Rlink}>{Rlink}</a></Typography>
-                                        </Popover>
-                                    </div>
-                                )}
-                            </PopupState>
-
-                        ) : (
-                            <Typography sx={{ fontSize: "12px", color: "#949494" }}>
-                                Unpublished
-                            </Typography>
-                        )}
-                    </Box>
-
-                    <Box sx={{ width: "100%", height: "10px", position: "absolute", bottom: "45px" }}>
-                        <Divider variant="middle" />
-                    </Box>
-
-                    <Box sx={{ width: "240px", height: "37px", display: "flex", justifyContent: "space-between", position: "absolute", bottom: "8px", left: "20px" }}>
-
-                        <Button variant="outlined" onClick={editclick} >EDIT</Button>
-                        <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
-
-                    </Box>
-
-                </Paper>
-            ))
+            renderedForms.push(<FormCard form={x} />)
         })
 
         renderedForms.push((
-            <Paper sx={{ ...cardsx, background: "#0000000A", ...centered }}>
+            <Paper sx={{ ...cardsx, background: "#0000000A", ...centered, height: "200px" }}>
                 <Avatar variant={"circular"} size={"40px"} sx={{ padding: "13px", ...hoversx }} onClick={modal}>
                     <AddIcon sx={plussx} fontSize={"medium"} />
                 </Avatar>
@@ -152,6 +262,7 @@ function Dashboard() {
     const [formName, setFormName] = useState("")
     const [formDesc, setFormDesc] = useState("")
     const [reload, setReload] = useState(false)
+    // const [inputValue, setInputValue] = useState("")
 
     const reloadPage = () => {
         setLoading(true)
@@ -197,7 +308,11 @@ function Dashboard() {
         }
         handleClose()
         reloadPage()
-        window.location.assign(window.location.origin + "/alteditform/" + newForm._id)
+        if (window.innerWidth < minW || touch.a == true) {
+            window.location.assign(window.location.origin + "/alteditformmob/" + newForm._id)
+        } else {
+            window.location.assign(window.location.origin + "/alteditform/" + newForm._id)
+        }
     }
 
     // main render logic
@@ -214,20 +329,17 @@ function Dashboard() {
             maxHeight: "100vh",
             overflow: "auto",
             borderRadius: "0",
-            paddingBottom: "300px",
+            // paddingBottom: "300px",
         }
         const boxsx = {
             padding: {
                 xs: "36px 0 36px 4%",
                 md: "118px 0 0 4%",
             },
-            maxWidth: {
-                xs: "500px",
-                md: "275px",
-            },
+            maxWidth: "320px",
+
             maxHeight: {
                 xs: "40%",
-
             },
             width: {
                 xs: "100%",
@@ -244,9 +356,16 @@ function Dashboard() {
         }
         const boxsx2 = {
             padding: {
-                xs: "28px 0 0 64px",
-                md: "10px 0 0 64px",
+                xs: "64px 0 0 0",
+                md: "128px 0 0 64px",
             },
+            display: {
+                xs: "flex",
+            },
+            width: {
+                xs: "100%",
+            },
+            flexDirection: "column",
         }
         const modalsx = {
             position: 'absolute',
@@ -301,7 +420,7 @@ function Dashboard() {
                         </Box>
                         <Paper sx={papersx}>
                             <Box sx={boxsx2}>
-                                <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)" }}>
+                                <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)", display: { xs: "flex" }, justifyContent: { xs: "center", md: "start" } }}>
                                     {(forms && forms.length > 0) ? 'Click on a form to edit or view responses.' : "No forms available, click on the + button below."}
                                 </Typography>
                                 {(() => {
@@ -310,11 +429,10 @@ function Dashboard() {
                                         for (let i = 0; i < 4; i++) {
                                             arr.push(<Skeleton variant="rectangular" sx={{ borderRadius: "5px", width: "280px", height: "136px", margin: "26px 51px 0 0" }} animation="wave" />)
                                         }
-                                        return arr
+                                        return <div className="forms-container">{arr}</div>
                                     }
                                     return <AllForms forms={forms} modal={handleOpen} />
                                 })()}
-
                             </Box>
                         </Paper>
                     </div>

@@ -9,485 +9,10 @@ import {
     Container,
     Typography,
     Divider,
-    Button
+    Button,
+    Popover,
 } from "@mui/material"
 import Signout from '../Signout';
-
-const pieces = [
-    {
-        _id: "_somepieceid",
-        props: [
-            {
-                key: "qtext",
-                value: "question1"
-            }
-        ]
-    },
-    {
-        _id: "_somepieceid1",
-        props: [
-            {
-                key: "qtext",
-                value: "question2"
-            }
-        ]
-    },
-    {
-        _id: "_somepieceid2",
-        props: [
-            {
-                key: "qtext",
-                value: "question3"
-            }
-        ]
-    },
-    {
-        _id: "_somepieceid3",
-        props: [
-            {
-                key: "qtext",
-                value: "question4"
-            }
-        ]
-    },
-    {
-        _id: "_somepieceid4",
-        props: [
-            {
-                key: "qtext",
-                value: "question5"
-            }
-        ]
-    },
-]
-
-const responses = [
-    {
-        createdAt: 1654065883136,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883137,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883138,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-    {
-        createdAt: 1654065883139,
-        response: [
-            {
-                key: "_somepieceid",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid1",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid2",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid3",
-                value: String(Math.random() * 200)
-            },
-            {
-                key: "_somepieceid4",
-                value: String(Math.random() * 200)
-            },
-        ],
-    },
-]
 
 function parseResponseData(responses, pieces) {
     let columns = [{
@@ -509,7 +34,12 @@ function parseResponseData(responses, pieces) {
             editable: false,
             sortable: false,
             minWidth: 100,
-            flex: 1
+            flex: 1,
+            valueFormatter: (params) => {
+                if (!params.value) return ""
+                const split = params.value.split("__sep__")
+                return split.length > 1 ? split.join(", ") : params.value
+            },
         }
     }))
     let rows = responses.map((r, i) => {
@@ -536,6 +66,16 @@ function ResponseView({ }) {
     const [loading, setLoading] = useState(true)
     const [pageSize, setPageSize] = useState(10)
     const [form, setForm] = useState({})
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [selected, _setSelected] = useState(null)
+
+    const select = (event, content) => {
+        _setSelected(content)
+        setAnchorEl(event.currentTarget)
+    }
+    const close = () => {
+        setAnchorEl(null)
+    }
 
     const { id } = useParams()
 
@@ -548,9 +88,6 @@ function ResponseView({ }) {
                 setLoading(false)
             })
         })
-        // const data = parseResponseData(responses, pieces)
-        // setData(data)
-        // setLoading(false)
     }, [])
 
     const contsx = {
@@ -593,6 +130,9 @@ function ResponseView({ }) {
         padding: "8px 0"
     }
 
+    const handleCellClick = (params, event) => {
+        select(event, params.formattedValue)
+    }
     return (
         <React.Fragment>
             <Signout />
@@ -626,6 +166,7 @@ function ResponseView({ }) {
                                 disableColumnSelector={true}
                                 disableSelectionOnClick
                                 disableColumnMenu
+                                onCellClick={handleCellClick}
                                 sx={{
                                     '& .MuiDataGrid-columnSeparator': {
                                         display: "none"
@@ -636,11 +177,31 @@ function ResponseView({ }) {
                                     "& .MuiDataGrid-columnHeaders": {
                                         // position: "sticky"
                                     },
+                                    '&.MuiDataGrid-root .MuiDataGrid-cell:focus': {
+                                        outline: 'none',
+                                    },
                                     '&': {
                                         border: "none"
                                     },
                                 }}
                             />}
+                        <Box sx={{ position: "absolute", width: "fit-content", height: "fit-content" }}>
+                            <Popover
+                                open={anchorEl !== null}
+                                onClose={close}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                anchorEl={anchorEl}
+                            >
+                                <Typography padding={".5em 1em"}>{selected}</Typography>
+                            </Popover>
+                        </Box>
                     </Box>
                 </Paper>
                 <Box sx={sidebutssx}>

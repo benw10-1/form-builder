@@ -14,14 +14,14 @@ import {
 import "./Login.css"
 
 // destructure props
-function Login({ handlers: { login: [loginVal, handleLoginChange], pass: [passVal, handlePassChange], handleSubmit, other } }) {
+function Login({ handlers: { login: [loginVal, handleLoginChange], pass: [passVal, handlePassChange], handleSubmit, other }, errors = {} }) {
     return (
         <React.Fragment>
             <Box m={"0 0 30px 0"}>
-                <TextField id="input-user" label="Username or email" variant="standard" onChange={handleLoginChange} value={loginVal} fullWidth={true} />
+                <TextField id="input-user" label="Username or email" variant="standard" onChange={handleLoginChange} value={loginVal} fullWidth={true} error={errors.user} helperText={errors.user} />
             </Box>
             <Box m={"0 0 42.5px 0"}>
-                <TextField id="input-pass" label="Password" variant="standard" type="password" onChange={handlePassChange} value={passVal} fullWidth={true} />
+                <TextField id="input-pass" label="Password" variant="standard" type="password" onChange={handlePassChange} value={passVal} fullWidth={true} error={errors.pass} helperText={errors.pass} />
             </Box>
             <div className="button-block">
                 <div className="button-cont">
@@ -34,17 +34,17 @@ function Login({ handlers: { login: [loginVal, handleLoginChange], pass: [passVa
 }
 
 // destructure props
-function Signup({ handlers: { login: [loginVal, handleLoginChange], email: [emailVal, handleEmailChange], pass: [passVal, handlePassChange], handleSubmit, other } }) {
+function Signup({ handlers: { login: [loginVal, handleLoginChange], email: [emailVal, handleEmailChange], pass: [passVal, handlePassChange], handleSubmit, other }, errors = {} }) {
     return (
         <React.Fragment>
             <Box m={"10px 0 20px 0"}>
-                <TextField id="input-user" label="Username" variant="standard" onChange={handleLoginChange} value={loginVal} fullWidth={true} />
+                <TextField id="input-user" label="Username" variant="standard" onChange={handleLoginChange} value={loginVal} fullWidth={true} error={errors.user} helperText={errors.user} />
             </Box>
             <Box m={"0 0 20px 0"}>
-                <TextField id="input-email" label="Email" variant="standard" onChange={handleEmailChange} value={emailVal} fullWidth={true} />
+                <TextField id="input-email" label="Email" variant="standard" onChange={handleEmailChange} value={emailVal} fullWidth={true} error={errors.email} helperText={errors.email} />
             </Box>
             <Box m={"0 0 40px 0"}>
-                <TextField id="input-pass" label="Password" variant="standard" type="password" onChange={handlePassChange} value={passVal} fullWidth={true} />
+                <TextField id="input-pass" label="Password" variant="standard" type="password" onChange={handlePassChange} value={passVal} fullWidth={true} error={errors.pass} helperText={errors.pass} />
             </Box>
             <div className="button-block">
                 <div className="button-cont">
@@ -66,6 +66,7 @@ function LoginSignup({ switchState }) {
     let [loading, setLoading] = useState(true)
     // false is login, true is signup
     let [_switch, setSwitch] = useState(switchState)
+    const [errors, setErrors] = useState({})
     // states that set the values for the inputs
     let [loginVal, setLoginVal] = useState("")
     let [emailVal, setEmailVal] = useState("")
@@ -76,6 +77,7 @@ function LoginSignup({ switchState }) {
         setLoading(true)
         // reset password but keep username
         setPassVal("")
+        setErrors({})
         const new_path = _switch ? "login" : "signup"
         // set url without reloading
         window.history.pushState('data', new_path, "/" + new_path);
@@ -129,8 +131,14 @@ function LoginSignup({ switchState }) {
         else result = await mutations.login(loginVal, passVal)
         // checks for error status (see client/src/gqlJS and server/schemas/resolvers)
         // TODO: Change alert
-        if (result.__status__ === "error") alert(_switch ? "Bad signup" : "Bad login")
+        if (result.__status__ === "error") {
+            setErrors(result.errors ?? {})
+        }
         else window.location.assign(window.location.origin + "/dashboard")
+    }
+
+    const keyHandle = (event) => {
+        if (event.key === "Enter") handleSubmit(event)
     }
 
     // main render logic
@@ -174,7 +182,7 @@ function LoginSignup({ switchState }) {
                                             {'Fast & easily customizable forms for any situation'}
                                         </Typography>
                                     </div>
-                                    <Card sx={sxcont} component="form" autoComplete="off">
+                                    <Card sx={sxcont} component="form" autoComplete="off" onKeyDown={keyHandle}>
                                         <CardContent sx={sxcontent}>
                                             {_switch ?
                                                 <Signup
@@ -183,15 +191,19 @@ function LoginSignup({ switchState }) {
                                                         email: [emailVal, handleEmailChange],
                                                         pass: [passVal, handlePassChange],
                                                         handleSubmit,
-                                                        other
-                                                    }} /> :
+                                                        other,
+                                                    }}
+                                                    errors={errors}
+                                                /> :
                                                 <Login
                                                     handlers={{
                                                         login: [loginVal, handleLoginChange],
                                                         pass: [passVal, handlePassChange],
                                                         handleSubmit,
-                                                        other
-                                                    }} />
+                                                        other,
+                                                    }}
+                                                    errors={errors}
+                                                />
                                             }
                                         </CardContent>
                                     </Card>
