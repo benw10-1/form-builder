@@ -23,10 +23,10 @@ app.use(express.json())
 
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test") {
   app.use(express.static(path.join(__dirname, "../client/build")))
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"))
-  })
 }
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"))
+})
 db.once('open', () => {
   server.start().then(() => {
     server.applyMiddleware({
