@@ -1,33 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
-import { queries, mutations, Auth, parseProps, dayTime } from "../utils"
+import { queries, mutations, Auth, parseProps } from "../utils"
 import { useParams } from "react-router-dom"
 
 import * as uuid from "uuid";
 
-import {
-    Fab,
-    Container,
-    CssBaseline,
-    Typography,
-    Box,
-    Link,
-    Avatar,
-    Skeleton,
-    Modal,
-    TextField,
-    Divider,
-    Card,
-
-
-} from "@mui/material";
-
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AddIcon from '@mui/icons-material/Add';
-import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
 import EditIcon from '@mui/icons-material/Edit';
-import TitleRounded from '@mui/icons-material/TitleRounded';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FormGroup from '@mui/material/FormGroup';
@@ -40,7 +26,6 @@ import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
-import Signout from "./Signout";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
 import "./n2style.css"
