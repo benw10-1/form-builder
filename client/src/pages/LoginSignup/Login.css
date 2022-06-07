@@ -14,6 +14,7 @@
 }
 .login-text {
     min-width: 320px;
+    margin-right: 102px;
 }
 
 .button-block {
@@ -48,7 +49,7 @@
 
 @media screen and (max-width: 420px) {
     .login-text h6 {
-        font-size: 90%;
+        font-size: 80%;
         word-wrap: break-word;
     }
 }

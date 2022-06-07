@@ -146,7 +146,9 @@ function LoginSignup({ switchState }) {
         const sxcont = {
             width: "405px",
             height: "370px",
-            padding: "15px 60px",
+            padding: {
+                xs: "15px 30px",
+            },
             position: "relative"
         }
         const sxcontent = {
@@ -174,7 +176,7 @@ function LoginSignup({ switchState }) {
                             return (
                                 <React.Fragment>
                                     <div className="login-text">
-                                        <Typography variant="h4" width={_switch ? 172 : 252} height={42} sx={{ fontFamily: "Roboto", fontStyle: "normal" }}>
+                                        <Typography color="primary" variant="h4" width={_switch ? 172 : 252} height={42} sx={{ fontFamily: "Roboto", fontStyle: "normal", marginRight: "102px" }}>
                                             {_switch ? "Get started" : "Build your forms"}
                                             <br />
                                         </Typography>
@@ -182,7 +184,7 @@ function LoginSignup({ switchState }) {
                                             {'Fast & easily customizable forms for any situation'}
                                         </Typography>
                                     </div>
-                                    <Card sx={sxcont} component="form" autoComplete="off" onKeyDown={keyHandle}>
+                                    <Card sx={{ ...sxcont, }} component="form" autoComplete="off" onKeyDown={keyHandle}>
                                         <CardContent sx={sxcontent}>
                                             {_switch ?
                                                 <Signup
