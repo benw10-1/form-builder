@@ -5,7 +5,7 @@
 //maybe new form and edit form are separate pages
 // but they will look very similar
 import React from "react";
-import { Link } from "@mui/material"
+import Link from "@mui/material/Link"
 import Auth from "../utils/auth"
 
 function Signout(){

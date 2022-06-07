@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from "@mui/x-data-grid"
 import { queries, dayTime, Auth } from '../../utils'
 import { useParams } from 'react-router-dom';
-import {
-    Box,
-    Skeleton,
-    Paper,
-    Container,
-    Typography,
-    Divider,
-    Button,
-    Popover,
-} from "@mui/material"
-import Signout from '../Signout';
+import Box from "@mui/material/Box"
+import Skeleton from "@mui/material/Skeleton"
+import Paper from "@mui/material/Paper"
+import Container from "@mui/material/Container"
+import Typography from "@mui/material/Typography"
+import Divider from "@mui/material/Divider"
+import Button from "@mui/material/Button"
+import Popover from "@mui/material/Popover"
+import Signout from '../Signout'
+import { DataGrid } from "@mui/x-data-grid/DataGrid"
 
 function parseResponseData(responses, pieces) {
     let columns = [{
@@ -191,11 +189,11 @@ function ResponseView({ }) {
                                 onClose={close}
                                 anchorOrigin={{
                                     vertical: 'top',
-                                    horizontal: 'center',
+                                    horizontal: 'left',
                                 }}
                                 transformOrigin={{
                                     vertical: 'bottom',
-                                    horizontal: 'center',
+                                    horizontal: 'left',
                                 }}
                                 anchorEl={anchorEl}
                             >

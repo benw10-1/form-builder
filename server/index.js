@@ -14,7 +14,8 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   csrfPrevention: true,
-  context: authMiddleware
+  context: authMiddleware,
+  playground: false,
 })
 
 app.use(express.urlencoded({ extended: false }))
