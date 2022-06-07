@@ -191,11 +191,11 @@ function ResponseView({ }) {
                                 onClose={close}
                                 anchorOrigin={{
                                     vertical: 'top',
-                                    horizontal: 'center',
+                                    horizontal: 'left',
                                 }}
                                 transformOrigin={{
                                     vertical: 'bottom',
-                                    horizontal: 'center',
+                                    horizontal: 'left',
                                 }}
                                 anchorEl={anchorEl}
                             >

@@ -28,7 +28,7 @@ import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 //send to small device touchscreen version if screen less than minW wide or they are using touchscreen
-const minW = 1400;
+const minW = 900;
 let touch = { a: false };
 function touchDetect(t) { t.a = true; }
 window.addEventListener('touchstart', () => { touchDetect(touch) });

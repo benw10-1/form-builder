@@ -36,15 +36,10 @@
 }
 
 @media screen and (max-width: 600px) {
-    .MuiContainer-root {
-        min-width: 500px;
-    }
-
     .login-text {
         margin-left: 70px;
     }
     .login-text h6 {
         font-size: 1rem;
     }
-    
 }

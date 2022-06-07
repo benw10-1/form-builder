@@ -169,8 +169,7 @@ function Respond() {
         position: "relative",
         width: "100%",
         borderLeft: "5px solid white",
-        paddingLeft: "10px"
-
+        paddingLeft: "0"
     }
 
     const formsx = {
@@ -178,13 +177,8 @@ function Respond() {
 
         padding: "63px 61px 63px 61px",
         overflow: "auto",
-
-        position: "absolute",
         width: "800px",
         minHeight: "100vh",
-        left: "382px",
-        top: "0px",
-
         /* Light/Background/Paper */
         background: "#FFFFFF",
 
@@ -192,11 +186,6 @@ function Respond() {
         boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
         borderRadius: "4px"
     }
-
-
-
-
-
 
     const toolbarsx = {
         opacity: ".0",
@@ -325,15 +314,6 @@ function Respond() {
 
 
     const RespondRender = ({ piece }) => {
-
-
-
-
-
-
-
-
-
         let a = piece._id;
 
         let parsed = parseProps(piece.props);
@@ -349,7 +329,6 @@ function Respond() {
                     <>
                         <Typography sx={{ ...fontsx, ...headsx }}>{parsed.htext}</Typography>
                         {parsed.hsubtext && <Typography sx={{ ...fontsx, ...normsx }}>{parsed.hsubtext}</Typography>}
-
                     </>
                 )
 
@@ -388,11 +367,7 @@ function Respond() {
                                     name={a}
                                     label={parsed.qsubtext}
                                     onChange={handleChange}
-
-
                                 />
-
-
                             </>
                         )
                     } else {
@@ -405,7 +380,6 @@ function Respond() {
                                     variant="standard"
                                     name={a}
                                     onChange={handleChange} />
-
                             </>
                         )
 
@@ -478,8 +452,6 @@ function Respond() {
                 }
 
             }
-
-
         } else {
             return (
                 <div>
@@ -498,7 +470,7 @@ function Respond() {
                 <Typography sx={{ ...fontsx, ...titlesx }}>{form.title}</Typography>
                 {form.description && <Typography sx={{ ...fontsx, ...normsx }}>{form.description}</Typography>}
                 <br />
-                <Divider variant="middle" />
+                <Divider flexItem={true} />
                 <br />
             </>
 
@@ -527,21 +499,21 @@ function Respond() {
                 let ch = 0;
 
                 for (const key in ans[h].value) {
-                    
 
-                    if(ans[h].value[key]==true){
-                        if (ch==0){
-                            newval= key;
+
+                    if (ans[h].value[key] == true) {
+                        if (ch == 0) {
+                            newval = key;
                             ch++;
 
-                        }else{
-                            newval= newval + "__sep__" + key
+                        } else {
+                            newval = newval + "__sep__" + key
                         }
-                        
-                    }   
+
+                    }
                 }
-                ans[h].value=newval; 
-            } 
+                ans[h].value = newval;
+            }
         }
 
         console.log(ans);
@@ -575,7 +547,7 @@ function Respond() {
         }
         return (
             <>
-                {disabled ? <Success err={error}/> : renP}
+                {disabled ? <Success err={error} /> : renP}
             </>
         )
 
@@ -626,29 +598,13 @@ function Respond() {
 
         }
         req()
-
-
-
-        ///dummy data///////////////////////////////////////////////////////////////
-
-
-
     }, [])
-
-
-
-
-
-
-    ////////////////////////end scratch/function area/////////////////////////////////////////////////////////////////////
-
-
 
     return (
         <>
             <CssBaseline />
 
-            <Box display="flex" flexDirection="row" sx={{ height: "100%" }}>
+            <Container disableGutters maxWidth={true} sx={{ display: "flex", justifyContent: "center" }}>
                 <Card sx={formsx}>
                     <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
                     <Renderer pieces={pieces} />
@@ -657,18 +613,10 @@ function Respond() {
                     <br />
                     <br />
                 </Card>
-
-            </Box>
+            </Container>
 
         </>
-
-
     )
-
-
-
-
-
 }
 
 export default Respond;
