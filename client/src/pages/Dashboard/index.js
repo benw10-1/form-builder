@@ -49,7 +49,10 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
         height: open ? "240px" : "200px",
         display: "flex",
         "&:hover": { boxShadow: 15 },
-        margin: "26px 25px 0",
+        margin: {
+            xs: "26px 25px 0",
+            md: "26px 50px 0 0",
+        },
         transition: "all 0.3s ease-in",
     }
     const hoversx = {
@@ -212,7 +215,10 @@ function AllForms({ forms = [], modal }) {
             height: "auto",
             display: "flex",
             "&:hover": { boxShadow: 15 },
-            margin: "26px 25px 0"
+            margin: {
+                xs: "26px 25px 0",
+                md: "26px 50px 0 0",
+            }
         }
         const centered = {
             display: "flex",
@@ -350,8 +356,8 @@ function Dashboard() {
         }
         const boxsx2 = {
             padding: {
-                xs: "28px 0 0 0",
-                md: "10px 0 0 64px",
+                xs: "64px 0 0 0",
+                md: "128px 0 0 64px",
             },
             display: {
                 xs: "flex",
@@ -414,7 +420,7 @@ function Dashboard() {
                         </Box>
                         <Paper sx={papersx}>
                             <Box sx={boxsx2}>
-                                <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)", display: { xs: "flex" }, justifyContent: { xs: "center" } }}>
+                                <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)", display: { xs: "flex" }, justifyContent: { xs: "center", md: "start" } }}>
                                     {(forms && forms.length > 0) ? 'Click on a form to edit or view responses.' : "No forms available, click on the + button below."}
                                 </Typography>
                                 {(() => {
