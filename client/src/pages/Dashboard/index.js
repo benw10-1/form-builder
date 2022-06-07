@@ -114,7 +114,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
 
     return (
         <Paper sx={{ ...cardsx, background: "#FFFFFF", padding: "16px 16px 0", display: "flex", flexDirection: "column" }}>
-            <Box sx={{ overflow: "hidden", height: "84px", paddingBottom: "12px", width: "100%" }}>
+            <Box sx={{ overflow: "hidden", height: "84px", paddingBottom: "12px", width: "100%", textOverflow: "ellipsis" }}>
                 <Typography variant="h4" sx={{ margin: "0 0 4px 0", fontSize: "24px" }}>
                     {title}
                 </Typography>
@@ -199,54 +199,6 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
             </Box>
         </Paper>
     )
-    // old popup
-    // <PopupState variant="popover" popupId="demo-popup-popover">
-    //     {(popupState) => (
-    //         <div className="popover-style">
-    //             {/* ...bindTrigger(popupState) */}
-    //             <Typography onClick={collapse} sx={{ ...hoversx, fontSize: "14px", color: "#4CAF50", textDecoration: "underline", width: "56px" }}>
-    //                 Published
-    //             </Typography>
-
-    //             {/* <Popover className="pop" elevation={0} sx={poposx}
-    //                 anchorReference="anchorOrigin"
-    //                 anchorEl={popupState}
-    //                 {...bindPopover(popupState)}
-    //                 anchorOrigin={{
-    //                     vertical: 'bottom',
-    //                     horizontal: 'left',
-    //                 }}
-    //                 transformOrigin={{
-    //                     vertical: 'top',
-    //                     horizontal: 'right',
-    //                 }}
-    //             >
-    //                 <Box
-    //                     className="link-container"
-    //                     sx={{
-    //                         width: "270px",
-    //                         fontSize: "12px",
-    //                         backgroundColor: "transparent",
-    //                         display: "flex",
-    //                         alignItems: "center"
-    //                     }}
-    //                 >
-    //                     <Button variant="contained" sx={{ ...hoversx, ...buttonsx }} onClick={() => { navigator.clipboard.writeText(Rlink) }}>
-    //                         <ContentCopyIcon
-    //                             sx={copysx}
-    //                         />
-    //                     </Button>
-    //                     <input
-    //                         style={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none" }}
-    //                         type="text"
-    //                         value={Rlink}
-    //                         disabled="true"
-    //                     />
-    //                 </Box>
-    //             </Popover> */}
-    //         </div>
-    //     )}
-    // </PopupState>
 }
 
 function AllForms({ forms = [], modal }) {
