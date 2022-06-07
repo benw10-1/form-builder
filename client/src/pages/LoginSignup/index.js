@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { mutations, Auth } from "../../utils"
-import {
-    Container,
-    CssBaseline,
-    TextField,
-    Card,
-    Typography,
-    CardContent,
-    Skeleton,
-    Button,
-    Box
-} from "@mui/material"
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Card from "@mui/material/Card";
+import Typography from "@mui/material/Typography";
+import CardContent from "@mui/material/CardContent";
+import Skeleton from "@mui/material/Skeleton";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import "./Login.css"
 
 // destructure props

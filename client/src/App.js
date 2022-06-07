@@ -3,10 +3,8 @@ import React from 'react';
 import {
     Dashboard,
     FourOFour,
-    Home,
     LoginSignup,
     Form,
-    EditForm,
     ALTEditForm,
     ALTEditFormMob,
     Responses,

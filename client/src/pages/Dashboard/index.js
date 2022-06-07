@@ -1,31 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import { queries, mutations, Auth, dayTime } from "../../utils";
-import {
-    Container,
-    CssBaseline,
-    Paper,
-    Typography,
-    Box,
-    Link,
-    Avatar,
-    Skeleton,
-    Modal,
-    TextField,
-    Button,
-    Divider,
-    Collapse,
-} from "@mui/material";
+
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import Skeleton from "@mui/material/Skeleton";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/button";
+import Divider from "@mui/material/Divider";
 
 import AddIcon from '@mui/icons-material/Add';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Stack from '@mui/material/Stack';
 
 import Signout from "../Signout";
 import moment from "moment";
 import "./Dashboard.css"
 
 import Popover from '@mui/material/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 //send to small device touchscreen version if screen less than minW wide or they are using touchscreen
 const minW = 900;
