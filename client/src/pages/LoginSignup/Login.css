@@ -13,8 +13,9 @@
     flex-wrap: wrap;
 }
 .login-text {
-    margin-right: 102px;
+    min-width: 320px;
 }
+
 .button-block {
     display: flex;
     width: 100%;
@@ -28,23 +29,26 @@
 
 @media screen and (max-width: 925px) {
     .login-positioning {
-        padding: 100px 0px;
+        padding: 70px 0px;
     }
     .login-text h4 {
-        font-size: 2rem;
+        font-size: 2.1rem;
     }
 }
 
 @media screen and (max-width: 600px) {
-    .MuiContainer-root {
-        min-width: 500px;
-    }
-
     .login-text {
-        margin-left: 70px;
+        margin: 0 0 50px 0px;
     }
     .login-text h6 {
-        font-size: 1rem;
+        font-size: 120%;
     }
     
+}
+
+@media screen and (max-width: 420px) {
+    .login-text h6 {
+        font-size: 90%;
+        word-wrap: break-word;
+    }
 }
