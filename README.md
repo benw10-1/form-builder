@@ -78,11 +78,11 @@ THEN I am taken back to the log in landing page
 
 
 # Contributors 
-<ul><li><strong><a href="https://github.com/benw10-1" target="__blank">Benjamin Wirth</a>:</strong> Full Stack Engineer</li>
-<li><strong><a href="https://github.com/grdnd" target="__blank">Gordon Do</a>:</strong> Front-End Engineer</li>
-<li><strong><a href="https://github.com/nialvo" target="__blank">Nicholas Voloshanovich</a>:</strong> Full Stack Engineer</li>
-<li><strong><a href="https://github.com/racheldmarron" target="__blank">Rachel Marron</a>:</strong> Project Manager, Front-End Engineer</li>
-<li><strong><a href="https://github.com/mrjeoffrey" target="__blank">Jeoffrey Batangan</a>:</strong> UI Designer, Front-End Engineer</li></ul>
+<ul><li><strong><a href="https://github.com/benw10-1" target="__blank">benw10-1</a>:</strong> Full Stack Engineer</li>
+<li><strong><a href="https://github.com/grdnd" target="__blank">Grdnd</a>:</strong> Front-End Engineer</li>
+<li><strong><a href="https://github.com/nialvo" target="__blank">Nialvo</a>:</strong> Full Stack Engineer</li>
+<li><strong><a href="https://github.com/racheldmarron" target="__blank">racheldmarron</a>:</strong> Project Manager, Front-End Engineer</li>
+<li><strong><a href="https://github.com/mrjeoffrey" target="__blank">mrjeoffrey</a>:</strong> UI Designer, Front-End Engineer</li></ul>
 
 # License 
 
