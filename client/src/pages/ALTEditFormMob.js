@@ -836,13 +836,19 @@ function ALTEditFormMob() {
 
     const Rightbutton = ({ }) => {
         const menusx = {
+            "&:hover": {
+                backgroundColor: "transparent"
+            },
             "&.Mui-focusVisible": {
                 backgroundColor: "transparent"
             },
             "& .MuiMenuItem-root": {
                 "&.Mui-focusVisible": {
                     backgroundColor: "transparent"
-                }
+                },
+                "&:hover": {
+                    backgroundColor: "transparent"
+                },
             },
         }
 
