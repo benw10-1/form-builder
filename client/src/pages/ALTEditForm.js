@@ -1,49 +1,36 @@
 
-import React, { useState, useEffect, useRef } from "react";
-import { queries, mutations, Auth, parseProps, dayTime } from "../utils"
-import { useParams } from "react-router-dom"
-
-import * as uuid from "uuid";
-
-import {
-    Fab,
-    Container,
-    CssBaseline,
-    Typography,
-    Box,
-    Link,
-    Avatar,
-    Skeleton,
-    Modal,
-    TextField,
-    Divider,
-    Card,
-
-
-} from "@mui/material";
-
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import AddIcon from '@mui/icons-material/Add';
-import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
-import EditIcon from '@mui/icons-material/Edit';
-import TitleRounded from '@mui/icons-material/TitleRounded';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FormGroup from '@mui/material/FormGroup';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
+import TitleRounded from '@mui/icons-material/TitleRounded';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import FormLabel from '@mui/material/FormLabel';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
-
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import * as uuid from "uuid";
+import { Auth, dayTime, mutations, parseProps, queries } from "../utils";
+import "./nstyle.css";
 import Signout from "./Signout";
 
-import "./nstyle.css"
+
 
 function ALTEditForm() {
 
@@ -68,7 +55,7 @@ function ALTEditForm() {
         top:"0",
         left:"20vw",
 
-        padding: "10vh 10vh 10vh 10vh",
+        padding: "60px",
         overflow: "auto",
 
         //position: "absolute",
@@ -345,7 +332,7 @@ function ALTEditForm() {
                         return (
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography><br />
-                                <TextField sx={{ width: `${parsed.inWidth}%` }}
+                                <TextField sx={{ width: `70%` }}
                                     id="outlined-multiline-static"
                                     multiline
                                     rows={r}
@@ -358,7 +345,7 @@ function ALTEditForm() {
                         return (
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
-                                <TextField id="standard-basic" sx={{ width: `${parsed.inWidth}%` }} label={parsed.qsubtext} variant="standard" />
+                                <TextField id="standard-basic" sx={{ width: `70%` }} label={parsed.qsubtext} variant="standard" />
 
                             </>
                         )
@@ -603,6 +590,7 @@ function ALTEditForm() {
                                 variant="standard"
                                 defaultValue={parseProps(pieceRef.current.props).qtext}
                                 onChange={handleChange}
+                                sx={{ marginBottom: "1rem" }}
                             /><br />
                             <TextField
                                 label="Question Label"
@@ -610,8 +598,9 @@ function ALTEditForm() {
                                 variant="standard"
                                 defaultValue={parseProps(pieceRef.current.props).qsubtext}
                                 onChange={handleChange}
+                                sx={{ marginBottom: "1rem" }}
                             /><br />
-                            <Box sx={sliderboxsx}>
+                            {/* <Box sx={sliderboxsx}>
                                 <br />
                                 <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Text Entry Width</Typography>
                                 <Slider
@@ -624,8 +613,8 @@ function ALTEditForm() {
                                     onChange={handleChange}
                                     onChangeCommitted={handleUnclick}
                                 />
-                            </Box>
-                            <Box sx={sliderboxsx}>
+                            </Box> */}
+                            {/* <Box sx={sliderboxsx}>
                                 <br />
                                 <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Text Entry Length</Typography>
                                 <Slider
@@ -638,10 +627,10 @@ function ALTEditForm() {
                                     onChange={handleChange}
                                     onChangeCommitted={handleUnclick}
                                 />
-                            </Box>
+                            </Box> */}
 
 
-                            <TextField sx={{ width: `${parsed.inWidth}%` }}
+                            <TextField sx={{ width: `70%` }}
                                 id="outlined-multiline-static"
                                 multiline
                                 rows={r}
@@ -668,7 +657,7 @@ function ALTEditForm() {
                                 defaultValue={parseProps(pieceRef.current.props).qsubtext}
                                 onChange={handleChange}
                             /><br />
-                            <Box sx={sliderboxsx}>
+                            {/* <Box sx={sliderboxsx}>
                                 <br />
                                 <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Text Entry Width</Typography>
                                 <Slider
@@ -681,9 +670,9 @@ function ALTEditForm() {
                                     onChange={handleChange}
                                     onChangeCommitted={handleUnclick}
                                 />
-                            </Box>
+                            </Box> */}
 
-                            <TextField id="standard-basic" sx={{ width: `${parsed.inWidth}%` }} label={parseProps(pieceRef.current.props).qsubtext} variant="standard" />
+                            <TextField id="standard-basic" sx={{ width: `70%` }} label={parseProps(pieceRef.current.props).qsubtext} variant="standard" />
 
                         </>
                     )
@@ -907,7 +896,8 @@ function ALTEditForm() {
     async function saveform(xx) {
         // console.log(xx)
         let zz = removeIds(xx);
-        const ids = (await mutations.updateFormPieces(id, zz))?.result;
+        const ids = (await mutations.updateFormPieces(String(id), zz))?.result;
+        if (!ids) return
         setPieces(xx.map((x, i) => {
             x._id = ids[i];
             return x;
@@ -1134,28 +1124,6 @@ function ALTEditForm() {
         });
     }
 
-
-
-    function saveToDb() {
-        removeIds();
-        console.log(pieces);//replace this line with a mutation to save pieces to form!!!!!!!!!!********************************************
-    }
-
-
-
-
-    function logPieces() {
-        console.log(pieces);
-    }
-
-    function logForm() {
-        console.log(form);
-    }
-
-    function logId() {
-        console.log(id);
-    }
-    /////////////////////////////////////////////////////////////CHANGE THESES VALUES, WE DON"T WANT GOATS TO SHOW UP IF THEY LEAVE IT BLANK!!///OR NOT////
     function addPiece(type, loc, qt = "-1") {
 
         const P = { piid: uuid.v4(), _type: type, props: [] };
@@ -1209,22 +1177,6 @@ function ALTEditForm() {
         setPieces(pieces.filter(p => p.piid != c))
     }
 
-
-
-    ////////////////////////end scratch/function area/////////////////////////////////////////////////////////////////////
-
-
-    let sampleForm = {
-        _id: "62957d6b1ff7cd229d54ebb5",
-        createdAt: "1653964139558",
-        creator: { _id: "62945f2c19fc4ab989b6bda9" },
-        description: "werte",
-        endpoint: null,
-        piece_refs: [],
-        published: false,
-        title: "qwretrt"
-    }
-
     return (
         <>  
             
@@ -1247,12 +1199,10 @@ function ALTEditForm() {
                     
                 </Box>
 
-
                 <Card sx={formsx}>
                     <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
                     <Editor pieces={pieces} />
                 </Card>
-
 
                 <Box sx={rightButtonssx}>
                 <Signout />

@@ -1,34 +1,16 @@
 
 import React, { useState, useEffect, useRef } from "react";
-import { queries, mutations, Auth, parseProps, dayTime } from "../utils"
+import { queries, mutations, parseProps } from "../utils"
 import { useParams } from "react-router-dom"
 
-
-import {
-    Fab,
-    Container,
-    CssBaseline,
-    Typography,
-    Box,
-    Link,
-    Avatar,
-    Skeleton,
-    Modal,
-    TextField,
-    Divider,
-    Card,
-
-
-} from "@mui/material";
-
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-
-import AddIcon from '@mui/icons-material/Add';
-import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
-import EditIcon from '@mui/icons-material/Edit';
-import TitleRounded from '@mui/icons-material/TitleRounded';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
+import Container from '@mui/material/Container';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Radio from '@mui/material/Radio';
@@ -36,10 +18,9 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import Slider from '@mui/material/Slider';
-import Stack from '@mui/material/Stack';
 
 import "./nstyle.css"
+import Paper from "@mui/material/Paper";
 
 
 function Success({ err }) {
@@ -60,110 +41,17 @@ function Success({ err }) {
         </Box>
     );
 }
-
 function Respond() {
 
-    const gray = {
-        color: "rgba(0,0,0,0.5)"
-    }
 
     const pink = {
         color: "rgba(200,0,0,0.5)"
 
     }
-    const sliderboxsx = {
-        width: "30%"
-    }
-
-    const deloptsx = {
-        display: "flex",
-    }
-
-    const editiconsx = {
-
-        opacity: ".9",
-        position: "absolute",
-        top: "0px",
-        right: "0px",
-        fontSize: "30px",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
-    }
-
-    const iconboxsx = {
-        position: "absolute",
-        top: "0px",
-        left: "0px",
-        width: "100%",
-        height: "100%",
-        opacity: ".0",
-        "&:hover": {
-            opacity: "1.0",
-        }
-    }
-
-    const checkiconsx = {
-        position: "absolute",
-        top: "0px",
-        right: "0px",
-        fontSize: "30px",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
-
-    }
-    const deliconsx = {
-        position: "absolute",
-        top: "0px",
-        right: "40px",
-        fontSize: "30px",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
-
-    }
-    const checkiconboxsx = {
-        position: "absolute",
-        top: "0px",
-        left: "0px",
-        width: "100%",
-        height: "100%",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
-
-    }
-
-    const freeiconsx = {
-
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        }
-
-    }
-
     const boxsx = {
 
         position: "relative",
         width: "100%",
-    }
-    const editboxsx = {
-        position: "relative",
-        width: "100%",
-        borderLeft: "5px solid #42A5F5",
-        paddingLeft: "10px"
-
     }
     const noneditboxsx = {
         position: "relative",
@@ -174,47 +62,19 @@ function Respond() {
 
     const formsx = {
         /* Auto layout */
-
-        padding: "63px 61px 63px 61px",
-        overflow: "auto",
+        display: "block",
+        padding: "30px 40px",
         width: "800px",
         minHeight: "100vh",
         /* Light/Background/Paper */
         background: "#FFFFFF",
-
+        overflow: "unset",
         /* Elevation/1 */
         boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
         borderRadius: "4px"
     }
 
-    const toolbarsx = {
-        opacity: ".0",
-        "&:hover": {
-            opacity: "1.0",
-        }
 
-    }
-    const toolssx = {
-
-        maxWidth: "500px",
-        height: "40px",
-        display: "flex",
-        justifyContent: "space-evenly",
-        margin: "auto",
-        display: "flex",
-        alignItems: "center"
-    }
-
-    const toolboxsx = {
-        display: "flex",
-        marginRight: "15px",
-        marginLeft: "15px",
-        opacity: ".25",
-        "&:hover": {
-            opacity: ".85",
-            cursor: "pointer"
-        },
-    }
 
     const fontsx = {
         fontFamily: 'Roboto',
@@ -242,24 +102,7 @@ function Respond() {
 
     }
 
-    const subsx = {
-        fontSize: "12px",
-        lineHeight: "166%",
-        letterSpacing: "0.4px"
 
-    }
-
-    const centered = {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-    }
-    const plussx = {
-        width: "20px"
-    }
-    const hoversx = {
-        "&:hover": { cursor: "pointer" }
-    }
 
 
     const [pieces, _setPieces] = useState([]);
@@ -284,11 +127,6 @@ function Respond() {
     }
 
     const [resp, _setResp] = useState({});
-    const respRef = useRef(resp);
-    const setResp = (c) => {
-        _setResp(c);
-        respRef.current = c;
-    }
 
     const handleChange = (e) => {
         let loc = e.target.name
@@ -306,12 +144,6 @@ function Respond() {
         responsesRef.current = [...responsesRef.current.slice(0, index), P, ...responsesRef.current.slice(index + 1)];
 
     };
-
-
-
-
-
-
 
     const RespondRender = ({ piece }) => {
         let a = piece._id;
@@ -361,7 +193,7 @@ function Respond() {
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography><br />
                                 <TextField
-                                    sx={{ width: `${parsed.inWidth}%` }}
+                                    sx={{ width: `70%` }}
                                     multiline
                                     rows={r}
                                     name={a}
@@ -375,7 +207,7 @@ function Respond() {
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
                                 <TextField
-                                    sx={{ width: `${parsed.inWidth}%` }}
+                                    sx={{ width: `70%` }}
                                     label={parsed.qsubtext}
                                     variant="standard"
                                     name={a}
@@ -602,19 +434,18 @@ function Respond() {
 
     return (
         <>
-            <CssBaseline />
-
-            <Container disableGutters maxWidth={true} sx={{ display: "flex", justifyContent: "center" }}>
-                <Card sx={formsx}>
-                    <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
-                    <Renderer pieces={pieces} />
-                    <br />
-                    <SubButton disabled={disabled} />
-                    <br />
-                    <br />
-                </Card>
+            <Container disableGutters maxWidth={true} sx={{ display: "flex", justifyContent: "center", overflow: "auto", height: "unset" }}>
+                <Paper sx={formsx}>
+                    <Box sx={{ width: "100%" }}>
+                        <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
+                        <Renderer pieces={pieces} />
+                        <br />
+                        <SubButton disabled={disabled} />
+                        <br />
+                        <br />
+                    </Box>
+                </Paper>
             </Container>
-
         </>
     )
 }

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="../paypal-api/paypal.css">
+    <script src="https://kit.fontawesome.com/e05aadbe2e.js" crossorigin="anonymous"></script>
+    <title></title>
+</head>
+<body>
+
+    <section class="h-100 h-custom" style="background-color: #1976D2;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+              <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                <div class="card-body p-0">
+                  <div class="row g-0">
+                    <div class="col-lg-12">
+                      <div class="p-5">
+                        <div class="d-flex justify-content-center align-items-center mb-4">
+                          <h1 class="fw-bold mb-0 text-black">Get YourForms.App Simple!</h1>
+                          </div>
+                          <div class="d-flex justify-content-center align-items-center mb-3">
+                          <h3 class="fw-bold mb-0 text-black">$7.99/month</h3>
+                          </div>
+                          <div class="d-flex justify-content-center align-items-center mb-3">
+                            <h3 class="mb-0 text-black">Here's What You Get:</h3>
+                          </div>
+                            <div class="d-flex justify-content-center align-items-center mb-3">
+                              <ul>
+                                <li>Remove watermarks</li>
+                                <li>Store up to 20 forms a month</li>
+                              </ul>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+      
+                        <div id="smart-button-container">
+                            <div style="text-align: center;">
+                              <div id="paypal-button-container"></div>
+                            </div>
+                          </div>
+                        <script src="https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
+                        <script>
+                          function initPayPalButton() {
+                            paypal.Buttons({
+                              style: {
+                                shape: 'rect',
+                                color: 'gold',
+                                layout: 'vertical',
+                                label: 'paypal',
+                                
+                              },
+                    
+                      
+                              onApprove: function(data, actions) {
+                                return actions.order.capture().then(function(orderData) {
+                                  
+                                  console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                      
+
+                                  const element = document.getElementById('paypal-button-container');
+                                  element.innerHTML = '';
+                                  element.innerHTML = '<h3>Thank you for your donation! You are helping us get out of debt</h3>';
+                    
+                                  
+                                });
+                              },
+                      
+                              onError: function(err) {
+                                console.log(err);
+                              }
+                            }).render('#paypal-button-container');
+                          }
+                          initPayPalButton();
+                        </script>
+                         
+      </section>
+    <script src="../paypal-api/paypal.js" />
+    <script script src="https://www.paypal.com/sdk/js?client-id=AVNeKrsJzkpNy8TMmVldot854UJE2NeFyAvFtL9zzlj_HZTI6sNel_7fx63KbwQDRhmOvOCyPPhKFhOz&currency=USD"></script>
+</body>
+</html>

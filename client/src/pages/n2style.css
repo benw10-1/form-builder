@@ -2,8 +2,11 @@ html{
     background-color:rgb(250,250,250);
 }
 
+/* #demo-popup-menu {
+    top: 0px
+} */
 
-.positioning {
+/* .positioning {
     display: flex;
     width: 100%;
     height: 100%;
@@ -11,25 +14,40 @@ html{
     align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
+    margin: 0 auto;
+} */
+
+.MuiBackdrop-root {
+    height: 100%;
+}
+
+.MuiPopoverPaper-root {
+    backgound-color: red;
 }
 
 .rightButtons{
-    
-    padding: 63px 61px 63px 61px;
-        
+    padding: 63px 31px;
     overflow: auto;
-    
     position: fixed;
     max-width: 575px;
     height: 100%;
     left: 1182px;
-    top: 0px ;
-    
+    top: 0px;
 }
 
 .mainmenu{
     position: fixed;
-    top:10%;
-    right: 10%;
-    z-index:2;
+    top: 2%;
+    right: 3%;
+    z-index: 2;
+}
+
+.menu-shifter {
+    top: 100%;
+}
+
+@media screen and (min-width: 320px) {
+    .mainmenu {
+        /* right: 4%; */
+    }
 }
