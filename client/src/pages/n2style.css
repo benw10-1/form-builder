@@ -21,7 +21,7 @@ html{
     height: 100%;
 }
 
-.rightButtons{
+/* .rightButtons{
     padding: 63px 31px;
     overflow: auto;
     position: fixed;
@@ -29,11 +29,21 @@ html{
     height: 100%;
     left: 1182px;
     top: 0px;
-}
+} */
 
 .mainmenu{
     position: fixed;
+    right: 2.5%;
     top: 2%;
-    right: 3%;
     z-index: 2;
+}
+
+.menu-shifter {
+    top: 100%;
+}
+
+@media screen and (max-width: 420px) {
+    .mainmenu {
+        right: 4%;
+    }
 }

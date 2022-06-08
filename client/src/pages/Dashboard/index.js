@@ -10,7 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import Skeleton from "@mui/material/Skeleton";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/button";
+import Button from "@mui/material/Button/";
 import Divider from "@mui/material/Divider";
 
 import AddIcon from '@mui/icons-material/Add';
@@ -395,7 +395,7 @@ function Dashboard() {
                         <Button width={"42px"} variant={"contained"} onClick={addForm} sx={{ margin: "25px 0 0 0" }} >Create Form</Button>
                     </Box>
                 </Modal>
-                <Signout />
+                <Signout sx={{ right: { xs: "40px" } }} />
 
                 {/* Dashboard Sidebar */}
                 <Container maxWidth={false} disableGutters={true} >

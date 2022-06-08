@@ -35,15 +35,14 @@ function ALTEditFormMob() {
     const hurl = "http://localhost:3000/";
 
     const buttonscontsx = {
-        width: "100vw"
+        width: "100%"
     }
     const buttonscont2sx = {
-        width: "100vw",
+        width: "60%",
         display:"flex",
         justifyContent: "center",
+        margin: "auto",
     }
-
-    
 
     const rightbuttonsx = {
         position: "fixed",
@@ -684,14 +683,11 @@ function ALTEditFormMob() {
                             onChange={handleChange}
                         /><br />
 
-
                         <FormControl>
                             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
                                 {renor}
                             </RadioGroup><br />
                         </FormControl><br />
-
-
 
                         <TextField
                             label="Add option"
@@ -702,10 +698,8 @@ function ALTEditFormMob() {
                         />
                         <CheckCircleIcon sx={freeiconsx} onClick={() => { submitOption() }} />
 
-
                     </>
                 )
-
 
             } else {
                 return (
@@ -807,9 +801,9 @@ function ALTEditFormMob() {
       {(popupState) => (
         <React.Fragment>
           
-          <MenuTwoToneIcon {...bindTrigger(popupState)} sx={plussx} fontSize={"medium"} color="primary"/>
+          <MenuTwoToneIcon {...bindTrigger(popupState)} sx={{ ...plussx, width: "auto", color: "#FFF" }} fontSize={"large"}/>
           
-          <Menu {...bindMenu(popupState)}>
+          <Menu elevation={0} sx={{ minWidth: { xs: "320px" }, top: "25px", borderRadius: "4px", }} {...bindMenu(popupState)}>
             <MenuItem onClick={popupState.open}>
                 <Box sx={buttonscontsx}>
                    <ButtonsTwo conf={confirm} key={"buttons2"} /> 
@@ -819,7 +813,7 @@ function ALTEditFormMob() {
             </MenuItem>
             
             <MenuItem onClick={popupState.close} >
-                <Box sx={buttonscont2sx}>CLOSE MENU</Box>
+                <Button variant="outlined" color="danger" sx={buttonscont2sx}>CLOSE MENU</Button>
             </MenuItem>
           </Menu>
         </React.Fragment>
@@ -963,15 +957,19 @@ function ALTEditFormMob() {
         if (conf.clear == "no" & conf.delete == "no") {
             return (
                 <Box>
-
                 {/* rightbutton */}
                 <div className="mainmenu">
-                    <Rightbutton/>
+                    <Button variant="contained" color="primary" sx={{ minWidth: "64px", height: "50px"}}>
+                        <Rightbutton />
+                    </Button>
                 </div>
-                
                 <Card sx={formsx}>
                     
-                    <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
+                    <Titler form={form}
+                    sx={{
+                        borderLeft: "5px solid white",
+                        fontSize: { sm: "2rem" }
+                    }}/>
                     <Editor pieces={pieces} />
                 </Card>
             </Box>
@@ -1218,33 +1216,15 @@ function ALTEditFormMob() {
     }
 
 
-    
-
-
-
     return (
         <>  
             
             <CssBaseline />
             <XX form={form} pieces={pieces} conf={confirm}/>
             
-
-
-                
-
-            
-
         </>
     )
 }
-
-/*
-<div className="rightButtons">
-                    <ButtonsTwo conf={confirm} key={"buttons2"} />
-                    <ButtonsOne form={form} key={"buttons1"} />
-                </div>
-                */
-
 
 export default ALTEditFormMob;
 
