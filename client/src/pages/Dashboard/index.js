@@ -10,7 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import Skeleton from "@mui/material/Skeleton";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/button";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 
 import AddIcon from '@mui/icons-material/Add';
@@ -320,8 +320,7 @@ function Dashboard() {
         }
         const papersx = {
             width: "100%",
-            minHeight: "100%",
-            maxHeight: "100vh",
+            height: "100%",
             overflow: "auto",
             borderRadius: "0",
             // paddingBottom: "300px",
@@ -333,15 +332,12 @@ function Dashboard() {
             },
             maxWidth: "320px",
 
-            maxHeight: {
-                xs: "40%",
-            },
+            height: "fit-content",
             width: {
                 xs: "100%",
                 sm: "275",
                 md: "275px",
             },
-            height: "100%",
             display: "block",
             position: "relative",
             margin: {
@@ -351,9 +347,10 @@ function Dashboard() {
         }
         const boxsx2 = {
             padding: {
-                xs: "64px 0 0 0",
-                md: "128px 0 0 64px",
+                xs: "0",
+                md: "0 0 0 64px",
             },
+            margin: { md: "128px 0 0 0", xs: "64px 0 0 0" },
             display: {
                 xs: "flex",
             },
@@ -401,7 +398,7 @@ function Dashboard() {
                 <Container maxWidth={false} disableGutters={true} >
                     <div className="dash-positioning">
                         <Box sx={boxsx}>
-                            <Typography variant="h6" height={55} sx={fontsx}>
+                            <Typography variant="h6" sx={fontsx}>
                                 {(() => { return dayTime() + " " + Auth.getProfile()?.name ?? "User" })()}
                                 <br />
                             </Typography>
@@ -409,7 +406,7 @@ function Dashboard() {
                                 {'My Forms'}
                                 <br />
                             </Typography>
-                            <Typography variant="body1" width={216} height={84} sx={fontsx}>
+                            <Typography variant="body1" width={216} sx={fontsx}>
                                 {'Create a new form by clicking the plus sign on the dashboard.'}
                             </Typography>
                         </Box>
