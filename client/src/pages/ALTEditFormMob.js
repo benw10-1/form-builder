@@ -285,7 +285,7 @@ function ALTEditFormMob() {
                         return (
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography><br />
-                                <TextField sx={{ width: `${parsed.inWidth}%` }}
+                                <TextField sx={{ width: `70%` }}
                                     id="outlined-multiline-static"
                                     multiline
                                     rows={r}
@@ -298,7 +298,7 @@ function ALTEditFormMob() {
                         return (
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
-                                <TextField id="standard-basic" sx={{ width: `${parsed.inWidth}%` }} label={parsed.qsubtext} variant="standard" />
+                                <TextField id="standard-basic" sx={{ width: `70%` }} label={parsed.qsubtext} variant="standard" />
 
                             </>
                         )
@@ -544,7 +544,7 @@ function ALTEditFormMob() {
                                 defaultValue={parseProps(pieceRef.current.props).qtext}
                                 onChange={handleChange}
                             /><br />
-                            <TextField
+                            {/* <TextField
                                 label="Question Label"
                                 name="qsubtext"
                                 variant="standard"
@@ -578,10 +578,10 @@ function ALTEditFormMob() {
                                     onChange={handleChange}
                                     onChangeCommitted={handleUnclick}
                                 />
-                            </Box>
+                            </Box> */}
 
 
-                            <TextField sx={{ width: `${parsed.inWidth}%` }}
+                            <TextField sx={{ width: `70%` }}
                                 id="outlined-multiline-static"
                                 multiline
                                 rows={r}
@@ -608,7 +608,7 @@ function ALTEditFormMob() {
                                 defaultValue={parseProps(pieceRef.current.props).qsubtext}
                                 onChange={handleChange}
                             /><br />
-                            <Box sx={sliderboxsx}>
+                            {/* <Box sx={sliderboxsx}>
                                 <br />
                                 <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Text Entry Width</Typography>
                                 <Slider
@@ -621,9 +621,9 @@ function ALTEditFormMob() {
                                     onChange={handleChange}
                                     onChangeCommitted={handleUnclick}
                                 />
-                            </Box>
+                            </Box> */}
 
-                            <TextField id="standard-basic" sx={{ width: `${parsed.inWidth}%` }} label={parseProps(pieceRef.current.props).qsubtext} variant="standard" />
+                            <TextField id="standard-basic" sx={{ width: `70%` }} label={parseProps(pieceRef.current.props).qsubtext} variant="standard" />
 
                         </>
                     )
@@ -934,7 +934,8 @@ function ALTEditFormMob() {
     async function saveform(xx) {
         // console.log(xx)
         let zz = removeIds(xx);
-        const ids = (await mutations.updateFormPieces(id, zz))?.result;
+        const ids = (await mutations.updateFormPieces(String(id), zz))?.result;
+        if (!ids) return
         setPieces(xx.map((x, i) => {
             x._id = ids[i];
             return x;

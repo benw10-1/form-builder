@@ -35,6 +35,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
         console.log("close", openPop)
         setOpenPop(false);
     }
+    const [publ, setPubl] = useState(published)
     const openRef = useRef(open);
     const copyRef = useRef(false);
 
@@ -128,7 +129,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
                 <Typography className="created" variant="body1" sx={{ fontSize: "14px", whiteSpace: "nowrap" }} h={"20px"}>
                     {"Created " + moment(Number(createdAt)).format("LL")}
                 </Typography>
-                {published ? (
+                {publ ? (
                     <Typography onClick={collapse} sx={{ ...hoversx, fontSize: "14px", color: "#4CAF50", textDecoration: "underline", userSelect: "none" }}>
                         Published
                     </Typography>
@@ -190,7 +191,10 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
                 <Box sx={{ height: "62px", display: "grid", placeItems: "center" }}>
                     <Box sx={{ width: "240px", display: "flex", justifyContent: "space-between" }}>
-                        <Button variant="outlined" onClick={editclick} disabled={published}>EDIT</Button>
+                        {publ ? <Button variant="outlined" onClick={() => {
+                            let obj = mutations.setPublished(_id, false); 
+                            if (obj.__status__ !== "error") setPubl(false)
+                        }}>UNPUBLISH</Button> : <Button variant="outlined" onClick={editclick}>EDIT</Button>}
                         <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
                     </Box>
                 </Box>
