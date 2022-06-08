@@ -872,7 +872,7 @@ function ALTEditFormMob() {
                                 },
                             }}
                         >
-                            <MenuItem onClick={popupState.close} sx={menusx}>
+                            <MenuItem onClick={() => {return}} sx={menusx}>
                                 <Box sx={buttonscontsx}>
                                     <ButtonsTwo conf={confirm} key={"buttons2"} />
                                     <ButtonsOne form={form} key={"buttons1"} />
