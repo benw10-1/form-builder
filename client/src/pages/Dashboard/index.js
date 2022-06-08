@@ -177,12 +177,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
                             </Box>
                         </Popover>
                     </Box>
-                    <input
-                        style={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%" }}
-                        type="text"
-                        value={Rlink}
-                        disabled="true"
-                    />
+                    <Box sx={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%", width: "100%"}}>{Rlink}</Box>
                 </Box>
             </Box>
 
@@ -193,7 +188,10 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
                     <Box sx={{ width: "240px", display: "flex", justifyContent: "space-between" }}>
                         {publ ? <Button variant="outlined" onClick={async () => {
                             let obj = await mutations.setPublished(_id, false); 
-                            if (obj.__status__ !== "error") setPubl(false)
+                            if (obj.__status__ !== "error") {
+                                setPubl(false)
+                                setOpen(false)
+                            }
                         }}>UNPUBLISH</Button> : <Button variant="outlined" onClick={editclick}>EDIT</Button>}
                         <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
                     </Box>
