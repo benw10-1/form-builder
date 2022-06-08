@@ -111,7 +111,7 @@ async function respond(parent, { id, responses }, context) {
 
     for (const x of responses) {
         const { key, value } = x
-        // if (!key || !value || value === '' || key === '') throw new Error("No key or value passed to: " + key ?? "Untyped")
+        if (!key || !value || value === '' || key === '') continue
         const piece = await Piece.findById(key).exec()
         if (!piece) throw new Error("Piece not found")
         if (String(piece.form_ref) !== String(form._id)) throw new Error("Piece not in form")

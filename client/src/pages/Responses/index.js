@@ -147,6 +147,7 @@ function ResponseView({ }) {
     }
 
     const handleCellClick = (params, event) => {
+        if (params.formattedValue === '') return
         select(event, params.formattedValue)
     }
     return (
