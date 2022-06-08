@@ -17,8 +17,6 @@ import {
     TextField,
     Divider,
     Card,
-
-
 } from "@mui/material";
 
 import Button from '@mui/material/Button';
@@ -42,7 +40,7 @@ import Stack from '@mui/material/Stack';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import Signout from "./Signout";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import "./n2style.css"
 
 function ALTEditFormMob() {
@@ -166,25 +164,19 @@ function ALTEditFormMob() {
     const formsx = {
         /* Auto layout */
 
-        padding: "10vh 10vh 10vh 10vh",
+        padding: {
+            xs: "10vh 5vh",
+            md: "10vh 10vh",
+        },
         overflow: "auto",
 
         position: "relative",
         width: "100vw",
         minHeight: "100vh",
         
-
         /* Light/Background/Paper */
         background: "#FFFFFF",
-
-       
     }
-
-
-
-
-
-
     
     const toolbarsx = {
 
@@ -314,10 +306,8 @@ function ALTEditFormMob() {
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
                                 <TextField id="standard-basic" sx={{ width: `${parsed.inWidth}%` }} label={parsed.qsubtext} variant="standard" />
-
                             </>
                         )
-
                     }
 
                 } else if (parsed.qtype == "check") {
@@ -371,12 +361,8 @@ function ALTEditFormMob() {
                             <h4> A qtypeless question appeared in the wild</h4>
                         </div>
                     )
-
                 }
-
             }
-
-
         } else {
             return (
                 <div>
@@ -389,8 +375,6 @@ function ALTEditFormMob() {
 
     const Titler = ({ form }) => {
 
-
-
         return (
             <>
                 <Typography sx={{ ...fontsx, ...titlesx }}>{form.title}</Typography>
@@ -399,21 +383,8 @@ function ALTEditFormMob() {
                 <Divider variant="middle" />
                 <br />
             </>
-
         )
     };
-
-
-
-
-
-
-
-
-
-
-
-
     ////////////////////////scratch/function area/////////////////////////////////////////////////////////////////////
 
     const [pieces, _setPieces] = useState([]);
@@ -439,15 +410,12 @@ function ALTEditFormMob() {
 
     const optionRef = useRef({});
 
-
-
     const [form, _setForm] = useState({});
     const formRef = useRef(form);
     const setForm = (d) => {
         _setForm(d);
         formRef.current = d;
     }
-
 
     const [editing, _setEditing] = useState('');
     const editRef = useRef(editing);
@@ -459,13 +427,11 @@ function ALTEditFormMob() {
     const EditingRender = ({ piece }) => {
 
         setAPiece(piece)
-
         const handleChange = (e) => {
             let P = pieceRef.current;
             P.props = P.props.filter(pr => pr.key != e.target.name);
             P.props.push({ key: e.target.name, value: e.target.value });
             setAPiece(P);
-
         };
 
         const handleUnclick = (e) => {
@@ -795,7 +761,7 @@ function ALTEditFormMob() {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClick}
                 >
-                    <AddBoxTwoToneIcon sx={plussx} color="primary" fontSize={"medium"} />
+                    <AddCircleIcon sx={plussx} color="primary" fontSize={"large"} />
                     
                 </Box>
                 <Menu
@@ -1011,21 +977,13 @@ function ALTEditFormMob() {
             return (
                 <Box>
 
-
-            
+                {/* rightbutton */}
                 <div className="mainmenu">
                     <Rightbutton/>
                 </div>
                 
-
-                
-
-
                 <Card sx={formsx}>
                     
-                    
-
-
                     <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
                     <Editor pieces={pieces} />
                 </Card>

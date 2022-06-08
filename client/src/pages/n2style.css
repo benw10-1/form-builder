@@ -21,10 +21,6 @@ html{
     height: 100%;
 }
 
-.MuiPopoverPaper-root {
-    backgound-color: red;
-}
-
 .rightButtons{
     padding: 63px 31px;
     overflow: auto;
@@ -40,14 +36,4 @@ html{
     top: 2%;
     right: 3%;
     z-index: 2;
-}
-
-.menu-shifter {
-    top: 100%;
-}
-
-@media screen and (min-width: 320px) {
-    .mainmenu {
-        /* right: 4%; */
-    }
 }
