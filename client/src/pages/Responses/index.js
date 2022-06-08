@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from "@mui/x-data-grid"
 import { queries, dayTime, Auth } from '../../utils'
 import { useParams } from 'react-router-dom';
-import {
-    Box,
-    Skeleton,
-    Paper,
-    Container,
-    Typography,
-    Divider,
-    Button,
-    Popover,
-} from "@mui/material"
-import Signout from '../Signout';
+import Box from "@mui/material/Box"
+import Skeleton from "@mui/material/Skeleton"
+import Paper from "@mui/material/Paper"
+import Container from "@mui/material/Container"
+import Typography from "@mui/material/Typography"
+import Divider from "@mui/material/Divider"
+import Button from "@mui/material/Button"
+import Popover from "@mui/material/Popover"
+import Signout from '../Signout'
+import { DataGrid } from "@mui/x-data-grid/DataGrid"
 
 function parseResponseData(responses, pieces) {
     let columns = [{
@@ -91,20 +89,31 @@ function ResponseView({ }) {
     }, [])
 
     const contsx = {
-        width: "800px",
+        width: {
+            xs: "100%",
+            md: "800px"
+        },
         height: "calc(100% - 100px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: "60px",
+        padding: {
+            xs: "30px 0",
+            md: "60px"
+        },
         flexShrink: 1,
     }
 
     const formContainersx = {
-        width: "100%",
+        width: {
+            xs: "90%",
+            md: "100%"
+        },
         height: "100%",
         // overflow: "auto",
         marginTop: "36px",
+        display: "flex",
+        justifyContent: "center",
         // padding: "0 0 60px 0"
     }
 
@@ -119,9 +128,16 @@ function ResponseView({ }) {
         flexShrink: 2,
     }
     const sidebutssx = {
-        width: "200px",
+        width: {
+            xs: "100%",
+            md: "200px"
+        },
         display: "flex",
         flexDirection: "column",
+        justifyContent: {
+            xs: "center",
+            md: "start"
+        },
         alignItems: "center",
         padding: "0 30px",
     }
@@ -131,12 +147,13 @@ function ResponseView({ }) {
     }
 
     const handleCellClick = (params, event) => {
+        if (params.formattedValue === '') return
         select(event, params.formattedValue)
     }
     return (
         <React.Fragment>
             <Signout />
-            <Container disableGutters={true} maxWidth={false} sx={{ display: "flex", justifyContent: "center", paddingTop: "80px" }}>
+            <Container disableGutters={true} maxWidth={true} sx={{ display: "flex", justifyContent: "center", paddingTop: { xs: 0, md: "80px" }, flexDirection: { xs: "column", md: "row" } }}>
                 <Box sx={sidesx}>
                     <Typography variant="h4" sx={{ fontSize: "20px", fontWeight: 500, marginBottom: "34px" }}>
                         {(() => { return dayTime() + " " + (Auth.getProfile()?.name ?? "User") })()}
@@ -147,10 +164,10 @@ function ResponseView({ }) {
                 </Box>
                 <Paper sx={contsx}>
                     <Box sx={titlesx}>
-                        <Typography variant="h4" marginBottom={"6px"} >
+                        <Typography variant="h4" marginBottom={"6px"} sx={{ textAlign: { xs: "center", md: "start" } }} >
                             {form.title ?? "Form"}
                         </Typography>
-                        {true ? <Typography variant="body1">{form.description ?? "Some description"}</Typography> : null}
+                        {true ? <Typography variant="body1" sx={{ textAlign: { xs: "center", md: "start" } }} >{form.description ?? "Some description"}</Typography> : null}
                     </Box>
                     <Divider flexItem={true} />
                     <Box sx={formContainersx}>
@@ -191,11 +208,11 @@ function ResponseView({ }) {
                                 onClose={close}
                                 anchorOrigin={{
                                     vertical: 'top',
-                                    horizontal: 'center',
+                                    horizontal: 'left',
                                 }}
                                 transformOrigin={{
                                     vertical: 'bottom',
-                                    horizontal: 'center',
+                                    horizontal: 'left',
                                 }}
                                 anchorEl={anchorEl}
                             >
@@ -207,7 +224,7 @@ function ResponseView({ }) {
                 <Box sx={sidebutssx}>
                     <Button variant="contained" color="primary" onClick={() => {
                         window.location.assign(`/dashboard`)
-                    }} sx={{ ...buttonsx, margin: "100px 0 24px 0" }}>Back to Dashboard</Button>
+                    }} sx={{ ...buttonsx, margin: { md: "100px 0 24px 0", xs: "50px 0 24px 0"} }}>Back to Dashboard</Button>
                     {/* <Divider flexItem={true}  />
                 <Button variant="outlined" color="secondary" disabled={!!form.endpoint} onClick={() => {
                     if (form.endpoint) {

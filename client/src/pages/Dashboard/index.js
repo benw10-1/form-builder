@@ -1,34 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
 import { queries, mutations, Auth, dayTime } from "../../utils";
-import {
-    Container,
-    CssBaseline,
-    Paper,
-    Typography,
-    Box,
-    Link,
-    Avatar,
-    Skeleton,
-    Modal,
-    TextField,
-    Button,
-    Divider,
-    Collapse,
-} from "@mui/material";
+
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import Skeleton from "@mui/material/Skeleton";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 
 import AddIcon from '@mui/icons-material/Add';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Stack from '@mui/material/Stack';
 
 import Signout from "../Signout";
 import moment from "moment";
 import "./Dashboard.css"
 
 import Popover from '@mui/material/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 //send to small device touchscreen version if screen less than minW wide or they are using touchscreen
-const minW = 1400;
+const minW = 900;
 let touch = { a: false };
 function touchDetect(t) { t.a = true; }
 window.addEventListener('touchstart', () => { touchDetect(touch) });
@@ -40,6 +35,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
         console.log("close", openPop)
         setOpenPop(false);
     }
+    const [publ, setPubl] = useState(published)
     const openRef = useRef(open);
     const copyRef = useRef(false);
 
@@ -133,7 +129,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
                 <Typography className="created" variant="body1" sx={{ fontSize: "14px", whiteSpace: "nowrap" }} h={"20px"}>
                     {"Created " + moment(Number(createdAt)).format("LL")}
                 </Typography>
-                {published ? (
+                {publ ? (
                     <Typography onClick={collapse} sx={{ ...hoversx, fontSize: "14px", color: "#4CAF50", textDecoration: "underline", userSelect: "none" }}>
                         Published
                     </Typography>
@@ -195,7 +191,10 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
                 <Box sx={{ height: "62px", display: "grid", placeItems: "center" }}>
                     <Box sx={{ width: "240px", display: "flex", justifyContent: "space-between" }}>
-                        <Button variant="outlined" onClick={editclick} disabled={published}>EDIT</Button>
+                        {publ ? <Button variant="outlined" onClick={async () => {
+                            let obj = await mutations.setPublished(_id, false); 
+                            if (obj.__status__ !== "error") setPubl(false)
+                        }}>UNPUBLISH</Button> : <Button variant="outlined" onClick={editclick}>EDIT</Button>}
                         <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
                     </Box>
                 </Box>
@@ -325,8 +324,7 @@ function Dashboard() {
         }
         const papersx = {
             width: "100%",
-            minHeight: "100%",
-            maxHeight: "100vh",
+            height: "100%",
             overflow: "auto",
             borderRadius: "0",
             // paddingBottom: "300px",
@@ -338,15 +336,12 @@ function Dashboard() {
             },
             maxWidth: "320px",
 
-            maxHeight: {
-                xs: "40%",
-            },
+            height: "fit-content",
             width: {
                 xs: "100%",
                 sm: "275",
                 md: "275px",
             },
-            height: "100%",
             display: "block",
             position: "relative",
             margin: {
@@ -356,9 +351,10 @@ function Dashboard() {
         }
         const boxsx2 = {
             padding: {
-                xs: "64px 0 0 0",
-                md: "128px 0 0 64px",
+                xs: "0",
+                md: "0 0 0 64px",
             },
+            margin: { md: "128px 0 0 0", xs: "64px 0 0 0" },
             display: {
                 xs: "flex",
             },
@@ -400,13 +396,13 @@ function Dashboard() {
                         <Button width={"42px"} variant={"contained"} onClick={addForm} sx={{ margin: "25px 0 0 0" }} >Create Form</Button>
                     </Box>
                 </Modal>
-                <Signout />
+                <Signout sx={{ right: { xs: "40px" } }} />
 
                 {/* Dashboard Sidebar */}
                 <Container maxWidth={false} disableGutters={true} >
                     <div className="dash-positioning">
                         <Box sx={boxsx}>
-                            <Typography variant="h6" height={55} sx={fontsx}>
+                            <Typography variant="h6" sx={fontsx}>
                                 {(() => { return dayTime() + " " + Auth.getProfile()?.name ?? "User" })()}
                                 <br />
                             </Typography>
@@ -414,7 +410,7 @@ function Dashboard() {
                                 {'My Forms'}
                                 <br />
                             </Typography>
-                            <Typography variant="body1" width={216} height={84} sx={fontsx}>
+                            <Typography variant="body1" width={216} sx={fontsx}>
                                 {'Create a new form by clicking the plus sign on the dashboard.'}
                             </Typography>
                         </Box>

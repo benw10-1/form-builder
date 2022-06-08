@@ -1,33 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
-import { queries, mutations, Auth, parseProps, dayTime } from "../utils"
+import { queries, mutations, Auth, parseProps } from "../utils"
 import { useParams } from "react-router-dom"
 
 import * as uuid from "uuid";
 
-import {
-    Fab,
-    Container,
-    CssBaseline,
-    Typography,
-    Box,
-    Link,
-    Avatar,
-    Skeleton,
-    Modal,
-    TextField,
-    Divider,
-    Card,
-
-
-} from "@mui/material";
-
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AddIcon from '@mui/icons-material/Add';
-import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
 import EditIcon from '@mui/icons-material/Edit';
-import TitleRounded from '@mui/icons-material/TitleRounded';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FormGroup from '@mui/material/FormGroup';
@@ -40,9 +26,8 @@ import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
-import Signout from "./Signout";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import "./n2style.css"
 
 function ALTEditFormMob() {
@@ -50,19 +35,18 @@ function ALTEditFormMob() {
     const hurl = "http://localhost:3000/";
 
     const buttonscontsx = {
-        width: "100vw"
+        width: "100%"
     }
     const buttonscont2sx = {
-        width: "100vw",
+        width: "60%",
         display:"flex",
         justifyContent: "center",
+        margin: "auto",
     }
-
-    
 
     const rightbuttonsx = {
         position: "fixed",
-        width:"20vh",
+        width: "20vh",
         top: "10vh",
         left: "50vh",
     }
@@ -91,7 +75,7 @@ function ALTEditFormMob() {
         right: "0px",
         fontSize: "30px",
         opacity: ".85",
-       
+
     }
 
     const iconboxsx = {
@@ -101,7 +85,7 @@ function ALTEditFormMob() {
         width: "100%",
         height: "100%",
         opacity: "1.0",
-       
+
     }
 
     const checkiconsx = {
@@ -110,7 +94,7 @@ function ALTEditFormMob() {
         right: "0px",
         fontSize: "30px",
         opacity: ".85",
-        
+
 
     }
     const deliconsx = {
@@ -119,7 +103,7 @@ function ALTEditFormMob() {
         right: "40px",
         fontSize: "30px",
         opacity: ".85",
-        
+
 
     }
     const checkiconboxsx = {
@@ -129,7 +113,7 @@ function ALTEditFormMob() {
         width: "100%",
         height: "100%",
         opacity: ".85",
-        
+
 
     }
 
@@ -166,25 +150,19 @@ function ALTEditFormMob() {
     const formsx = {
         /* Auto layout */
 
-        padding: "10vh 10vh 10vh 10vh",
+        padding: {
+            xs: "10vh 5vh",
+            md: "10vh 10vh",
+        },
         overflow: "auto",
 
         position: "relative",
         width: "100vw",
         minHeight: "100vh",
         
-
         /* Light/Background/Paper */
         background: "#FFFFFF",
-
-       
     }
-
-
-
-
-
-
     
     const toolbarsx = {
 
@@ -202,7 +180,7 @@ function ALTEditFormMob() {
         marginRight: "15px",
         marginLeft: "15px",
         opacity: ".85",
-        
+
     }
 
     const fontsx = {
@@ -300,7 +278,7 @@ function ALTEditFormMob() {
                         return (
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography><br />
-                                <TextField sx={{ width: `${parsed.inWidth}%` }}
+                                <TextField sx={{ width: `70%` }}
                                     id="outlined-multiline-static"
                                     multiline
                                     rows={r}
@@ -313,11 +291,10 @@ function ALTEditFormMob() {
                         return (
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
-                                <TextField id="standard-basic" sx={{ width: `${parsed.inWidth}%` }} label={parsed.qsubtext} variant="standard" />
+                                <TextField id="standard-basic" sx={{ width: `70%` }} label={parsed.qsubtext} variant="standard" />
 
                             </>
                         )
-
                     }
 
                 } else if (parsed.qtype == "check") {
@@ -371,12 +348,8 @@ function ALTEditFormMob() {
                             <h4> A qtypeless question appeared in the wild</h4>
                         </div>
                     )
-
                 }
-
             }
-
-
         } else {
             return (
                 <div>
@@ -389,8 +362,6 @@ function ALTEditFormMob() {
 
     const Titler = ({ form }) => {
 
-
-
         return (
             <>
                 <Typography sx={{ ...fontsx, ...titlesx }}>{form.title}</Typography>
@@ -399,21 +370,8 @@ function ALTEditFormMob() {
                 <Divider variant="middle" />
                 <br />
             </>
-
         )
     };
-
-
-
-
-
-
-
-
-
-
-
-
     ////////////////////////scratch/function area/////////////////////////////////////////////////////////////////////
 
     const [pieces, _setPieces] = useState([]);
@@ -439,15 +397,12 @@ function ALTEditFormMob() {
 
     const optionRef = useRef({});
 
-
-
     const [form, _setForm] = useState({});
     const formRef = useRef(form);
     const setForm = (d) => {
         _setForm(d);
         formRef.current = d;
     }
-
 
     const [editing, _setEditing] = useState('');
     const editRef = useRef(editing);
@@ -459,13 +414,11 @@ function ALTEditFormMob() {
     const EditingRender = ({ piece }) => {
 
         setAPiece(piece)
-
         const handleChange = (e) => {
             let P = pieceRef.current;
             P.props = P.props.filter(pr => pr.key != e.target.name);
             P.props.push({ key: e.target.name, value: e.target.value });
             setAPiece(P);
-
         };
 
         const handleUnclick = (e) => {
@@ -559,7 +512,7 @@ function ALTEditFormMob() {
                                 defaultValue={parseProps(pieceRef.current.props).qtext}
                                 onChange={handleChange}
                             /><br />
-                            <TextField
+                            {/* <TextField
                                 label="Question Label"
                                 name="qsubtext"
                                 variant="standard"
@@ -593,10 +546,10 @@ function ALTEditFormMob() {
                                     onChange={handleChange}
                                     onChangeCommitted={handleUnclick}
                                 />
-                            </Box>
+                            </Box> */}
 
 
-                            <TextField sx={{ width: `${parsed.inWidth}%` }}
+                            <TextField sx={{ width: `70%` }}
                                 id="outlined-multiline-static"
                                 multiline
                                 rows={r}
@@ -623,7 +576,7 @@ function ALTEditFormMob() {
                                 defaultValue={parseProps(pieceRef.current.props).qsubtext}
                                 onChange={handleChange}
                             /><br />
-                            <Box sx={sliderboxsx}>
+                            {/* <Box sx={sliderboxsx}>
                                 <br />
                                 <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Text Entry Width</Typography>
                                 <Slider
@@ -636,9 +589,9 @@ function ALTEditFormMob() {
                                     onChange={handleChange}
                                     onChangeCommitted={handleUnclick}
                                 />
-                            </Box>
+                            </Box> */}
 
-                            <TextField id="standard-basic" sx={{ width: `${parsed.inWidth}%` }} label={parseProps(pieceRef.current.props).qsubtext} variant="standard" />
+                            <TextField id="standard-basic" sx={{ width: `70%` }} label={parseProps(pieceRef.current.props).qsubtext} variant="standard" />
 
                         </>
                     )
@@ -731,14 +684,11 @@ function ALTEditFormMob() {
                             onChange={handleChange}
                         /><br />
 
-
                         <FormControl>
                             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
                                 {renor}
                             </RadioGroup><br />
                         </FormControl><br />
-
-
 
                         <TextField
                             label="Add option"
@@ -749,10 +699,8 @@ function ALTEditFormMob() {
                         />
                         <CheckCircleIcon sx={freeiconsx} onClick={() => { submitOption() }} />
 
-
                     </>
                 )
-
 
             } else {
                 return (
@@ -795,7 +743,7 @@ function ALTEditFormMob() {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClick}
                 >
-                    <AddBoxTwoToneIcon sx={plussx} color="primary" fontSize={"medium"} />
+                    <AddCircleIcon sx={plussx} color="primary" fontSize={"large"} />
                     
                 </Box>
                 <Menu
@@ -806,6 +754,8 @@ function ALTEditFormMob() {
                     MenuListProps={{
                         'aria-labelledby': 'basic-button',
                     }}
+                    autoFocus={false}
+                    disableAutoFocusItem={true}
                 >
                     <MenuItem onClick={() => {
                         handleClose();
@@ -847,31 +797,73 @@ function ALTEditFormMob() {
 
     ///////////////////////////right side buttons stuff////////////////////////
 
-    const Rightbutton = ({})=> {
+    const Rightbutton = ({ }) => {
+        const menusx = {
+            "&:hover": {
+                backgroundColor: "transparent"
+            },
+            "&.Mui-focusVisible": {
+                backgroundColor: "transparent"
+            },
+            "& .MuiMenuItem-root": {
+                "&.Mui-focusVisible": {
+                    backgroundColor: "transparent"
+                },
+                "&:hover": {
+                    backgroundColor: "transparent"
+                },
+            },
+        }
+
         return (
 
             <PopupState variant="popover" popupId="demo-popup-menu">
-      {(popupState) => (
-        <React.Fragment>
-          
-          <MenuTwoToneIcon {...bindTrigger(popupState)} sx={plussx} fontSize={"medium"} color="primary"/>
-          
-          <Menu {...bindMenu(popupState)}>
-            <MenuItem onClick={popupState.open}>
-                <Box sx={buttonscontsx}>
-                   <ButtonsTwo conf={confirm} key={"buttons2"} /> 
-                   <ButtonsOne form={form} key={"buttons1"} />
-                </Box>
-                
-            </MenuItem>
-            
-            <MenuItem onClick={popupState.close} >
-                <Box sx={buttonscont2sx}>CLOSE MENU</Box>
-            </MenuItem>
-          </Menu>
-        </React.Fragment>
-      )}
-    </PopupState>
+                {(popupState) => (
+                    <React.Fragment>
+
+                        <MenuTwoToneIcon
+                            {...bindTrigger(popupState)}
+                            fontSize={"large"}
+                            sx={{
+                                ...plussx,
+                                width: "auto",
+                                color: "#FFF"
+                            }}
+                        />
+
+                        <Menu
+                            {...bindMenu(popupState)}
+                            elevation={0}
+                            disableAutoFocusItem={true}
+                            autoFocus={false}
+                            sx={{
+                                top: "25px", 
+                                borderRadius: "4px",
+                                minWidth: {
+                                    xs: "320px" 
+                                }, 
+                                "& .MuiMenu-root": {
+                                    "& :hover": {
+                                        backgroundColor: "transparent"
+                                    }
+                                },
+                            }}
+                        >
+                            <MenuItem onClick={() => {return}} sx={menusx}>
+                                <Box sx={buttonscontsx}>
+                                    <ButtonsTwo conf={confirm} key={"buttons2"} />
+                                    <ButtonsOne form={form} key={"buttons1"} />
+                                </Box>
+
+                            </MenuItem>
+
+                            <MenuItem onClick={popupState.close} sx={menusx}>
+                                <Box sx={buttonscont2sx}>CLOSE MENU</Box>
+                            </MenuItem>
+                        </Menu>
+                    </React.Fragment>
+                )}
+            </PopupState>
         )
 
         /*
@@ -925,7 +917,8 @@ function ALTEditFormMob() {
     async function saveform(xx) {
         // console.log(xx)
         let zz = removeIds(xx);
-        const ids = (await mutations.updateFormPieces(id, zz))?.result;
+        const ids = (await mutations.updateFormPieces(String(id), zz))?.result;
+        if (!ids) return
         setPieces(xx.map((x, i) => {
             x._id = ids[i];
             return x;
@@ -982,10 +975,10 @@ function ALTEditFormMob() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={clearform} color="error">CONFIRM CLEAR </Button>
-                    <Box sx={{display:"flex"}}>
-                       <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography> 
+                    <Box sx={{ display: "flex" }}>
+                        <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography>
                     </Box>
-                    
+
                     <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
             )
@@ -994,10 +987,10 @@ function ALTEditFormMob() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={deleteform} color="error">CONFIRM DELETE </Button>
-                    <Box sx={{display:"flex"}}>
+                    <Box sx={{ display: "flex" }}>
                         <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
                     </Box>
-                    
+
                     <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
             )
@@ -1010,23 +1003,27 @@ function ALTEditFormMob() {
         if (conf.clear == "no" & conf.delete == "no") {
             return (
                 <Box>
-
-
-            
+                    
+                {/* rightbutton */}
                 <div className="mainmenu">
-                    <Rightbutton/>
+                    <Button
+                        variant="contained" 
+                        color="primary" 
+                        sx={{ 
+                            minWidth: "64px", 
+                            height: "50px"
+                        }}>
+                        <Rightbutton />
+                    </Button>
                 </div>
-                
-
-                
-
 
                 <Card sx={formsx}>
                     
-                    
-
-
-                    <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
+                    <Titler form={form}
+                    sx={{
+                        borderLeft: "5px solid white",
+                        fontSize: { sm: "2rem" }
+                    }}/>
                     <Editor pieces={pieces} />
                 </Card>
             </Box>
@@ -1035,8 +1032,8 @@ function ALTEditFormMob() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={clearform} color="error">CONFIRM CLEAR </Button>
-                    <Box sx={{display:"flex"}}>
-                       <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography> 
+                    <Box sx={{ display: "flex" }}>
+                        <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography>
                     </Box>
                     <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
                 </Stack>
@@ -1046,7 +1043,7 @@ function ALTEditFormMob() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={deleteform} color="error">CONFIRM DELETE </Button>
-                    <Box sx={{display:"flex"}}>
+                    <Box sx={{ display: "flex" }}>
                         <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
                     </Box>
                     <Button variant="outlined" onClick={cancel} >CANCEL</Button><br /><br />
@@ -1070,7 +1067,7 @@ function ALTEditFormMob() {
                     <Button variant="contained" onClick={() => { saveform(pieceArrRef.current) }}>SAVE FORM </Button>
                     <Button variant="outlined" onClick={() => { gotodash(pieceArrRef.current) }}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={publishform}>PUBLISH</Button>
-                    <Box sx={{display:"flex"}}>
+                    <Box sx={{ display: "flex" }}>
                         <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form is currently not available to respondents</Typography>
 
                     </Box>
@@ -1086,13 +1083,13 @@ function ALTEditFormMob() {
                     <Button variant="contained" onClick={() => { saveform(pieceArrRef.current) }}>SAVE FORM </Button>
                     <Button variant="outlined" onClick={() => { gotodash(pieceArrRef.current) }}>BACK TO MY FORMS </Button>
                     <Button variant="outlined" onClick={unpublishform}>UNPUBLISH</Button>
-                    <Box sx={{display:"flex"}}>
+                    <Box sx={{ display: "flex" }}>
                         <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form currently published at:</Typography>
                         <Typography sx={{ ...fontsx, ...normsx, ...gray }}><a href={rlink}>{rlink}</a></Typography>
 
 
                     </Box>
-                    
+
 
                 </Stack>
             )
@@ -1123,7 +1120,7 @@ function ALTEditFormMob() {
                                     <Box sx={checkiconboxsx}>
                                         <DeleteIcon sx={deliconsx} onClick={() => { delPiece(a) }} />
                                         <CheckCircleIcon sx={checkiconsx} onClick={() => { edit('-1') }} />
-                                    </Box><br/>
+                                    </Box><br />
                                     <EditingRender piece={pieces[i]} />
                                 </Box>
                             </Box>
@@ -1144,7 +1141,7 @@ function ALTEditFormMob() {
                                 <Box sx={boxsx}   >
                                     <Box sx={iconboxsx}>
                                         <EditIcon sx={editiconsx} onClick={() => { edit(a) }} />
-                                    </Box><br/>
+                                    </Box><br />
                                     <NormalRender piece={pieces[i]} />
                                 </Box>
                             </Box>
@@ -1160,21 +1157,17 @@ function ALTEditFormMob() {
                 {renP}
                 <br />
                 <Box sx={toolbarsx}>
-                <BasicMenu l={'-1'} />
+                    <BasicMenu l={'-1'} />
                 </Box>
-                
+
             </>
         )
 
 
     }
 
-
-
-
     const { id } = useParams();
     let [loading, setLoading] = useState(true)
-    
 
     useEffect(() => {
 
@@ -1203,7 +1196,7 @@ function ALTEditFormMob() {
         req()
 
 
-       
+
         setEditing('-1');
 
 
@@ -1225,7 +1218,7 @@ function ALTEditFormMob() {
 
 
 
-   
+
     function addPiece(type, loc, qt = "-1") {
 
         const P = { piid: uuid.v4(), _type: type, props: [] };
@@ -1260,7 +1253,7 @@ function ALTEditFormMob() {
         }
 
     }
-    
+
 
 
     function edit(a) {
@@ -1273,33 +1266,15 @@ function ALTEditFormMob() {
     }
 
 
-    
-
-
-
     return (
-        <>  
-            
+        <>
+
             <CssBaseline />
             <XX form={form} pieces={pieces} conf={confirm}/>
             
-
-
-                
-
-            
-
         </>
     )
 }
-
-/*
-<div className="rightButtons">
-                    <ButtonsTwo conf={confirm} key={"buttons2"} />
-                    <ButtonsOne form={form} key={"buttons1"} />
-                </div>
-                */
-
 
 export default ALTEditFormMob;
 

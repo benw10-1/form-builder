@@ -14,6 +14,7 @@
 }
 .login-text {
     min-width: 320px;
+    margin-right: 102px;
 }
 
 .button-block {
@@ -34,21 +35,29 @@
     .login-text h4 {
         font-size: 2.1rem;
     }
-}
-
-@media screen and (max-width: 600px) {
     .login-text {
         margin: 0 0 50px 0px;
     }
+    .login-positioning {
+        flex-direction: column;
+        justify-content: space-around;
+    }
+}
+
+@media screen and (max-width: 600px) {
     .login-text h6 {
         font-size: 120%;
     }
-    
 }
 
-@media screen and (max-width: 420px) {
-    .login-text h6 {
-        font-size: 90%;
+@media screen and (max-width: 415px) {
+    .login-positioning {
+        align-items: unset;
+    }
+    .login-text {
+        margin: 0;
+        padding: 0 .5em;
+        font-size: 80%;
         word-wrap: break-word;
     }
 }

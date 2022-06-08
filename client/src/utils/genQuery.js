@@ -8,7 +8,7 @@ import Auth from "./auth"
  */
  async function genQuery(q, variables) {
     // const url = "/graphql"
-    const url = "http://localhost:3001/graphql"
+    const url = "/graphql"
     // https://graphql.org/learn/serving-over-http/#post-request
     const body = {
         "query": q,
@@ -53,6 +53,9 @@ import Auth from "./auth"
                 }
                 else if (cur.message === "Email already used") {
                     acc.email = "Email already used"
+                }
+                else if (cur.message === "Not logged in") {
+                    Auth.logout()
                 }
                 else {
                     acc.rest.push(cur)
