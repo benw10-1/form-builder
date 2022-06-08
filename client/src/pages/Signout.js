@@ -8,8 +8,8 @@ import React from "react";
 import Link from "@mui/material/Link"
 import Auth from "../utils/auth"
 
-function Signout(){
-    const sx = {
+function Signout({ sx }) {
+    const _sx = {
         position: "absolute",
         right: "54px",
         top: "24px",
@@ -18,11 +18,12 @@ function Signout(){
         fontSize: "12px",
         "&:hover": {
             cursor: "pointer"
-        }
+        },
+        ...sx
     }
 
     return (
-        <Link underline="always" hover={false} width={48} height={20} sx={sx} onClick={Auth.logout}>Sign Out</Link>
+        <Link underline="always" hover={false} width={48} height={20} sx={_sx} onClick={Auth.logout}>Sign Out</Link>
     );
 }
 
