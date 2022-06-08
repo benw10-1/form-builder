@@ -27,7 +27,7 @@ import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import "./n2style.css"
 
 function ALTEditFormMob() {
@@ -35,15 +35,14 @@ function ALTEditFormMob() {
     const hurl = "http://localhost:3000/";
 
     const buttonscontsx = {
-        width: "100vw"
+        width: "100%"
     }
     const buttonscont2sx = {
-        width: "100vw",
-        display: "flex",
+        width: "60%",
+        display:"flex",
         justifyContent: "center",
+        margin: "auto",
     }
-
-
 
     const rightbuttonsx = {
         position: "fixed",
@@ -151,26 +150,20 @@ function ALTEditFormMob() {
     const formsx = {
         /* Auto layout */
 
-        padding: "10vh 10vh 10vh 10vh",
+        padding: {
+            xs: "10vh 5vh",
+            md: "10vh 10vh",
+        },
         overflow: "auto",
 
         position: "relative",
         width: "100vw",
         minHeight: "100vh",
-
-
+        
         /* Light/Background/Paper */
         background: "#FFFFFF",
-
-
     }
-
-
-
-
-
-
-
+    
     const toolbarsx = {
 
         width: "100%",
@@ -302,7 +295,6 @@ function ALTEditFormMob() {
 
                             </>
                         )
-
                     }
 
                 } else if (parsed.qtype == "check") {
@@ -356,12 +348,8 @@ function ALTEditFormMob() {
                             <h4> A qtypeless question appeared in the wild</h4>
                         </div>
                     )
-
                 }
-
             }
-
-
         } else {
             return (
                 <div>
@@ -374,8 +362,6 @@ function ALTEditFormMob() {
 
     const Titler = ({ form }) => {
 
-
-
         return (
             <>
                 <Typography sx={{ ...fontsx, ...titlesx }}>{form.title}</Typography>
@@ -384,21 +370,8 @@ function ALTEditFormMob() {
                 <Divider variant="middle" />
                 <br />
             </>
-
         )
     };
-
-
-
-
-
-
-
-
-
-
-
-
     ////////////////////////scratch/function area/////////////////////////////////////////////////////////////////////
 
     const [pieces, _setPieces] = useState([]);
@@ -424,15 +397,12 @@ function ALTEditFormMob() {
 
     const optionRef = useRef({});
 
-
-
     const [form, _setForm] = useState({});
     const formRef = useRef(form);
     const setForm = (d) => {
         _setForm(d);
         formRef.current = d;
     }
-
 
     const [editing, _setEditing] = useState('');
     const editRef = useRef(editing);
@@ -444,13 +414,11 @@ function ALTEditFormMob() {
     const EditingRender = ({ piece }) => {
 
         setAPiece(piece)
-
         const handleChange = (e) => {
             let P = pieceRef.current;
             P.props = P.props.filter(pr => pr.key != e.target.name);
             P.props.push({ key: e.target.name, value: e.target.value });
             setAPiece(P);
-
         };
 
         const handleUnclick = (e) => {
@@ -716,14 +684,11 @@ function ALTEditFormMob() {
                             onChange={handleChange}
                         /><br />
 
-
                         <FormControl>
                             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
                                 {renor}
                             </RadioGroup><br />
                         </FormControl><br />
-
-
 
                         <TextField
                             label="Add option"
@@ -734,10 +699,8 @@ function ALTEditFormMob() {
                         />
                         <CheckCircleIcon sx={freeiconsx} onClick={() => { submitOption() }} />
 
-
                     </>
                 )
-
 
             } else {
                 return (
@@ -780,8 +743,8 @@ function ALTEditFormMob() {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClick}
                 >
-                    <AddBoxTwoToneIcon sx={plussx} color="primary" fontSize={"medium"} />
-
+                    <AddCircleIcon sx={plussx} color="primary" fontSize={"large"} />
+                    
                 </Box>
                 <Menu
                     id="basic-menu"
@@ -858,13 +821,27 @@ function ALTEditFormMob() {
                 {(popupState) => (
                     <React.Fragment>
 
-                        <MenuTwoToneIcon {...bindTrigger(popupState)} sx={plussx} fontSize={"medium"} color="primary" />
+                        <MenuTwoToneIcon
+                            {...bindTrigger(popupState)}
+                            fontSize={"large"}
+                            sx={{
+                                ...plussx,
+                                width: "auto",
+                                color: "#FFF"
+                            }}
+                        />
 
                         <Menu
                             {...bindMenu(popupState)}
+                            elevation={0}
                             disableAutoFocusItem={true}
                             autoFocus={false}
                             sx={{
+                                top: "25px", 
+                                borderRadius: "4px",
+                                minWidth: {
+                                    xs: "320px" 
+                                }, 
                                 "& .MuiMenu-root": {
                                     "& :hover": {
                                         backgroundColor: "transparent"
@@ -1026,26 +1003,30 @@ function ALTEditFormMob() {
         if (conf.clear == "no" & conf.delete == "no") {
             return (
                 <Box>
-
-
-
-                    <div className="mainmenu">
+                    
+                {/* rightbutton */}
+                <div className="mainmenu">
+                    <Button
+                        variant="contained" 
+                        color="primary" 
+                        sx={{ 
+                            minWidth: "64px", 
+                            height: "50px"
+                        }}>
                         <Rightbutton />
-                    </div>
+                    </Button>
+                </div>
 
-
-
-
-
-                    <Card sx={formsx}>
-
-
-
-
-                        <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
-                        <Editor pieces={pieces} />
-                    </Card>
-                </Box>
+                <Card sx={formsx}>
+                    
+                    <Titler form={form}
+                    sx={{
+                        borderLeft: "5px solid white",
+                        fontSize: { sm: "2rem" }
+                    }}/>
+                    <Editor pieces={pieces} />
+                </Card>
+            </Box>
             )
         } else if (conf.clear == "yes") {
             return (
@@ -1289,33 +1270,15 @@ function ALTEditFormMob() {
     }
 
 
-
-
-
-
     return (
         <>
 
             <CssBaseline />
-            <XX form={form} pieces={pieces} conf={confirm} />
-
-
-
-
-
-
-
+            <XX form={form} pieces={pieces} conf={confirm}/>
+            
         </>
     )
 }
-
-/*
-<div className="rightButtons">
-                    <ButtonsTwo conf={confirm} key={"buttons2"} />
-                    <ButtonsOne form={form} key={"buttons1"} />
-                </div>
-                */
-
 
 export default ALTEditFormMob;
 
