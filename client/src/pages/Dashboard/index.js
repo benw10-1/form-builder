@@ -191,8 +191,8 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
                 <Box sx={{ height: "62px", display: "grid", placeItems: "center" }}>
                     <Box sx={{ width: "240px", display: "flex", justifyContent: "space-between" }}>
-                        {publ ? <Button variant="outlined" onClick={() => {
-                            let obj = mutations.setPublished(_id, false); 
+                        {publ ? <Button variant="outlined" onClick={async () => {
+                            let obj = await mutations.setPublished(_id, false); 
                             if (obj.__status__ !== "error") setPubl(false)
                         }}>UNPUBLISH</Button> : <Button variant="outlined" onClick={editclick}>EDIT</Button>}
                         <Button variant="outlined" onClick={responsesclick} color="success">RESPONSES</Button>
