@@ -177,12 +177,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
                             </Box>
                         </Popover>
                     </Box>
-                    <input
-                        style={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%" }}
-                        type="text"
-                        value={Rlink}
-                        disabled="true"
-                    />
+                    <Box sx={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%", width: "100%"}}>{Rlink}</Box>
                 </Box>
             </Box>
 
