@@ -69,6 +69,7 @@ function LoginSignup({ switchState }) {
     let [loginVal, setLoginVal] = useState("")
     let [emailVal, setEmailVal] = useState("")
     let [passVal, setPassVal] = useState("")
+    let [rerender, setRerender] = useState(false)
 
     // fake loading sequence
     const other = () => {
@@ -92,6 +93,9 @@ function LoginSignup({ switchState }) {
             if (loggedIn) window.location.replace(window.location.origin + "/dashboard")
             else setLoading(false)
         }
+        window.addEventListener("resize", () => {
+            setRerender(Math.random() * 10) // force rerender
+        })
         req()
     }, [])
 
@@ -142,13 +146,14 @@ function LoginSignup({ switchState }) {
     // main render logic
     const pageRender = () => {
         const sxcont = {
-            width: "405px",
             height: "370px",
+            width: "405px",
             padding: {
                 xs: "15px 30px",
             },
             position: "relative"
         }
+        if (window.innerWidth < 415) sxcont.width = "100%"
         const sxcontent = {
             height: "100%",
             display: "flex",
@@ -159,7 +164,7 @@ function LoginSignup({ switchState }) {
         const body = (
             <React.Fragment>
                 <CssBaseline />
-                <Container maxWidth={false}>
+                <Container maxWidth={true} disableGutters >
                     <div className="login-positioning">
                         {(() => {
                             if (loading) return (
@@ -174,11 +179,11 @@ function LoginSignup({ switchState }) {
                             return (
                                 <React.Fragment>
                                     <div className="login-text">
-                                        <Typography color="primary" variant="h4" width={_switch ? 172 : 252} height={42} sx={{ fontFamily: "Roboto", fontStyle: "normal", marginRight: "102px" }}>
+                                        <Typography color="primary" variant="h4" height={42} sx={{ fontFamily: "Roboto", fontStyle: "normal", }}>
                                             {_switch ? "Get started" : "Build your forms"}
                                             <br />
                                         </Typography>
-                                        <Typography variant="subtitle1" width={371} height={28} sx={{ fontFamily: "Roboto", fontStyle: "normal" }}>
+                                        <Typography variant="subtitle1" height={28} sx={{ fontFamily: "Roboto", fontStyle: "normal" }}>
                                             {'Fast & easily customizable forms for any situation'}
                                         </Typography>
                                     </div>

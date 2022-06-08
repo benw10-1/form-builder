@@ -20,6 +20,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
 import "./nstyle.css"
+import Paper from "@mui/material/Paper";
 
 
 function Success({ err }) {
@@ -61,14 +62,13 @@ function Respond() {
 
     const formsx = {
         /* Auto layout */
-
-        padding: "63px 61px 63px 61px",
-        overflow: "auto",
+        display: "block",
+        padding: "30px 40px",
         width: "800px",
         minHeight: "100vh",
         /* Light/Background/Paper */
         background: "#FFFFFF",
-
+        overflow: "unset",
         /* Elevation/1 */
         boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
         borderRadius: "4px"
@@ -193,7 +193,7 @@ function Respond() {
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography><br />
                                 <TextField
-                                    sx={{ width: `${parsed.inWidth}%` }}
+                                    sx={{ width: `70%` }}
                                     multiline
                                     rows={r}
                                     name={a}
@@ -207,7 +207,7 @@ function Respond() {
                             <>
                                 <Typography sx={{ ...fontsx, ...normsx }}>{parsed.qtext}</Typography>
                                 <TextField
-                                    sx={{ width: `${parsed.inWidth}%` }}
+                                    sx={{ width: `70%` }}
                                     label={parsed.qsubtext}
                                     variant="standard"
                                     name={a}
@@ -434,19 +434,18 @@ function Respond() {
 
     return (
         <>
-            <CssBaseline />
-
-            <Container disableGutters maxWidth={true} sx={{ display: "flex", justifyContent: "center" }}>
-                <Card sx={formsx}>
-                    <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
-                    <Renderer pieces={pieces} />
-                    <br />
-                    <SubButton disabled={disabled} />
-                    <br />
-                    <br />
-                </Card>
+            <Container disableGutters maxWidth={true} sx={{ display: "flex", justifyContent: "center", overflow: "auto", height: "unset" }}>
+                <Paper sx={formsx}>
+                    <Box sx={{ width: "100%" }}>
+                        <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
+                        <Renderer pieces={pieces} />
+                        <br />
+                        <SubButton disabled={disabled} />
+                        <br />
+                        <br />
+                    </Box>
+                </Paper>
             </Container>
-
         </>
     )
 }

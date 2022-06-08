@@ -66,6 +66,9 @@ THEN I am taken back to the log in landing page
 ![](./assets/form-builder-ref-6.png)
 ![](./assets/form-builder-ref-7.png)
 
+## Wireframes & Enhancements
+View our [wireframes](https://www.figma.com/file/sMycCXFriNgNHqmfDmzjTI/project3_share?node-id=0%3A1) to understand our flows and enhancements.
+
 
 # Created Using: 
 <ul><li>React.js</li>
