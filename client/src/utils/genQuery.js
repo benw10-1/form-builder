@@ -54,6 +54,12 @@ import Auth from "./auth"
                 else if (cur.message === "Email already used") {
                     acc.email = "Email already used"
                 }
+                else if (cur.message === "Not logged in") {
+                    Auth.logout()
+                }
+                else if (cur.message === "Not creator") {
+                    window.location.assign("/dashboard")
+                }
                 else {
                     acc.rest.push(cur)
                 }

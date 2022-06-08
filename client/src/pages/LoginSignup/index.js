@@ -34,7 +34,7 @@ function Login({ handlers: { login: [loginVal, handleLoginChange], pass: [passVa
 // destructure props
 function Signup({ handlers: { login: [loginVal, handleLoginChange], email: [emailVal, handleEmailChange], pass: [passVal, handlePassChange], handleSubmit, other }, errors = {} }) {
     return (
-        <React.Fragment>
+        <React.Fragment style={{ minWidth: "320px" }}>
             <Box m={"10px 0 20px 0"}>
                 <TextField id="input-user" label="Username" variant="standard" onChange={handleLoginChange} value={loginVal} fullWidth={true} error={errors.user} helperText={errors.user} />
             </Box>
@@ -164,7 +164,7 @@ function LoginSignup({ switchState }) {
         const body = (
             <React.Fragment>
                 <CssBaseline />
-                <Container maxWidth={true} disableGutters >
+                <Container maxWidth={true} minWidth={320} disableGutters >
                     <div className="login-positioning">
                         {(() => {
                             if (loading) return (
@@ -179,15 +179,15 @@ function LoginSignup({ switchState }) {
                             return (
                                 <React.Fragment>
                                     <div className="login-text">
-                                        <Typography color="primary" variant="h4" height={42} sx={{ fontFamily: "Roboto", fontStyle: "normal", }}>
+                                        <Typography color="primary" variant="h4" width={_switch ? 172 : 252} height={42} sx={{ fontFamily: "Roboto", fontStyle: "normal", marginRight: { md: "70px" } }}>
                                             {_switch ? "Get started" : "Build your forms"}
                                             <br />
                                         </Typography>
-                                        <Typography variant="subtitle1" height={28} sx={{ fontFamily: "Roboto", fontStyle: "normal" }}>
+                                        <Typography variant="subtitle1" width={371} height={28} sx={{ fontFamily: "Roboto", fontStyle: "normal", marginLeft: "0px", wordWarp: { xs: "normal" } }}>
                                             {'Fast & easily customizable forms for any situation'}
                                         </Typography>
                                     </div>
-                                    <Card sx={{ ...sxcont, }} component="form" autoComplete="off" onKeyDown={keyHandle}>
+                                    <Card sx={{...sxcont, padding: { xs: "15px 40px", md: "15px 60px" }}} component="form" autoComplete="off" onKeyDown={keyHandle}>
                                         <CardContent sx={sxcontent}>
                                             {_switch ?
                                                 <Signup

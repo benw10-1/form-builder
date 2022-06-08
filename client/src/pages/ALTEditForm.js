@@ -21,7 +21,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -33,27 +32,24 @@ import Signout from "./Signout";
 
 
 function ALTEditForm() {
-
-    const hurl = "http://localhost:3000/";
-
-    const leftDisplaysx ={
+    const leftDisplaysx = {
         position: "fixed",
-        top:"0",
-        left:"0",
+        top: "0",
+        left: "0",
         padding: "14vw 2vw 2vw 2vw",
         width: "20vw",
         height: "100%",
         display: "block",
-        zIndex:"0",
-        
+        zIndex: "0",
+
     }
 
     const formsx = {
         /* Auto layout */
-        zIndex:"2",
+        zIndex: "2",
         position: "absolute",
-        top:"0",
-        left:"20vw",
+        top: "0",
+        left: "20vw",
 
         padding: "60px",
         overflow: "auto",
@@ -61,7 +57,7 @@ function ALTEditForm() {
         //position: "absolute",
         width: "60vw",
         minHeight: "100vh",
-        
+
         //top: "0px",
 
         /* Light/Background/Paper */
@@ -75,20 +71,20 @@ function ALTEditForm() {
 
     const rightButtonssx = {
         position: "fixed",
-        top:"0",
-        right:"0",
-    
+        top: "0",
+        right: "0",
+
         padding: "16vh 2vw 2vw 2vw",
-            
+
         overflow: "auto",
-        
+
         //position: "fixed",
         width: "20vw",
         height: "100%",
-        zIndex:"0",
+        zIndex: "0",
 
 
-        
+
     }
 
 
@@ -99,9 +95,6 @@ function ALTEditForm() {
     const pink = {
         color: "rgba(200,0,0,0.5)"
 
-    }
-    const sliderboxsx = {
-        width: "30%"
     }
 
     const deloptsx = {
@@ -202,7 +195,7 @@ function ALTEditForm() {
 
     }
 
-    
+
 
 
 
@@ -263,27 +256,9 @@ function ALTEditForm() {
 
     }
 
-    const subsx = {
-        fontSize: "12px",
-        lineHeight: "166%",
-        letterSpacing: "0.4px"
-
-    }
-
-    const centered = {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-    }
     const plussx = {
         width: "20px"
     }
-    const hoversx = {
-        "&:hover": { cursor: "pointer" }
-    }
-
-
-
 
     const NormalRender = ({ piece }) => {
 
@@ -600,35 +575,6 @@ function ALTEditForm() {
                                 onChange={handleChange}
                                 sx={{ marginBottom: "1rem" }}
                             /><br />
-                            {/* <Box sx={sliderboxsx}>
-                                <br />
-                                <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Text Entry Width</Typography>
-                                <Slider
-                                    size="small"
-                                    defaultValue={parsed.inWidth}
-                                    aria-label="Small"
-                                    valueLabelDisplay="auto"
-                                    name="inWidth"
-                                    min={10}
-                                    onChange={handleChange}
-                                    onChangeCommitted={handleUnclick}
-                                />
-                            </Box> */}
-                            {/* <Box sx={sliderboxsx}>
-                                <br />
-                                <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Text Entry Length</Typography>
-                                <Slider
-                                    size="small"
-                                    defaultValue={parsed.inLength}
-                                    aria-label="Small"
-                                    valueLabelDisplay="auto"
-                                    name="inLength"
-                                    min={2}
-                                    onChange={handleChange}
-                                    onChangeCommitted={handleUnclick}
-                                />
-                            </Box> */}
-
 
                             <TextField sx={{ width: `70%` }}
                                 id="outlined-multiline-static"
@@ -657,20 +603,6 @@ function ALTEditForm() {
                                 defaultValue={parseProps(pieceRef.current.props).qsubtext}
                                 onChange={handleChange}
                             /><br />
-                            {/* <Box sx={sliderboxsx}>
-                                <br />
-                                <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Text Entry Width</Typography>
-                                <Slider
-                                    size="small"
-                                    defaultValue={parsed.inWidth}
-                                    aria-label="Small"
-                                    valueLabelDisplay="auto"
-                                    name="inWidth"
-                                    min={10}
-                                    onChange={handleChange}
-                                    onChangeCommitted={handleUnclick}
-                                />
-                            </Box> */}
 
                             <TextField id="standard-basic" sx={{ width: `70%` }} label={parseProps(pieceRef.current.props).qsubtext} variant="standard" />
 
@@ -807,9 +739,6 @@ function ALTEditForm() {
         }
     };
 
-
-    ///////////////////////////toolbar stuff////////////////
-    //      //////////////////////////popmenu stuff////////////////
     const BasicMenu = ({ l }) => {
         const [anchorEl, setAnchorEl] = React.useState(null);
         const open = Boolean(anchorEl);
@@ -861,9 +790,6 @@ function ALTEditForm() {
             </div>
         );
     }
-
-    //      /////////////////end popup menu stuff////////////////////////////////////////////////
-
 
     const Toolbar = ({ location }) => {
         return (
@@ -947,8 +873,8 @@ function ALTEditForm() {
             return (
                 <Stack spacing={2} direction="column">
                     <Button variant="outlined" onClick={clearformconf} color="error">CLEAR FORM </Button>
-                    <Button variant="contained" onClick={deleteformconf} color="error">DELETE FORM</Button><br/>
-                    <Divider variant="middle" /><br/>
+                    <Button variant="contained" onClick={deleteformconf} color="error">DELETE FORM</Button><br />
+                    <Divider variant="middle" /><br />
                 </Stack>
             )
         } else if (conf.clear == "yes") {
@@ -956,8 +882,8 @@ function ALTEditForm() {
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={clearform} color="error">CONFIRM CLEAR </Button>
                     <Typography sx={{ ...fontsx, ...normsx, ...gray }}>All questions will be deleted in form and responses.</Typography>
-                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br/>
-                    <Divider variant="middle" /><br/>
+                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br />
+                    <Divider variant="middle" /><br />
                 </Stack>
             )
 
@@ -966,8 +892,8 @@ function ALTEditForm() {
                 <Stack spacing={2} direction="column">
                     <Button variant="contained" onClick={deleteform} color="error">CONFIRM DELETE </Button>
                     <Typography sx={{ ...fontsx, ...normsx, ...gray }}>Form, response link, and responses will be deleted.</Typography>
-                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br/>
-                    <Divider variant="middle" /><br/>
+                    <Button variant="outlined" onClick={cancel} >CANCEL</Button><br />
+                    <Divider variant="middle" /><br />
                 </Stack>
             )
 
@@ -1158,15 +1084,6 @@ function ALTEditForm() {
         }
 
     }
-    /*
-    This is unnecessary (and doesn't work) because shallow references? disconcerting but ok...
-        function savePiece(loc){
-            const index = pieceArrRef.current.map(e => e.piid).indexOf(loc);
-            setPieces([...pieceArrRef.current.slice(0,index), pieceRef.current, ...pieceArrRef.current.slice(index+1)])
-            
-        };
-    */
-
 
     function edit(a) {
         setEditing(a);
@@ -1178,11 +1095,9 @@ function ALTEditForm() {
     }
 
     return (
-        <>  
-            
+        <>
             <CssBaseline />
-            <Box display="flex" flexDirection="row" sx={{ height: "100%", background:"rgb(250,250,250)"}}>
-
+            <Box display="flex" flexDirection="row" sx={{ height: "100%", background: "rgb(250,250,250)" }}>
                 <Box sx={leftDisplaysx}>
                     <Typography variant="h6" height={55} sx={fontsx}>
                         {(() => { return dayTime() + " " + Auth.getProfile()?.name ?? "User" })()}
@@ -1195,8 +1110,6 @@ function ALTEditForm() {
                     <Typography variant="body1" height={48} sx={fontsx}>
                         {'Edit your form by clicking on the toolbar icons.'}
                     </Typography>
-
-                    
                 </Box>
 
                 <Card sx={formsx}>
@@ -1205,32 +1118,14 @@ function ALTEditForm() {
                 </Card>
 
                 <Box sx={rightButtonssx}>
-                <Signout />
                     <ButtonsTwo conf={confirm} key={"buttons2"} />
                     <ButtonsOne form={form} key={"buttons1"} />
                 </Box>
 
             </Box>
-
+            <Signout />
         </>
     )
 }
 
 export default ALTEditForm;
-
-
-
-/*
-let { id } = useParams()
-
-    
-
-    // same logic as Dashboard.js
-    useEffect(() => {
-        
-    }, [])
-*/
-
-
-
-

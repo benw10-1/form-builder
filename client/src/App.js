@@ -19,7 +19,6 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                
                 {/*routes that do not require user to be logged in (content in Home will be different if logged in)*/}
                 <Route path="/" element={Auth.loggedIn() ? <Navigate replace to="/dashboard" /> : <Navigate replace to="/login" />} />
                 <Route path="/login" element={<LoginSignup switchState={false}/>} />
@@ -37,11 +36,9 @@ function App() {
                 <Route path="/alteditform/:id" element={<ALTEditForm/>} />
                 <Route path="/alteditformmob/:id" element={<ALTEditFormMob/>} />
                 <Route path="/respond/:id" element={<Respond/>} />
-                {/* <Route path="/testResponse" element={<Responses/>} /> */}
 
                 {/* wrong route route */}
                 <Route path="*" element={<FourOFour />}/>
-
             </Routes>
         </BrowserRouter>
     );

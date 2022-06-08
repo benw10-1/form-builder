@@ -78,6 +78,11 @@ function ResponseView({ }) {
     const { id } = useParams()
 
     useEffect(() => {
+        let loggedIn = Auth.loggedIn()
+        if (!loggedIn) {
+            window.location.replace(window.location.origin + "/login")
+            return
+        }
         queries.getFormByID(id).then(form => {
             setForm(form.result)
             queries.getResponsesByForm(id).then(async res => {
@@ -89,11 +94,12 @@ function ResponseView({ }) {
     }, [])
 
     const contsx = {
-        width: {
-            xs: "100%",
+        width: "100%",
+        maxWidth: {
+            xs: "unset",
             md: "800px"
         },
-        height: "calc(100% - 100px)",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -123,7 +129,7 @@ function ResponseView({ }) {
     }
 
     const sidesx = {
-        width: "300px",
+        width: "350px",
         padding: "30px",
         flexShrink: 2,
     }
@@ -162,76 +168,71 @@ function ResponseView({ }) {
                         {"Viewing: " + (form.title ?? "Form")}
                     </Typography>
                 </Box>
-                <Paper sx={contsx}>
-                    <Box sx={titlesx}>
-                        <Typography variant="h4" marginBottom={"6px"} sx={{ textAlign: { xs: "center", md: "start" } }} >
-                            {form.title ?? "Form"}
-                        </Typography>
-                        {true ? <Typography variant="body1" sx={{ textAlign: { xs: "center", md: "start" } }} >{form.description ?? "Some description"}</Typography> : null}
-                    </Box>
-                    <Divider flexItem={true} />
-                    <Box sx={formContainersx}>
-                        {loading ?
-                            <Skeleton sx={formContainersx} /> :
-                            <DataGrid
-                                columns={data.columns}
-                                rows={data.rows}
-                                // autoHeight={true}
-                                pageSize={pageSize}
-                                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                                rowsPerPageOptions={[10, 20, 50, 100]}
-                                disableColumnSelector={true}
-                                disableSelectionOnClick
-                                disableColumnMenu
-                                onCellClick={handleCellClick}
-                                sx={{
-                                    '& .MuiDataGrid-columnSeparator': {
-                                        display: "none"
-                                    },
-                                    '& .MuiDataGrid-footerContainer': {
-                                        border: "none"
-                                    },
-                                    "& .MuiDataGrid-columnHeaders": {
-                                        // position: "sticky"
-                                    },
-                                    '&.MuiDataGrid-root .MuiDataGrid-cell:focus': {
-                                        outline: 'none',
-                                    },
-                                    '&': {
-                                        border: "none"
-                                    },
-                                }}
-                            />}
-                        <Box sx={{ position: "absolute", width: "fit-content", height: "fit-content" }}>
-                            <Popover
-                                open={anchorEl !== null}
-                                onClose={close}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                anchorEl={anchorEl}
-                            >
-                                <Typography padding={".5em 1em"}>{selected}</Typography>
-                            </Popover>
+                <Box sx={{ display: "flex", justifyContent: "center", width: "100%", flexDirection: { xs: "column", md: "row" }, height: "calc(100% - 100px)" }}>
+                    <Paper sx={contsx}>
+                        <Box sx={titlesx}>
+                            <Typography variant="h4" marginBottom={"6px"} sx={{ textAlign: { xs: "center", md: "start" } }} >
+                                {form.title ?? "Form"}
+                            </Typography>
+                            {true ? <Typography variant="body1" sx={{ textAlign: { xs: "center", md: "start" } }} >{form.description ?? "Some description"}</Typography> : null}
                         </Box>
+                        <Divider flexItem={true} />
+                        <Box sx={formContainersx}>
+                            {loading ?
+                                <Skeleton sx={formContainersx} /> :
+                                <DataGrid
+                                    columns={data.columns}
+                                    rows={data.rows}
+                                    // autoHeight={true}
+                                    pageSize={pageSize}
+                                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                                    rowsPerPageOptions={[10, 20, 50, 100]}
+                                    disableColumnSelector={true}
+                                    disableSelectionOnClick
+                                    disableColumnMenu
+                                    onCellClick={handleCellClick}
+                                    sx={{
+                                        '& .MuiDataGrid-columnSeparator': {
+                                            display: "none"
+                                        },
+                                        '& .MuiDataGrid-footerContainer': {
+                                            border: "none"
+                                        },
+                                        "& .MuiDataGrid-columnHeaders": {
+                                            // position: "sticky"
+                                        },
+                                        '&.MuiDataGrid-root .MuiDataGrid-cell:focus': {
+                                            outline: 'none',
+                                        },
+                                        '&': {
+                                            border: "none"
+                                        },
+                                    }}
+                                />}
+                            <Box sx={{ position: "absolute", width: "fit-content", height: "fit-content" }}>
+                                <Popover
+                                    open={anchorEl !== null}
+                                    onClose={close}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'left',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    }}
+                                    anchorEl={anchorEl}
+                                >
+                                    <Typography padding={".5em 1em"}>{selected}</Typography>
+                                </Popover>
+                            </Box>
+                        </Box>
+                    </Paper>
+                    <Box sx={sidebutssx}>
+                        <Button variant="contained" color="primary" onClick={() => {
+                            window.location.assign(`/dashboard`)
+                        }} sx={{ ...buttonsx, margin: { md: "100px 0 24px 0", xs: "50px 0 24px 0" } }}>Back to Dashboard</Button>
                     </Box>
-                </Paper>
-                <Box sx={sidebutssx}>
-                    <Button variant="contained" color="primary" onClick={() => {
-                        window.location.assign(`/dashboard`)
-                    }} sx={{ ...buttonsx, margin: { md: "100px 0 24px 0", xs: "50px 0 24px 0"} }}>Back to Dashboard</Button>
-                    {/* <Divider flexItem={true}  />
-                <Button variant="outlined" color="secondary" disabled={!!form.endpoint} onClick={() => {
-                    if (form.endpoint) {
-                        window.location.assign("/form/" + form.endpoint)
-                    }
-                }} sx={{ ...buttonsx, margin: "24px 0 12px 0"}}>Preview</Button> */}
-                    {/* <Button variant="outlined" color="primary" onClick={() => {}} sx={{ ...buttonsx, margin: "0 0 12px 0"}}>Export Responses</Button> */}
                 </Box>
             </Container>
         </React.Fragment>
