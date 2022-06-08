@@ -8,7 +8,7 @@ import Auth from "./auth"
  */
  async function genQuery(q, variables) {
     // const url = "/graphql"
-    const url = "http://localhost:3001/graphql"
+    const url = "/graphql"
     // https://graphql.org/learn/serving-over-http/#post-request
     const body = {
         "query": q,

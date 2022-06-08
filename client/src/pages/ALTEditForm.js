@@ -1,49 +1,36 @@
 
-import React, { useState, useEffect, useRef } from "react";
-import { queries, mutations, Auth, parseProps, dayTime } from "../utils"
-import { useParams } from "react-router-dom"
-
-import * as uuid from "uuid";
-
-import {
-    Fab,
-    Container,
-    CssBaseline,
-    Typography,
-    Box,
-    Link,
-    Avatar,
-    Skeleton,
-    Modal,
-    TextField,
-    Divider,
-    Card,
-
-
-} from "@mui/material";
-
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import AddIcon from '@mui/icons-material/Add';
-import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
-import EditIcon from '@mui/icons-material/Edit';
-import TitleRounded from '@mui/icons-material/TitleRounded';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FormGroup from '@mui/material/FormGroup';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreHorizFilled from '@mui/icons-material/MoreHoriz';
+import TitleRounded from '@mui/icons-material/TitleRounded';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import FormLabel from '@mui/material/FormLabel';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
-
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import * as uuid from "uuid";
+import { Auth, dayTime, mutations, parseProps, queries } from "../utils";
+import "./nstyle.css";
 import Signout from "./Signout";
 
-import "./nstyle.css"
+
 
 function ALTEditForm() {
 
