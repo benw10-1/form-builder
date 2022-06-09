@@ -134,7 +134,7 @@ async function respond(parent, { id, responses }, context) {
         console.log("Found type " + qtype + " with text - " + qtext)
     }
 
-    const newResponse = await Response.create({ form_ref: id, responses })
+    const newResponse = await Response.create({ form_ref: form._id, responses })
 
     return newResponse
 }
