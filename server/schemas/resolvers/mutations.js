@@ -103,7 +103,7 @@ async function updateFormPieces(parent, { id, pieces }, context) {
 }
 
 async function respond(parent, { id, responses }, context) {
-    const form = await Form.findById(id)
+    const form = await Form.findOne({ endpoint: id }).exec()
     if (!form) throw new Error("Form not found")
     if (!form.published) throw new Error("Form not published")
 
