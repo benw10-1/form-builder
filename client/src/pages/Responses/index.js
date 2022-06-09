@@ -22,7 +22,7 @@ function parseResponseData(responses, pieces) {
             return new Date(Number(params.value)).toLocaleString()
         },
         width: 150
-    }].concat(pieces.map(p => {
+    }].concat(pieces.filter(p => p._type === "question").map(p => {
         return {
             field: p._id,
             headerName: p.props.reduce((prev, curr) => {
