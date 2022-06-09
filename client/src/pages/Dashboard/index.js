@@ -28,7 +28,7 @@ let touch = { a: false };
 function touchDetect(t) { t.a = true; }
 window.addEventListener('touchstart', () => { touchDetect(touch) });
 
-function FormCard({ form: { _id, title, description, createdAt, published } }) {
+function FormCard({ form: { _id, title, description, createdAt, published, endpoint } }) {
     const [open, setOpen] = useState(false);
     const [openPop, setOpenPop] = useState(false);
     const closeHandle = (event) => {
@@ -85,7 +85,7 @@ function FormCard({ form: { _id, title, description, createdAt, published } }) {
         placeItems: "center",
     }
 
-    const Rlink = `${window.location.origin}/respond/${_id}`
+    const Rlink = `${window.location.origin}/respond/${endpoint ? endpoint : _id}`
     const editclick = (event) => {
         if (window.innerWidth < minW || touch.a == true) {
             window.location.assign(window.location.origin + "/alteditformmob/" + _id)

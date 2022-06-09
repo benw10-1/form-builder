@@ -71,8 +71,6 @@ function Respond() {
         borderRadius: "4px"
     }
 
-
-
     const fontsx = {
         fontFamily: 'Roboto',
         fontStyle: "normal",
@@ -388,11 +386,13 @@ function Respond() {
     //let [pieces, setPieces] = useState([])
 
     useEffect(() => {
-
         async function req() {
-
             let reqForm = (await queries.getFormByEndpoint(id)).result ?? {}
             let reqPieces = (await queries.getPiecesByEndpoint(id)).result ?? []
+            if (reqPieces.length < 1) {
+                window.location.assign("/")
+                return
+            }
             setForm(reqForm)
             setPieces(reqPieces)
             setResponses(reqPieces.map((piece) => {
