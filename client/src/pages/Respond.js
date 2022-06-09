@@ -4,8 +4,6 @@ import { queries, mutations, parseProps } from "../utils"
 import { useParams } from "react-router-dom"
 
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -49,15 +47,14 @@ function Respond() {
 
     }
     const boxsx = {
-
         position: "relative",
         width: "100%",
     }
     const noneditboxsx = {
         position: "relative",
         width: "100%",
-        borderLeft: "5px solid white",
-        paddingLeft: "0"
+        paddingLeft: "0",
+        margin: ".5em 0",
     }
 
     const formsx = {
@@ -170,8 +167,7 @@ function Respond() {
             return (
                 <>
                     <br />
-                    <Divider variant="middle" />
-
+                    <Divider flexItem={true} />
                 </>
             )
         } else if (piece._type == "question") {
@@ -295,8 +291,6 @@ function Respond() {
     };
 
     const Titler = ({ form }) => {
-
-
         return (
             <>
                 <Typography sx={{ ...fontsx, ...titlesx }}>{form.title}</Typography>
@@ -437,7 +431,7 @@ function Respond() {
             <Container disableGutters maxWidth={true} sx={{ display: "flex", justifyContent: "center", overflow: "auto", height: "unset" }}>
                 <Paper sx={formsx}>
                     <Box sx={{ width: "100%" }}>
-                        <Titler form={form} sx={{ borderLeft: "5px solid white" }} />
+                        <Titler form={form} />
                         <Renderer pieces={pieces} />
                         <br />
                         <SubButton disabled={disabled} />
