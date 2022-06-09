@@ -903,7 +903,7 @@ function ALTEditForm() {
 
     function ButtonsOne({ form }) {
 
-        let rlink = `${window.location.origin}/respond/${id}`
+        let rlink = `${window.location.origin}/respond/${form.endpoint ?? id}`;
 
         if (form.published == false) {
             return (
