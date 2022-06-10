@@ -18,7 +18,7 @@ function parseResponseData(responses, pieces) {
         valueFormatter: (params) => {
             return new Date(Number(params.value)).toLocaleString()
         },
-        width: 100
+        width: 140
     }].concat(pieces.filter(p => p._type === "question").map(p => {
         return {
             field: p._id,

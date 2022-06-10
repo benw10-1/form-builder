@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { PaperCenter } from '../Layouts';
 import { useParams } from "react-router-dom";
 import { mutations, queries, Auth, dayTime } from "../../utils";
-import Editor from "./editor";
+import Editor, { SideBar } from "./editor";
 import {
     Button,
     Box,
@@ -60,18 +60,35 @@ function EditForm() {
     const [loading, setLoading] = useState(true);
     const [pieces, _setPieces] = useState([]);
     const [confirmProps, setConfirmProps] = useState({});
+    const [saved, setSaved] = useState(true);
+    const [rerender, setRerender] = useState(false)
+    const [editingEl, setEditingEl] = useState(null);
 
     const pieceRef = useRef(pieces);
-    const setPieces = (pieces) => {
-        pieceRef.current = pieces;
-        _setPieces(pieces);
-    };
-
-    const [rerender, setRerender] = useState(false)
 
     const resizer = (event) => {
         setRerender(Math.random() * 100)
     }
+
+    const setPieces = (pieces) => {
+        pieceRef.current = pieces;
+        setSaved(false);
+        _setPieces(pieces);
+    };
+
+    const savePieces = async () => {
+        const res = await mutations.updateFormPieces(id, pieces);
+        if (!res || res.errors) return
+
+        const mapped = pieces.map((p, i) => {
+            return {
+                ...p,
+                _id: res.result[i]
+            }
+        })
+        setPieces(mapped);
+        setSaved(true);
+    };
 
     useEffect(() => {
         window.addEventListener("resize", resizer)
@@ -92,24 +109,9 @@ function EditForm() {
             setForm(form?.result ?? {});
             setLoading(false);
             setPieces((await queries.getPiecesByID(id))?.result ?? []);
+            setSaved(true);
         });
     }, []);
-
-    const savePieces = async () => {
-        const res = await mutations.updateFormPieces(id, pieces);
-        if (!res || res.errors) {
-            return
-        }
-        else {
-            const mapped = pieces.map((p, i) => {
-                return {
-                    ...p,
-                    _id: res.result[i]
-                }
-            })
-            setPieces(mapped);
-        }
-    };
 
     const fontsx = {
         fontFamily: 'Roboto',
@@ -144,9 +146,7 @@ function EditForm() {
         </Box>
     )
 
-    const paperbody = (
-        <Editor pieces={pieces} form={form} handlers={{ savePieces, setPieces }} />
-    )
+    const paperbody = loading ? (<Skeleton />) : <Editor pieces={pieces} form={form} handlers={{ setPieces, setEditingEl }} />
 
     const butcontsx = {
         display: "flex",
@@ -156,7 +156,8 @@ function EditForm() {
     }
     const buttonsx = {
         width: "100%",
-        height: "42px",
+        minHeight: "42px",
+        padding: ".35rem",
         marginBottom: "16px",
     }
 
@@ -189,10 +190,10 @@ function EditForm() {
                 _open: true,
             })
         }}>clear form</Button>),
-        saveForm: (<Button variant="contained" sx={buttonsx} onClick={async () => {
+        saveForm: (<Button variant="contained" disabled={saved} sx={buttonsx} onClick={async () => {
             await savePieces();
         }}>save form</Button>),
-        deleteForm: (<Button variant="text" sx={{ ...buttonsx, marginBottom: 0 }} onClick={async (event) => {
+        deleteForm: (<Button color="warning" variant="text" sx={{ ...buttonsx, marginBottom: 0 }} onClick={async (event) => {
             const onResponse = async (response) => {
                 if (response) {
                     const { __status__ } = await mutations.deleteForm(id);
@@ -219,7 +220,10 @@ function EditForm() {
         preview: (<Button color="secondary" variant="outlined" sx={buttonsx} onClick={() => {
             window.location.assign(window.location.origin + "/preview/" + id);
         }}>preview</Button>),
-        viewResponses: (<Button variant="outlined" sx={buttonsx} onClick={() => {
+        dashboard: (<Button color="secondary" variant="outlined" sx={buttonsx} onClick={() => {
+            window.location.assign(window.location.origin + "/dashboard");
+        }}>dashboard</Button>),
+        viewResponses: (<Button color="secondary" variant="outlined" sx={buttonsx} onClick={() => {
             window.location.assign(window.location.origin + "/responses/" + id);
         }}>view responses</Button>),
     }
@@ -233,6 +237,7 @@ function EditForm() {
             </Box>
             {isMob ? null : <Divider flexItem={true} sx={{ margin: "9px 0", width: "100%" }} />}
             <Box sx={{ marginTop: isMob ? 0 : "16px" }}>
+                {buttonObj.dashboard}
                 {buttonObj.preview}
                 {buttonObj.viewResponses}
                 {buttonObj.deleteForm}
@@ -241,7 +246,11 @@ function EditForm() {
         </Box>
     )
 
-    return <PaperCenter left={left} paper={[paperheader, paperbody]} buttons={buttons} />
+    return (
+        <PaperCenter left={left} paper={[paperheader, paperbody]} buttons={buttons} >
+            <SideBar attachEl={editingEl} />
+        </PaperCenter>
+    )
 }
 
 export default EditForm;

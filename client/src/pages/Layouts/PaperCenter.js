@@ -118,10 +118,11 @@ function PaperCenter({ paper, buttons, children, left, sx }) {
             xs: "unset",
             md: "800px"
         },
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        minHeight: {
+            xs: window.innerHeight - 40,
+            md: window.innerHeight - 80
+        },
+        display: "block",
         borderRadius: {
             xs: "0px",
             md: "4px 4px 0 0"
@@ -145,6 +146,7 @@ function PaperCenter({ paper, buttons, children, left, sx }) {
             xs: "column",
             md: "row"
         },
+        height: "fit-content",
         ...(sx || {})
     }
     const boxsx = {
@@ -155,7 +157,6 @@ function PaperCenter({ paper, buttons, children, left, sx }) {
             xs: "column",
             md: "row"
         },
-        height: "100%"
     }
 
     return (
@@ -163,9 +164,10 @@ function PaperCenter({ paper, buttons, children, left, sx }) {
             <Signout sx={isMob ? { right: "unset", left: "24px", top: "unset", bottom: "24px" } : {}} />
             <CssBaseline />
             <Container disableGutters={true} maxWidth={true} sx={containersx}>
-                <Box sx={sidesx}>
-                    {left}
-                </Box>
+                {left ?
+                    <Box sx={sidesx}>
+                        {left}
+                    </Box> : null}
                 <Box sx={boxsx}>
                     <Paper sx={contsx}>
                         {(buttons && isMob) ? <MobileMenu buttons={buttons} /> : null}
@@ -177,6 +179,7 @@ function PaperCenter({ paper, buttons, children, left, sx }) {
                                 </React.Fragment>
                             )
                         })}
+                        {children}
                     </Paper>
                     {isMob ?
                         null :
