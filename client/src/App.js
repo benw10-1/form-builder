@@ -7,6 +7,7 @@ import {
     Form,
     ALTEditForm,
     ALTEditFormMob,
+    EditForm,
     Responses,
     Respond
 } from "./pages"
@@ -29,7 +30,7 @@ function App() {
                 {/* routes that require user to be logged in */}
                 <Route path="/dashboard" element={<Dashboard/>} />
                 {/* View responses and edit form in one page */}
-                <Route path="/editform/:id" element={<ALTEditForm/>} />
+                <Route path="/editform/:id" element={<EditForm/>} />
                 <Route path="/preview/:id" element={<Form/>} />
 
                 {/*testing route*/}

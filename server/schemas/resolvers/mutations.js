@@ -71,6 +71,7 @@ async function updateFormPieces(parent, { id, pieces }, context) {
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
+    if (form.published) throw new Error("Form already published")
 
     const parsedPieces = []
     for (const x of pieces) {
