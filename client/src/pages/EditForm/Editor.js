@@ -24,10 +24,8 @@ function SideBar({ attachEl, isMob }) {
         height: `${height - 10}px`,
         backgroundColor: "rgb(25, 118, 210)",
         zIndex: "1",
-        transition: "all .25s ease-in",
+        transition: "all .25s ease-out",
     }
-
-    console.log(height, top)
 
     return (
         <Box sx={sidebarsx} />
@@ -36,6 +34,7 @@ function SideBar({ attachEl, isMob }) {
 
 function Toolbox({ addPiece, editing }) {
     const [expanded, setExpanded] = useState(false)
+    const [ghostEl, setGhostEl] = useState(null)
 
     useEffect(() => {
         setExpanded(false)
@@ -45,6 +44,8 @@ function Toolbox({ addPiece, editing }) {
 
         return () => clearTimeout(tm)
     }, [editing])
+
+    const top = ghostEl?.offsetTop ?? 0
 
     const toolboxsx = {
         display: "flex",
@@ -57,32 +58,34 @@ function Toolbox({ addPiece, editing }) {
         padding: "8px",
         margin: "0 8px",
     }
-
     const containersx = {
-        height: expanded ? "62px" : "0",
+        height: (expanded && ghostEl) ? "62px" : "0",
         background: "#C4C4C433",
         transition: "height 0.3s ease-in",
         width: "100%",
         overflow: "hidden",
+        position: "absolute",
+        display: "grid",
+        placeItems: "center",
+        top: `${top}px`,
+        left: "0",
+    }
+
+    const ghostsx = {
+        background: "transparent",
+        height: "62px",
+        width: "100%",
     }
 
     return (
-        <Box sx={containersx}>
-            <Box sx={{
-                        fontSize: "12px",
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: "100%",
-                        height: "100%",
-                        padding: "6px 0",
-                    }}>
+        <React.Fragment>
+            <Box sx={containersx}>
                 <Paper sx={toolboxsx}>
                     <Button sx={buttonsx} startIcon={<Add />} variant="text" onClick={() => { addPiece(editing + 1, "question") }}>Add Question</Button>
                 </Paper>
             </Box>
-        </Box>
+            <Box sx={ghostsx} ref={(ref) => {setGhostEl(ref)}} />
+        </React.Fragment>
     )
 }
 
@@ -100,7 +103,7 @@ function Editor({ pieces, form, handlers: { setPieces, setEditingEl } }) {
 
     const addPiece = (index, type) => {
         const newPieces = [...pieces]
-        index = (!index && index !== 0) ? pieces.length - 1 : index
+        index = (!index && index !== 0 || index > pieces.length) ? pieces.length : index
         newPieces.splice(index, 0, {
             _type: type ?? "question",
             form_ref: form._id,

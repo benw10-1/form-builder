@@ -102,7 +102,10 @@ function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps,
             color: "rgb(21, 101, 192)",
         },
         cursor: "pointer",
-        opacity: (hover && !editingThis) ? .75 : 0,
+        opacity: {
+            xs: .75,
+            md: (hover && !editingThis) ? .75 : 0,
+        },
         transition: "all 0.2s ease-in",
         boxShadow: 0,
         border: 0,
@@ -158,7 +161,7 @@ function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps,
                 <Box onClick={removeThis} sx={miniboxsx}>
                     <CancelIcon sx={{ ...iconsx, opacity: "1", width: "25px", height: "25px" }} />
                 </Box>
-                <Divider orientation="vertical" fullWidth={true} />
+                <Divider orientation="vertical" flexItem={true} />
                 <Box sx={optionsx}>
                     <Typography sx={optiontextsx}>Required</Typography>
                     <Switch checked={required} onChange={setRequired} />

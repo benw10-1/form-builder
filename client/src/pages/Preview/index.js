@@ -70,27 +70,36 @@ function Preview({ responding }) {
 
     const backToEditing = (event) => {
         event.preventDefault();
-        window.location.assign = `/editform/${id}`;
+        window.location.assign(`/editform/${id}`)
     }
 
     const submit = (event) => {
         event.preventDefault();
         if (!responding) return
+        let ok = true
         const _responses = pieces.map((piece, i) => {
+            const required = piece.props.filter(prop => prop.value === "qreq");
+            const val = responses[i];
+            if (required && (val === undefined || val === "")) {
+                ok = false
+            }
             const response = {
                 key: piece._id,
-                value: responses[i] ?? "",
+                value: val ?? "",
             }
             return response;
         })
-        mutations.respond(ep, _responses).then(() => {
+        if (ok) mutations.respond(ep, _responses).then(() => {
             setSubmitted(true);
         })
+        else {
+            console.log("validation error")
+        }
     }
 
-    const leftbut = responding ? null : <Button variant="outlined" startIcon={<ArrowBack />} onClick={backToEditing} sx={{ width: "220px", padding: "8px 0" }}>Back to Editing</Button>
+    const leftbut = responding ? null : (window.innerWidth <= 900 ? null : <Button variant="outlined" startIcon={<ArrowBack />} onClick={backToEditing} sx={{ width: "220px", padding: "8px 0" }}>Back to Editing</Button>)
 
-    const right = (responding || window.innerWidth < 1250) ? null : <Box sx={{ width: "100%" }} />
+    const right = responding ? null : (window.innerWidth <= 900 ? <Button variant="outlined" startIcon={<ArrowBack />} onClick={backToEditing} sx={{ width: "100%", padding: "8px 0" }}>Back to Editing</Button> : null)
 
     const titlesx = {
         width: "100%",

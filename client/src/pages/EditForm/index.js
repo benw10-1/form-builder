@@ -137,15 +137,19 @@ function EditForm() {
 
     const left = (
         <React.Fragment>
-            <Typography variant="h6" height={55} sx={fontsx}>
+            <Typography variant="h6" height={window.innerWidth <= 900 ? "auto" : 55} sx={fontsx}>
                 {(() => { return dayTime() + " " + Auth.getProfile()?.name ?? "User" })()}
             </Typography>
-            <Typography variant="h5" height={24} sx={{ ...fontsx, marginTop: { md: "28px", xs: "14px" }, marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
+            {window.innerWidth > 900 ? (
+                <React.Fragment>
+                    <Typography variant="h5" height={24} sx={{ ...fontsx, marginTop: { md: "28px", xs: "14px" }, marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
                 {form.title}
             </Typography>
             <Typography variant="body1" height={48} sx={fontsx}>
                 {'Edit your form by clicking on the toolbar icons.'}
             </Typography>
+                </React.Fragment>
+            ) : null}
         </React.Fragment>
     )
 
@@ -179,7 +183,8 @@ function EditForm() {
     }
 
     const buttonObj = {
-        publish: (<Button variant="outlined" sx={buttonsx} onClick={async () => {
+        publish: (<Button variant="outlined" disabled={pieces.length === 0} sx={buttonsx} onClick={async () => {
+            if (pieces.length === 0) return;
             const save = await savePieces();
             const res = await mutations.setPublished(id, true);
             if (!res || res.errors) {
@@ -189,7 +194,7 @@ function EditForm() {
                 window.location.assign(window.location.origin + "/dashboard");
             }
         }}>publish</Button>),
-        clearForm: (<Button variant="contained" sx={buttonsx} onClick={async (event) => {
+        clearForm: (<Button variant="contained" sx={buttonsx} disabled={pieces.length === 0} onClick={async (event) => {
             const onResponse = (response) => {
                 if (response) {
                     setPieces([]);

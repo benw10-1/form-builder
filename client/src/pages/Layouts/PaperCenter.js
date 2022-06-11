@@ -121,7 +121,7 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
             md: "800px"
         },
         minHeight: {
-            xs: window.innerHeight - (leftRef.current ? leftRef.current.getBoundingClientRect().height : 200),
+            xs: window.innerHeight - (leftRef.current ? leftRef.current.getBoundingClientRect().height : 0),
             md: window.innerHeight - 80
         },
         display: "block",
@@ -134,7 +134,8 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
             md: "60px"
         },
         flexShrink: 1,
-        position: "relative"
+        position: "relative",
+        transition: "all 0.3s ease",
     }
     const containersx = {
         overflow: "auto",
@@ -148,6 +149,7 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
             xs: "column",
             md: "row"
         },
+        transition: "all 0.3s ease",
         height: "fit-content",
         ...(sx || {})
     }

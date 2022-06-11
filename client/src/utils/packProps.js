@@ -1,5 +1,5 @@
 function packProps(packed) {
-    console.log(packed)
+    // console.log(packed)
     if (!Object.keys(packed)) throw new Error("packProps: packed is required")
     return Array.from(Object.keys(packed)).reduce((acc, key) => {
         const value = packed[key]
