@@ -93,9 +93,8 @@ function ResponseView({ }) {
     const isMob = window.innerWidth < 900
 
     const formContainersx = {
-        width: "100%",
-        height: "100%",
-        marginTop: "36px",
+        flex: 1,
+        // marginTop: "36px",
         display: "flex",
         justifyContent: "center",
     }
@@ -184,7 +183,7 @@ function ResponseView({ }) {
     const dashbut = (
         <Button variant="contained" color="primary" onClick={() => {
             window.location.assign(`/dashboard`)
-        }} sx={{ ...buttonsx, margin: { md: "100px 0 24px 0", xs: 0 } }}>Back to Dashboard</Button>
+        }} sx={{ ...buttonsx, margin: 0 }}>Back to Dashboard</Button>
     )
 
     const left = (

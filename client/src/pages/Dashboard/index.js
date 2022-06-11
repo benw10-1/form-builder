@@ -378,7 +378,7 @@ function Dashboard() {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 400,
+            width: window.innerWidth <= 450 ? "100%" : "450px",
             bgcolor: '#FFFFFF',
             boxShadow: 24,
             padding: "25px 20px",

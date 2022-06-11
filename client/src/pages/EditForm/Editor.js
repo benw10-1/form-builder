@@ -45,6 +45,17 @@ function Toolbox({ addPiece, editing }) {
         return () => clearTimeout(tm)
     }, [editing])
 
+    const [rerender, setRerender] = useState(false)
+
+    const resizer = (event) => {
+        setRerender(Math.random() * 100)
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize", resizer)
+        return () => window.removeEventListener("resize", resizer)
+    }, [])
+
     const top = ghostEl?.offsetTop ?? 0
 
     const toolboxsx = {
@@ -81,7 +92,7 @@ function Toolbox({ addPiece, editing }) {
         <React.Fragment>
             <Box sx={containersx}>
                 <Paper sx={toolboxsx}>
-                    <Button sx={buttonsx} startIcon={<Add />} variant="text" onClick={() => { addPiece(editing + 1, "question") }}>Add Question</Button>
+                    <Button sx={buttonsx} startIcon={<Add />} variant="text" onClick={() => { addPiece(editing ? editing + 1 : null, "question") }}>Add Question</Button>
                 </Paper>
             </Box>
             <Box sx={ghostsx} ref={(ref) => {setGhostEl(ref)}} />
@@ -137,7 +148,7 @@ function Editor({ pieces, form, handlers: { setPieces, setEditingEl } }) {
     }
 
     const editPiece = (index) => {
-        if (index < 0 || index === null || index === undefined) {
+        if (index < 0 || index === null || index === undefined || index > pieces.length) {
             setEditingEl(null)
             editingRef.current = null
             setEditing(null)

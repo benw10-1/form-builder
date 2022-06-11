@@ -56,6 +56,7 @@ function Text({ reduced, editing, editProp, setResponse }) {
     const fieldsx = {
         width: "100%",
         marginBottom: "12px",
+        maxWidth: "430px",
     }
 
     const inner = () => {

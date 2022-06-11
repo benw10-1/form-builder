@@ -125,6 +125,7 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
             md: window.innerHeight - 80
         },
         display: "block",
+        flexDirection: "column",
         borderRadius: {
             xs: "0px",
             md: "4px 4px 0 0"
@@ -135,6 +136,8 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
         },
         flexShrink: 1,
         position: "relative",
+        display: "flex",
+        flexDirection: "column",
         transition: "all 0.3s ease",
     }
     const containersx = {
