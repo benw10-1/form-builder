@@ -23,7 +23,7 @@ function parseResponseData(responses, pieces) {
         return {
             field: p._id,
             headerName: p.props.reduce((prev, curr) => {
-                if (curr.key === "qtext") return curr.value
+                if (curr.key === "qtitle") return curr.value
                 return prev
             }, ""),
             editable: false,

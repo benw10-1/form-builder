@@ -53,6 +53,17 @@ function Confirm({ onResponse = () => { }, message, anchorEl, _open }) {
     )
 }
 
+function checkSaved(pieces, old) {
+    if (pieces.length !== old.length) return false
+    for (let i = 0; i < pieces.length; i++) {
+        const [piece, oldPiece] = [pieces[i], old[i]]
+        if (piece._type !== oldPiece._type) return false
+        if (piece.props.every((prop, i) => prop.key === "response" || (prop?.key === oldPiece?.props?.[i]?.key && prop?.value === oldPiece?.props?.[i]?.value))) continue
+        return false
+    }
+    return true
+}
+
 function EditForm() {
     const { id } = useParams();
     const isMob = window.innerWidth < 900
@@ -71,13 +82,19 @@ function EditForm() {
     }
 
     const setPieces = (pieces) => {
+        setSaved(checkSaved(pieces, pieceRef.current))
         pieceRef.current = pieces;
-        setSaved(false);
         _setPieces(pieces);
     };
 
     const savePieces = async () => {
-        const res = await mutations.updateFormPieces(id, pieces);
+        const pruned = pieces.map(piece => {
+            return {
+                ...piece,
+                props: piece.props.filter(prop => !prop.value.match("response"))
+            }
+        })
+        const res = await mutations.updateFormPieces(id, pruned);
         if (!res || res.errors) return
 
         const mapped = pieces.map((p, i) => {
@@ -107,8 +124,8 @@ function EditForm() {
                 return;
             }
             setForm(form?.result ?? {});
-            setLoading(false);
             setPieces((await queries.getPiecesByID(id))?.result ?? []);
+            setLoading(false);
             setSaved(true);
         });
     }, []);
@@ -163,6 +180,7 @@ function EditForm() {
 
     const buttonObj = {
         publish: (<Button variant="outlined" sx={buttonsx} onClick={async () => {
+            const save = await savePieces();
             const res = await mutations.setPublished(id, true);
             if (!res || res.errors) {
                 return

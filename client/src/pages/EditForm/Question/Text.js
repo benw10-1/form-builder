@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@mui/material";
 
-function Text({ reduced, editing, editProp, }) {
+function Text({ reduced, editing, editProp, setResponse }) {
     const [title, _setTitle] = useState(reduced.qtitle ?? "");
     const [desc, _setDesc] = useState(reduced.qdesc ?? "");
     const [value, _setValue] = useState("");
@@ -34,6 +34,7 @@ function Text({ reduced, editing, editProp, }) {
     const setValue = (event) => {
         _setValue(event.target.value)
         validate(event.target.value)
+        if (setResponse) setResponse(event.target.value)
     }
 
     const setInpError = (error) => {

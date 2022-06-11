@@ -6,8 +6,9 @@ import Form from "./Form"
 import ALTEditForm from "./ALTEditForm"
 import ALTEditFormMob from "./ALTEditFormMob"
 import Responses from "./Responses"
-import Respond from "./Respond"
+import Respond from "./RespondOld"
 import EditForm from './EditForm';
 import { PaperCenter } from './Layouts';
+import Preview from './Preview';
 
-export { Dashboard, FourOFour, Home, LoginSignup, Form, ALTEditForm, ALTEditFormMob, Responses, Respond, PaperCenter, EditForm };
+export { Dashboard, FourOFour, Home, LoginSignup, Form, ALTEditForm, ALTEditFormMob, Responses, Respond, PaperCenter, EditForm, Preview };

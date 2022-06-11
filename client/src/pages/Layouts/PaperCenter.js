@@ -76,7 +76,7 @@ function MobileMenu({ buttons }) {
     )
 }
 
-function PaperCenter({ paper, buttons, children, left, sx }) {
+function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
     const [rerender, setRerender] = useState(false)
 
     const resizer = (event) => {
@@ -87,6 +87,8 @@ function PaperCenter({ paper, buttons, children, left, sx }) {
         window.addEventListener("resize", resizer)
         return () => window.removeEventListener("resize", resizer)
     }, [])
+
+    const leftRef = useRef()
 
     const isMob = window.innerWidth < 900
 
@@ -119,7 +121,7 @@ function PaperCenter({ paper, buttons, children, left, sx }) {
             md: "800px"
         },
         minHeight: {
-            xs: window.innerHeight - 40,
+            xs: window.innerHeight - (leftRef.current ? leftRef.current.getBoundingClientRect().height : 200),
             md: window.innerHeight - 80
         },
         display: "block",
@@ -161,11 +163,11 @@ function PaperCenter({ paper, buttons, children, left, sx }) {
 
     return (
         <React.Fragment>
-            <Signout sx={isMob ? { right: "unset", left: "24px", top: "unset", bottom: "24px" } : {}} />
+            {hasSignOut ? <Signout sx={isMob ? { right: "unset", left: "24px", top: "unset", bottom: "24px" } : {}} /> : null}
             <CssBaseline />
             <Container disableGutters={true} maxWidth={true} sx={containersx}>
                 {left ?
-                    <Box sx={sidesx}>
+                    <Box sx={sidesx} ref={leftRef}>
                         {left}
                     </Box> : null}
                 <Box sx={boxsx}>

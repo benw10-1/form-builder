@@ -9,12 +9,13 @@ import {
     InputLabel,
 } from "@mui/material";
 
-function Question({ reduced, editing, editProp }) {
+function Question({ reduced, editing, editProp, setResponse }) {
     const [type, setType] = useState(reduced.qtype);
 
     let rendered
     if (type === "text") {
-        rendered = <Text reduced={reduced} editing={editing} editProp={editProp} />
+        if (editing) rendered = <Text reduced={reduced} editing={editing} editProp={editProp} />
+        else rendered = <Text reduced={reduced} setResponse={setResponse} />
     }
 
     const contsx = {

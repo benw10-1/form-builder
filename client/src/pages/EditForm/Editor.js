@@ -4,13 +4,11 @@ import Piece from "./Piece";
 import {
     Button,
     Box,
-    Popover,
     Paper,
     Typography,
     Skeleton,
 } from "@mui/material";
 import Add from "@mui/icons-material/Add"
-import MoreHoriz from "@mui/icons-material/MoreHoriz"
 
 function SideBar({ attachEl, isMob }) {
     if (!attachEl) return null
@@ -23,7 +21,7 @@ function SideBar({ attachEl, isMob }) {
         top: `${top - 10}px`,
         left: isMob ? "-5px" : "0",
         width: "5px",
-        height: `${height}px`,
+        height: `${height - 10}px`,
         backgroundColor: "rgb(25, 118, 210)",
         zIndex: "1",
         transition: "all .25s ease-in",
@@ -51,36 +49,39 @@ function Toolbox({ addPiece, editing }) {
     const toolboxsx = {
         display: "flex",
         minWidth: "250px",
-        height: expanded ? "42px" : "0",
         padding: "0 10px",
+        height: expanded ? "40px" : "0",
         justifyContent: "center",
-        transition: "all .25s ease-in",
     }
     const buttonsx = {
         padding: "8px",
         margin: "0 8px",
-        height: expanded ? "unset" : "0",
     }
 
     const containersx = {
-        display: "grid",
-        placeItems: "center",
-        width: "100%",
-        // {
-        //     xs: "calc(100% + 60px)",
-        //     md: "calc(100% + 120px)",
-        // }
         height: expanded ? "62px" : "0",
-        transition: "height .25s ease-in",
-        overflow: "auto hidden",
         background: "#C4C4C433",
+        transition: "height 0.3s ease-in",
+        width: "100%",
+        overflow: "hidden",
     }
 
     return (
         <Box sx={containersx}>
-            <Paper sx={toolboxsx}>
-                <Button sx={buttonsx} startIcon={<Add />} variant="text" onClick={() => { addPiece(editing + 1, "question") }}>Add Question</Button>
-            </Paper>
+            <Box sx={{
+                        fontSize: "12px",
+                        backgroundColor: "transparent",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
+                        height: "100%",
+                        padding: "6px 0",
+                    }}>
+                <Paper sx={toolboxsx}>
+                    <Button sx={buttonsx} startIcon={<Add />} variant="text" onClick={() => { addPiece(editing + 1, "question") }}>Add Question</Button>
+                </Paper>
+            </Box>
         </Box>
     )
 }
@@ -124,11 +125,9 @@ function Editor({ pieces, form, handlers: { setPieces, setEditingEl } }) {
     const changePiece = (index, props) => {
         const newPieces = pieces.map((piece, i) => {
             if (i !== index) return piece
-            const ps = reduceProps(props)
-
             return {
                 ...piece,
-                props: packProps(ps),
+                props,
             }
         })
         setPieces(newPieces)

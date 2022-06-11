@@ -9,7 +9,8 @@ import {
     ALTEditFormMob,
     EditForm,
     Responses,
-    Respond
+    Respond,
+    Preview
 } from "./pages"
 
 import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
@@ -26,17 +27,17 @@ function App() {
                 <Route path="/signup" element={<LoginSignup switchState={true}/>} />
                 <Route path="/form/:endpoint" element={<Form/>} />
                 <Route path="/responses/:id" element={<Responses/>} />
+                <Route path="/respond/:ep" element={<Preview responding={true} />} />
+                <Route path="/preview/:id" element={<Preview/>} />
 
                 {/* routes that require user to be logged in */}
                 <Route path="/dashboard" element={<Dashboard/>} />
                 {/* View responses and edit form in one page */}
                 <Route path="/editform/:id" element={<EditForm/>} />
-                <Route path="/preview/:id" element={<Form/>} />
 
                 {/*testing route*/}
                 <Route path="/alteditform/:id" element={<ALTEditForm/>} />
                 <Route path="/alteditformmob/:id" element={<ALTEditFormMob/>} />
-                <Route path="/respond/:id" element={<Respond/>} />
 
                 {/* wrong route route */}
                 <Route path="*" element={<FourOFour />}/>

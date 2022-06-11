@@ -15,7 +15,7 @@ import {
     Typography
 } from "@mui/material";
 
-function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps, setEditRef, copyThis, removeThis }) {
+function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps, setEditRef, copyThis, removeThis, setResponse }) {
     const [hover, setHover] = useState(false);
     const thisRef = useRef(null);
 
@@ -53,8 +53,8 @@ function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps,
 
     const editProp = setProps ? (prop, value) => {
         if (value === reduced[prop]) return
-        const newProps = { ...reduced, [prop]: value }
-        setProps(packProps(newProps))
+        reduced[prop] = value
+        setProps(packProps(reduced))
     } : null
 
     const setRequired = (event) => {
@@ -76,7 +76,7 @@ function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps,
         if (!reduced.qtitle) reduced.qtitle = "Example Title"
         if (!reduced.qdesc) reduced.qdesc = "Example Placeholder"
         if (editThis) piece = <Question reduced={reduced} editing={editingThis} editProp={editProp} />
-        else piece = <Question reduced={reduced} />
+        else piece = <Question reduced={reduced} setResponse={setResponse} />
     }
     // if (_type === "break") {
     //     piece = <Break reduced={reduced} editing={editingThis} editProp={editProp} />
