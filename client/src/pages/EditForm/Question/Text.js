@@ -6,12 +6,16 @@ import {
     Typography,
 } from "@mui/material";
 
-function Text({ reduced, editing, editProp, setResponse }) {
+function Text({ reduced, editing, editProp, setResponse, error }) {
     const [title, _setTitle] = useState(reduced.qtitle ?? "");
     const [desc, _setDesc] = useState(reduced.qdesc ?? "");
     const [value, _setValue] = useState("");
     const [titleError, _setTitleError] = useState(false);
     const [inpError, _setInpError] = useState(false);
+
+    useEffect(() => {
+        setInpError(error)
+    }, [error])
 
     // console.log(reduced)
 
@@ -42,6 +46,7 @@ function Text({ reduced, editing, editProp, setResponse }) {
     }
 
     const validate = (val) => {
+        val = val.trim()
         if (reduced.qreq && (!val || val === "")) {
             setInpError("Required")
             return false
@@ -57,6 +62,11 @@ function Text({ reduced, editing, editProp, setResponse }) {
         width: "100%",
         marginBottom: "12px",
         maxWidth: "430px",
+        "& .MuiFormHelperText-root": {
+            position: "absolute",
+            bottom: "0",
+            transform: "translateY(100%)",
+        }
     }
 
     const inner = () => {
@@ -70,7 +80,6 @@ function Text({ reduced, editing, editProp, setResponse }) {
                     placeholder="Question Title"
                     sx={fieldsx}
                     error={titleError}
-                    helperText={titleError}
                 />
                 <TextField
                     hiddenLabel
@@ -114,6 +123,11 @@ function Text({ reduced, editing, editProp, setResponse }) {
                     color: "rgba(0, 0, 0, 0.87)",
                 },
             },
+            "& .MuiFormHelperText-root": {
+                position: "absolute",
+                bottom: "0",
+                transform: "translateY(100%)",
+            }
         }
 
         return (

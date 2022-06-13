@@ -156,7 +156,8 @@ function ResponseView({ }) {
                             outline: 'none',
                         },
                         '&': {
-                            border: "none"
+                            border: "none",
+                            height: "unset",
                         },
                     }}
                 />}

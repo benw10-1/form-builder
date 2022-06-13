@@ -108,7 +108,7 @@ async function respond(id, responses) {
 async function updateFormMeta(id, title, description) {
   const variables = { id, title, description }
   const query = `
-    mutation UpdateFormMeta($id: ID!, $title: String!, $description: String)) {
+    mutation UpdateFormMeta($id: ID!, $title: String!, $description: String) {
       updateFormMeta(id: $id, title: $title, description: $description) {
         _id
         title

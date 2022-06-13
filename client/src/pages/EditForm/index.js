@@ -12,6 +12,7 @@ import {
     Skeleton,
     Divider,
 } from "@mui/material";
+import Editable from "./Editable";
 
 function Confirm({ onResponse = () => { }, message, anchorEl, _open }) {
     const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ function Confirm({ onResponse = () => { }, message, anchorEl, _open }) {
     };
 
     useEffect(() => {
-        if (_open !== open) setOpen(_open) 
+        if (_open !== open) setOpen(_open)
     }, [_open])
 
     return (
@@ -67,15 +68,15 @@ function checkSaved(pieces, old) {
 function EditForm() {
     const { id } = useParams();
     const isMob = window.innerWidth < 900
-    const [form, setForm] = useState({});
+    const [form, _setForm] = useState({});
     const [loading, setLoading] = useState(true);
     const [pieces, _setPieces] = useState([]);
     const [confirmProps, setConfirmProps] = useState({});
     const [saved, setSaved] = useState(true);
     const [rerender, setRerender] = useState(false)
-    const [editingEl, setEditingEl] = useState(null);
 
     const pieceRef = useRef(pieces);
+    const formRef = useRef(form);
 
     const resizer = (event) => {
         setRerender(Math.random() * 100)
@@ -87,14 +88,27 @@ function EditForm() {
         _setPieces(pieces);
     };
 
+    const setForm = (_form) => {
+        setSaved(false)
+        _setForm(_form);
+        formRef.current = _form;
+    }
+
     const savePieces = async () => {
-        const pruned = pieces.map(piece => {
+        const pruned = pieceRef.current.map(piece => {
             return {
                 ...piece,
-                props: piece.props.filter(prop => !prop.value.match("response"))
+                props: piece.props.filter(prop => {
+                    if (prop.key === "qtype" && !prop.value) prop.value = "text"
+                    if (prop.key === "qtitle" && !prop.value) prop.value = "Question Title"
+                    if (prop.key === "qdesc" && !prop.value) prop.value = ""
+
+                    return prop.key !== "response"
+                }),
             }
         })
         const res = await mutations.updateFormPieces(id, pruned);
+        const formUpt = await mutations.updateFormMeta(id, formRef.current.title, formRef.current.description);
         if (!res || res.errors) return
 
         const mapped = pieces.map((p, i) => {
@@ -119,6 +133,10 @@ function EditForm() {
             return;
         }
         queries.getFormByID(id).then(async form => {
+            if (!form || form.errors) {
+                window.location.replace(window.location.origin + "/");
+                return;
+            }
             if (form?.result && form.result.published) {
                 window.location.replace(window.location.origin + "/respond/" + id);
                 return;
@@ -143,11 +161,11 @@ function EditForm() {
             {window.innerWidth > 900 ? (
                 <React.Fragment>
                     <Typography variant="h5" height={24} sx={{ ...fontsx, marginTop: { md: "28px", xs: "14px" }, marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
-                {form.title}
-            </Typography>
-            <Typography variant="body1" height={48} sx={fontsx}>
-                {'Edit your form by clicking on the toolbar icons.'}
-            </Typography>
+                        {form.title}
+                    </Typography>
+                    <Typography variant="body1" height={48} sx={fontsx}>
+                        {'Edit your form by clicking on the toolbar icons.'}
+                    </Typography>
                 </React.Fragment>
             ) : null}
         </React.Fragment>
@@ -160,14 +178,37 @@ function EditForm() {
 
     const paperheader = (
         <Box sx={titlesx}>
-            <Typography variant="h4" marginBottom={"6px"} >
-                {form.title ?? "Form"}
-            </Typography>
-            {true ? <Typography variant="body1" >{form.description ?? "Some description"}</Typography> : null}
+            <Editable
+                initialText={formRef.current.title ?? "Form"}
+                textProps={{ sx: {
+                    fontFamily: 'Roboto',
+                    fontStyle: "normal",
+                    fontWeight: "400",
+                    fontSize: "34px",
+                    letterSpacing: "0.25px",
+                } }}
+                onChange={(text) => {
+                    setForm({ ...formRef.current, title: text });
+                }} 
+            />
+            {(formRef.current.description && formRef.current.description !== "") ? 
+            <Editable
+                initialText={formRef.current.description}
+                textProps={{ sx: {
+                    fontFamily: 'Roboto',
+                    fontStyle: "normal",
+                    fontWeight: "400",
+                    fontSize: "16px",
+                    letterSpacing: "0.15px",
+                } }}
+                onChange={(text) => {
+                    setForm({ ...formRef.current, description: text });
+                }} 
+            /> : null}
         </Box>
     )
 
-    const paperbody = loading ? (<Skeleton />) : <Editor pieces={pieces} form={form} handlers={{ setPieces, setEditingEl }} />
+    const paperbody = loading ? (<Skeleton />) : <Editor pieces={pieces} form={form} handlers={{ setPieces }} />
 
     const butcontsx = {
         display: "flex",
@@ -240,7 +281,8 @@ function EditForm() {
                 _open: true,
             })
         }} >delete form</Button>),
-        preview: (<Button color="secondary" variant="outlined" sx={buttonsx} onClick={() => {
+        preview: (<Button color="secondary" variant="outlined" sx={buttonsx} onClick={async () => {
+            await savePieces();
             window.location.assign(window.location.origin + "/preview/" + id);
         }}>preview</Button>),
         dashboard: (<Button color="secondary" variant="outlined" sx={buttonsx} onClick={() => {
@@ -270,9 +312,7 @@ function EditForm() {
     )
 
     return (
-        <PaperCenter left={left} paper={[paperheader, paperbody]} buttons={buttons} >
-            <SideBar attachEl={editingEl} />
-        </PaperCenter>
+        <PaperCenter left={left} paper={[paperheader, paperbody]} buttons={buttons} />
     )
 }
 

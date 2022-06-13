@@ -9,13 +9,17 @@ import {
     InputLabel,
 } from "@mui/material";
 
-function Question({ reduced, editing, editProp, setResponse }) {
+function Question({ reduced, editing, editProp, setResponse, error }) {
     const [type, setType] = useState(reduced.qtype);
 
     let rendered
     if (type === "text") {
-        if (editing) rendered = <Text reduced={reduced} editing={editing} editProp={editProp} />
-        else rendered = <Text reduced={reduced} setResponse={setResponse} />
+        if (editing) rendered = <Text reduced={reduced} editing={editing} editProp={editProp} error={error} />
+        else rendered = <Text reduced={reduced} setResponse={setResponse} error={error} />
+    }
+    else if (type === "multiplechoice") {
+        if (editing) rendered = <MultipleChoice reduced={reduced} editing={editing} editProp={editProp} error={error} />
+        else rendered = <MultipleChoice reduced={reduced} setResponse={setResponse} error={error} />
     }
 
     const contsx = {
@@ -44,7 +48,7 @@ function Question({ reduced, editing, editProp, setResponse }) {
                         label="Question Type"
                     >
                         <MenuItem value="text">Text</MenuItem>
-                        {/* <MenuItem value="multipleChoice">Multiple Choice</MenuItem> */}
+                        <MenuItem value="multiplechoice">Multiple Choice</MenuItem>
                     </Select>
                 </FormControl>
             </Box>

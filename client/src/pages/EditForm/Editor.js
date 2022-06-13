@@ -10,7 +10,13 @@ import {
 } from "@mui/material";
 import Add from "@mui/icons-material/Add"
 
-function SideBar({ attachEl, isMob }) {
+function SideBar({ attachEl, isMob, resize }) {
+    const [rerender, setRerender] = useState(false)
+
+    useEffect(() => {
+        setRerender(Math.random() * 100)
+    }, [resize])
+
     if (!attachEl) return null
     if (attachEl.current) attachEl = attachEl.current
     const { height } = attachEl.getBoundingClientRect()
@@ -32,7 +38,7 @@ function SideBar({ attachEl, isMob }) {
     )
 }
 
-function Toolbox({ addPiece, editing }) {
+function Toolbox({ addPiece, editing, resize }) {
     const [expanded, setExpanded] = useState(false)
     const [ghostEl, setGhostEl] = useState(null)
 
@@ -52,6 +58,11 @@ function Toolbox({ addPiece, editing }) {
     }
 
     useEffect(() => {
+        if (!ghostEl) return
+        resizer()
+    }, [resize])
+
+    useEffect(() => {
         window.addEventListener("resize", resizer)
         return () => window.removeEventListener("resize", resizer)
     }, [])
@@ -60,7 +71,7 @@ function Toolbox({ addPiece, editing }) {
 
     const toolboxsx = {
         display: "flex",
-        minWidth: "250px",
+        minWidth: "190px",
         padding: "0 10px",
         height: expanded ? "40px" : "0",
         justifyContent: "center",
@@ -100,9 +111,10 @@ function Toolbox({ addPiece, editing }) {
     )
 }
 
-function Editor({ pieces, form, handlers: { setPieces, setEditingEl } }) {
+function Editor({ pieces, form, handlers: { setPieces } }) {
     const [editing, setEditing] = useState(null)
     const editingRef = useRef(editing)
+    const [editingEl, setEditingEl] = useState(null)
 
     const removePiece = (index) => {
         if (index < 0 || index >= pieces.length) return
@@ -164,10 +176,11 @@ function Editor({ pieces, form, handlers: { setPieces, setEditingEl } }) {
         flexDirection: "column",
     }
 
-    const toolBox = <Toolbox addPiece={addPiece} editing={editingRef.current} />
+    const toolBox = <Toolbox addPiece={addPiece} editing={editingRef.current} resize={Math.random() * 10} />
 
     return (
         <Box sx={editorsx} >
+            <SideBar attachEl={editingEl} resize={Math.random() * 100} />
             {pieces.map((p, i) => {
                 const _piece = (
                     <Piece

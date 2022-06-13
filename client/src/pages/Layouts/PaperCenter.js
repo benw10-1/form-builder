@@ -138,7 +138,6 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
         position: "relative",
         display: "flex",
         flexDirection: "column",
-        transition: "all 0.3s ease",
     }
     const containersx = {
         overflow: "auto",

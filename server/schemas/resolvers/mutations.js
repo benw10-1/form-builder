@@ -120,7 +120,7 @@ async function respond(parent, { id, responses }, context) {
             console.log("Skipping piece: " + piece._type)
             continue
         }
-        const { qtype, qoptions, qtext } = propReducer(piece.props)
+        const { qtype, qoptions, qtitle } = propReducer(piece.props)
 
         if (qtype === "radio") {
             console.log(value, qoptions)
@@ -132,7 +132,7 @@ async function respond(parent, { id, responses }, context) {
             })
         }
 
-        console.log("Found type " + qtype + " with text - " + qtext)
+        console.log("Found type " + qtype + " with text - " + qtitle)
     }
 
     const newResponse = await Response.create({ form_ref: form._id, responses })
