@@ -14,6 +14,7 @@ function Text({ reduced, editing, editProp, setResponse, error }) {
     const [inpError, _setInpError] = useState(false);
 
     useEffect(() => {
+        console.log("red", error)
         setInpError(error)
     }, [error])
 
@@ -126,13 +127,14 @@ function Text({ reduced, editing, editProp, setResponse, error }) {
             "& .MuiFormHelperText-root": {
                 position: "absolute",
                 bottom: "0",
+                margin: "5px 0 0",
                 transform: "translateY(100%)",
             }
         }
 
         return (
             <React.Fragment>
-                <Typography sx={titlesx}>{String(reduced.qtitle + (reduced.qreq ? "*" : ""))}</Typography>
+                <Typography sx={titlesx}>{String(reduced.qtitle + (reduced.qreq ? " *" : ""))}</Typography>
                 <TextField
                     hiddenLabel
                     value={value}

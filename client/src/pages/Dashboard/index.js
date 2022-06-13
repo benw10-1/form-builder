@@ -22,12 +22,6 @@ import "./Dashboard.css"
 
 import Popover from '@mui/material/Popover';
 
-//send to small device touchscreen version if screen less than minW wide or they are using touchscreen
-const minW = 900;
-let touch = { a: false };
-function touchDetect(t) { t.a = true; }
-window.addEventListener('touchstart', () => { touchDetect(touch) });
-
 function FormCard({ form: { _id, title, description, createdAt, published, endpoint } }) {
     const [open, setOpen] = useState(false);
     const [openPop, setOpenPop] = useState(false);
@@ -175,7 +169,7 @@ function FormCard({ form: { _id, title, description, createdAt, published, endpo
                             </Box>
                         </Popover>
                     </Box>
-                    <Box sx={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%", width: "100%"}}>{Rlink}</Box>
+                    <Box sx={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%", width: "100%", color: "#0000EE", textDecoration: "underline", cursor: "pointer" }} onClick={() => {window.open(Rlink)}} >{Rlink}</Box>
                 </Box>
             </Box>
 
@@ -352,7 +346,7 @@ function Dashboard() {
                 sm: "275",
                 md: "275px",
             },
-            display: "block",
+            display: window.innerHeight > 600 ? "block" : "none",
             position: "relative",
             margin: {
                 xs: "0 0 0 0",

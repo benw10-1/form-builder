@@ -18,7 +18,6 @@ import {
 function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps, setEditRef, copyThis, removeThis, setResponse, error }) {
     const [hover, setHover] = useState(false);
     const thisRef = useRef(null);
-
     useEffect(() => {
         const enter = () => {
             setHover(true);

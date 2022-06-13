@@ -21,6 +21,10 @@ function Question({ reduced, editing, editProp, setResponse, error }) {
         if (editing) rendered = <MultipleChoice reduced={reduced} editing={editing} editProp={editProp} error={error} />
         else rendered = <MultipleChoice reduced={reduced} setResponse={setResponse} error={error} />
     }
+    else if (type === "multipleselect") {
+        if (editing) rendered = <MultipleChoice reduced={reduced} editing={editing} editProp={editProp} error={error} multiple={true} />
+        else rendered = <MultipleChoice reduced={reduced} setResponse={setResponse} error={error} multiple={true} />
+    }
 
     const contsx = {
         width: "100%",
@@ -49,6 +53,7 @@ function Question({ reduced, editing, editProp, setResponse, error }) {
                     >
                         <MenuItem value="text">Text</MenuItem>
                         <MenuItem value="multiplechoice">Multiple Choice</MenuItem>
+                        <MenuItem value="multipleselect">Multiple Select</MenuItem>
                     </Select>
                 </FormControl>
             </Box>

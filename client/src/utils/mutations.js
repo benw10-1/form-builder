@@ -187,4 +187,21 @@ async function deleteForm(id) {
   })
 }
 
-export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished, deleteForm }
+async function deleteResponses(id, responses) {
+  const variables = { id, responses }
+  const query = `
+    mutation DeleteResponses($id: ID!, $responses: [ID!]!) {
+      deleteResponses(id: $id, responses: $responses) 
+    }
+    `
+    console.log(variables)
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.deleteResponses
+    }
+  })
+}
+
+export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished, deleteForm, deleteResponses }

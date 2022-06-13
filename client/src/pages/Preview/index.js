@@ -18,6 +18,7 @@ function Preview({ responding }) {
     const [pieces, _setPieces] = useState([]);
     const [responses, setResponses] = useState([]);
     const [submitted, setSubmitted] = useState(false);
+    const [errors, setErrors] = useState([]);
 
     let { id, ep } = useParams();
 
@@ -43,12 +44,12 @@ function Preview({ responding }) {
     }, [])
 
     useEffect(() => {
-        let loggedIn = Auth.loggedIn();
-        if (!loggedIn) {
-            window.location.replace(window.location.origin + "/login");
-            return;
-        }
         if (id) {
+            let loggedIn = Auth.loggedIn();
+            if (!loggedIn) {
+                window.location.replace(window.location.origin + "/login");
+                return;
+            }
             queries.getFormByID(id).then(async form => {
                 if (form?.result && form.result.published) {
                     window.location.replace(window.location.origin + "/respond/" + id);
@@ -66,6 +67,9 @@ function Preview({ responding }) {
                 setLoading(false);
             });
         }
+        else {
+            window.location.replace(window.location.origin + "/");
+        }
     }, []);
 
     const backToEditing = (event) => {
@@ -75,13 +79,19 @@ function Preview({ responding }) {
 
     const submit = (event) => {
         event.preventDefault();
-        if (!responding) return
         let ok = true
+        const _errors = []
         const _responses = pieces.map((piece, i) => {
-            const required = piece.props.filter(prop => prop.value === "qreq");
+            const required = piece.props.reduce((acc, p) => {
+                if (p.key === "qreq") {
+                    return acc || p.value === "true";
+                }
+                return acc
+            }, false)
             const val = responses[i];
-            if (required && (val === undefined || val === "")) {
+            if (required && (!val || val === "")) {
                 ok = false
+                _errors[i] = "This is a required field"
             }
             const response = {
                 key: piece._id,
@@ -89,12 +99,12 @@ function Preview({ responding }) {
             }
             return response;
         })
+        console.log(_errors)
+        setErrors(_errors)
+        if (!responding) return
         if (ok) mutations.respond(ep, _responses).then(() => {
             setSubmitted(true);
         })
-        else {
-            console.log("validation error")
-        }
     }
 
     const leftbut = responding ? null : (window.innerWidth <= 900 ? null : <Button variant="outlined" startIcon={<ArrowBack />} onClick={backToEditing} sx={{ width: "220px", padding: "8px 0" }}>Back to Editing</Button>)
@@ -142,6 +152,7 @@ function Preview({ responding }) {
                                 }}
                                 index={i}
                                 key={p._id ?? i}
+                                error={errors[i]}
                             />
                         )
                     })}

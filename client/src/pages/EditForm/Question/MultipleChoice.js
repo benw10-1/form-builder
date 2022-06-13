@@ -7,7 +7,10 @@ import {
     FormLabel,
     RadioGroup,
     FormControlLabel,
-    Radio
+    Radio,
+    Checkbox,
+    FormGroup,
+    FormHelperText
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import Editable from "../Editable";
@@ -66,7 +69,7 @@ function EditableChoice({ removeThis, initalValue, setValue }) {
 
     return (
         <Box sx={radiolabelcontsx} ref={(_ref) => { setAnchorEl(_ref) }}>
-            <Editable textProps={{ variant: "body2", sx: radiolabelsx }} initialText={value} onChange={(text) => {_setValue(text); setValue(text)}} />
+            <Editable textProps={{ variant: "body2", sx: radiolabelsx }} initialText={value} onChange={(text) => { _setValue(text); setValue(text) }} />
             <Box sx={closesx}>
                 <CloseIcon sx={iconsx} onClick={removeThis} />
             </Box>
@@ -74,13 +77,14 @@ function EditableChoice({ removeThis, initalValue, setValue }) {
     )
 }
 
-function MultipleChoice({ reduced, editing, editProp, error, setResponse }) {
+function MultipleChoice({ reduced, editing, editProp, error, setResponse, multiple }) {
     const [title, _setTitle] = useState(reduced.qtitle ?? "");
     const [desc, _setDesc] = useState(reduced.qlabel ?? "");
     const [value, _setValue] = useState("");
     const [titleError, _setTitleError] = useState(false);
     const [inpError, _setInpError] = useState(false);
     const [options, _setOptions] = useState(reduced.qoptions ?? []);
+    const [checkedArray, _setCheckedArray] = useState(reduced.qoptions.map(() => false));
 
     useEffect(() => {
         setInpError(error)
@@ -115,7 +119,6 @@ function MultipleChoice({ reduced, editing, editProp, error, setResponse }) {
     const changeOption = (index, option) => {
         const newOptions = [...reduced.qoptions]
         newOptions[index] = option
-        console.log(newOptions)
         editProp("qoptions", newOptions)
         _setOptions(newOptions)
     }
@@ -137,22 +140,43 @@ function MultipleChoice({ reduced, editing, editProp, error, setResponse }) {
     }
 
     const setValue = (event) => {
-        _setValue(event.target.value)
-        validate(event.target.value)
-        if (setResponse) setResponse(event.target.value)
+        const resolved = event?.target?.value ?? event
+        _setValue(resolved)
+        validate(resolved)
+        if (setResponse) setResponse(resolved)
     }
 
     const setInpError = (error) => {
+        console.log("setInpError", error)
         _setInpError(error)
     }
 
     const validate = (val) => {
+        console.log(val)
         if (reduced.qreq && (!val || val === "")) {
             setInpError("Required")
             return false
         }
         setInpError(false)
         return true
+    }
+
+    const setChecked = (index, state) => {
+        const newCheckedArray = [...checkedArray]
+        newCheckedArray[index] = state
+        _setCheckedArray(newCheckedArray)
+        const joined = newCheckedArray.reduce((acc, val, i) => {
+            if (val) {
+                if (acc) {
+                    return acc + "__sep__" + options[i]
+                }
+                else {
+                    return options[i]
+                }
+            }
+            return acc
+        }, undefined)
+        setValue(joined)
     }
 
     const contsx = {
@@ -193,6 +217,37 @@ function MultipleChoice({ reduced, editing, editProp, error, setResponse }) {
         }
     }
 
+    const optionsjsx = (
+        <React.Fragment>
+            {options.map((option, index) => {
+                const label = editing ? (
+                    <EditableChoice
+                        initalValue={option}
+                        key={option + index}
+                        removeThis={() => { removeOption(index) }}
+                        setValue={(value) => { changeOption(index, value) }}
+                    />
+                ) : option
+
+                return (
+                    <FormControlLabel
+                        key={option + index}
+                        value={option}
+                        control={multiple ? <Checkbox disabled={editing} checked={checkedArray[index]} onChange={(event) => {setChecked(index, event.target.checked)}} /> : <Radio disabled={editing} />}
+                        label={label}
+                    />
+                )
+            })}
+            {editing ? (
+                <FormControlLabel
+                    value={"__new__"}
+                    control={multiple ? <Checkbox disabled={true} /> : <Radio disabled={true} />}
+                    label={<Typography sx={addsx} onClick={() => { addOption("Option " + (options.length + 1)) }}>Add option</Typography>}
+                />
+            ) : null}
+        </React.Fragment>
+    )
+
     return (
         <Box sx={contsx}>
             {editing ? (
@@ -216,50 +271,38 @@ function MultipleChoice({ reduced, editing, editProp, error, setResponse }) {
                         sx={fieldsx}
                     />
                 </React.Fragment>
-            ) : <Typography sx={titlesx}>{String(reduced.qtitle + (reduced.qreq ? "*" : ""))}</Typography>}
+            ) : <Typography sx={titlesx}>{String(reduced.qtitle + (reduced.qreq ? " *" : ""))}</Typography>}
 
             <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
                 <FormControl
-                    error={inpError}
-                    helperText={inpError}
+                    error={inpError ? true : false}
+                    sx={{
+                        "& .MuiFormHelperText-root": {
+                            position: "absolute",
+                            bottom: "0",
+                            left: "0",
+                            margin: "5px 0 0",
+                            transform: "translateY(100%)",
+                        }
+                    }}
                 >
                     {(editing || !reduced.qlabel || reduced.qlabel === "") ? null : <FormLabel>{reduced.qlabel}</FormLabel>}
-                    <RadioGroup
-                        value={value}
-                        onChange={setValue}
-                        aria-labelledby="multiple-choice"
-                        name="multiple-choice-question"
-                    >
-                        {options.map((option, index) => {
-                            const label = editing ? (
-                                <EditableChoice
-                                    initalValue={option}
-                                    key={option + index}
-                                    removeThis={() => { removeOption(index) }}
-                                    setValue={(value) => { changeOption(index, value) }}
-                                />
-                            ) : option
-
-                            return (
-                                <FormControlLabel
-                                    key={option + index}
-                                    value={option}
-                                    control={<Radio disabled={editing} />}
-                                    label={label}
-                                />
-                            )
-                        })}
-                        {editing ? (
-                            <FormControlLabel
-                                value={"__new__"}
-                                control={<Radio disabled={true} />}
-                                label={<Typography sx={addsx} onClick={() => { addOption("Option " + (options.length + 1)) }}>Add option</Typography>}
-                            />
-                        ) : null}
-                    </RadioGroup>
+                    {multiple ? (
+                        <FormGroup>{optionsjsx}</FormGroup>
+                    ) : (
+                        <RadioGroup
+                            value={value}
+                            onChange={setValue}
+                            aria-labelledby="multiple-choice"
+                            name="multiple-choice-question"
+                        >
+                            {optionsjsx}
+                        </RadioGroup>
+                    )}
+                    {inpError ? <FormHelperText>{inpError}</FormHelperText> : null}
                 </FormControl>
             </Box>
-        </Box>
+        </Box >
     )
 }
 

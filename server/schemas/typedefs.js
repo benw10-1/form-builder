@@ -74,6 +74,7 @@ const typeDefs = gql`
     respond(id: String!, responses: [PropInp]!): Response!
     setPublished(id: ID!, published: Boolean!): Form
     deleteForm(id: ID!): Form
+    deleteResponses(id: ID!, responses: [ID!]!): Int!
   }
 `;
 

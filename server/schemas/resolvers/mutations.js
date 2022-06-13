@@ -154,6 +154,19 @@ async function deleteForm(parent, { id }, context) {
     return deleted
 }
 
+async function deleteResponses(parent, { id, responses }, context) {
+    if (!context.user) throw new AuthenticationError("Not logged in")
+    const user = await User.findOne({ _id: context.user._id }).exec()
+    if (!user) throw new AuthenticationError("Not logged in")
+
+    const form = await Form.findById(id)
+    if (!form) throw new Error("Form not found")
+    if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
+
+    const deleted = await Response.deleteMany({ _id: { $in: responses } }).exec()
+    return deleted.deletedCount
+}
+
 module.exports = {
     signup,
     login,
@@ -162,5 +175,6 @@ module.exports = {
     updateFormMeta,
     updateFormPieces,
     setPublished,
-    deleteForm
+    deleteForm,
+    deleteResponses
 }

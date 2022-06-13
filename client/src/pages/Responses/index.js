@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { queries, dayTime, Auth } from '../../utils'
+import { queries, dayTime, Auth, mutations } from '../../utils'
 import { useParams } from 'react-router-dom';
 import Box from "@mui/material/Box"
 import Skeleton from "@mui/material/Skeleton"
@@ -43,7 +43,7 @@ function parseResponseData(responses, pieces) {
             if (rs[p.key]) rs[p.key] += `, ${p.value}`
             else rs[p.key] = p.value
         })
-        rs.id = i
+        rs.id = r._id
         rs.createdAt = r.createdAt
         return rs
     })
@@ -63,6 +63,7 @@ function ResponseView({ }) {
     const [form, setForm] = useState({})
     const [anchorEl, setAnchorEl] = useState(null)
     const [selected, _setSelected] = useState(null)
+    const [selection, setSelection] = useState([])
 
     const select = (event, content) => {
         _setSelected(content)
@@ -97,6 +98,7 @@ function ResponseView({ }) {
         // marginTop: "36px",
         display: "flex",
         justifyContent: "center",
+        position: "relative"
     }
 
     const titlesx = {
@@ -110,7 +112,7 @@ function ResponseView({ }) {
     }
 
     const handleCellClick = (params, event) => {
-        if (params.formattedValue === '') return
+        if (params.formattedValue === '' || params.field === "__check__") return true
         select(event, params.formattedValue)
     }
 
@@ -122,7 +124,7 @@ function ResponseView({ }) {
             {true ? <Typography variant="body1" >{form.description ?? "Some description"}</Typography> : null}
         </Box>
     )
-
+    // console.log(selection)
     const paperbody = (
         <Box sx={formContainersx}>
             {loading ?
@@ -130,14 +132,17 @@ function ResponseView({ }) {
                 <DataGrid
                     columns={data.columns}
                     rows={data.rows}
-                    // autoHeight={true}
                     pageSize={pageSize}
                     onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                     rowsPerPageOptions={[10, 20, 50, 100]}
                     disableColumnSelector={true}
                     disableSelectionOnClick
                     disableColumnMenu
+                    checkboxSelection={true}
                     onCellClick={handleCellClick}
+                    onSelectionModelChange={(newSelection) => { setSelection(newSelection) }}
+                    selectionModel={selection}
+                    hideFooterSelectedRowCount={true}
                     sx={{
                         '& .MuiDataGrid-columnSeparator': {
                             display: "none"
@@ -161,6 +166,24 @@ function ResponseView({ }) {
                         },
                     }}
                 />}
+            {selection.length > 0 ? (
+                <Box sx={{ position: "absolute", left: 0, bottom: 0, width: "20%", maxWidth: "110px", minWidth: "80px" }}>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={async () => {
+                            const res = await mutations.deleteResponses(id, selection)
+                            if (res.__status__ === "error") return
+                            setData({
+                                columns: data.columns,
+                                rows: data.rows.filter(r => !selection.includes(r.id))
+                            })
+                            setSelection([])
+                        }}
+                        sx={{ ...buttonsx, width: "100%" }}
+                    >Delete</Button>
+                </Box>
+            ) : null}
             <Box sx={{ position: "absolute", width: "fit-content", height: "fit-content" }}>
                 <Popover
                     open={anchorEl !== null}
@@ -184,19 +207,19 @@ function ResponseView({ }) {
     const dashbut = (
         <Button variant="contained" color="primary" onClick={() => {
             window.location.assign(`/dashboard`)
-        }} sx={{ ...buttonsx, margin: 0 }}>Back to Dashboard</Button>
+        }} sx={{ ...buttonsx, margin: 0, width: "100%" }}>Back to Dashboard</Button>
     )
 
     const left = (
         <React.Fragment>
-            <Typography variant="h4" sx={{ fontSize: "20px", fontWeight: 500, marginBottom: { md: "28px", xs: "0"} }}>
+            <Typography variant="h4" sx={{ fontSize: "20px", fontWeight: 500, marginBottom: { md: "28px", xs: "0" } }}>
                 {(() => { return dayTime() + " " + (Auth.getProfile()?.name ?? "User") })()}
             </Typography>
-            {isMob ? 
-            null :
-            <Typography variant="h4" sx={{ fontSize: "16px", fontWeight: 400 }}>
-                {"Viewing: " + (form.title ?? "Form")}
-            </Typography>}
+            {isMob ?
+                null :
+                <Typography variant="h4" sx={{ fontSize: "16px", fontWeight: 400 }}>
+                    {"Viewing: " + (form.title ?? "Form")}
+                </Typography>}
         </React.Fragment>
     )
 

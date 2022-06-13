@@ -4,12 +4,11 @@ import {
     Dashboard,
     FourOFour,
     LoginSignup,
-    Form,
     ALTEditForm,
     ALTEditFormMob,
     EditForm,
     Responses,
-    Respond,
+    Landing,
     Preview
 } from "./pages"
 
@@ -22,10 +21,9 @@ function App() {
         <BrowserRouter>
             <Routes>
                 {/*routes that do not require user to be logged in (content in Home will be different if logged in)*/}
-                <Route path="/" element={Auth.loggedIn() ? <Navigate replace to="/dashboard" /> : <Navigate replace to="/login" />} />
+                <Route path="/" element={Auth.loggedIn() ? <Navigate replace to="/dashboard" /> : <Landing />} />
                 <Route path="/login" element={<LoginSignup switchState={false}/>} />
                 <Route path="/signup" element={<LoginSignup switchState={true}/>} />
-                <Route path="/form/:endpoint" element={<Form/>} />
                 <Route path="/responses/:id" element={<Responses/>} />
                 <Route path="/respond/:ep" element={<Preview responding={true} />} />
                 <Route path="/preview/:id" element={<Preview/>} />
