@@ -68,7 +68,9 @@ function checkSaved(pieces, old) {
 function EditForm() {
     const { id } = useParams();
     const isMob = window.innerWidth < 900
-    const [form, _setForm] = useState({});
+    const [form, _setForm] = useState({
+        title: "Form"
+    });
     const [loading, setLoading] = useState(true);
     const [pieces, _setPieces] = useState([]);
     const [confirmProps, setConfirmProps] = useState({});
@@ -154,21 +156,21 @@ function EditForm() {
     }
 
     const left = (
-        <React.Fragment>
-            <Typography variant="h6" height={window.innerWidth <= 900 ? "auto" : 55} sx={fontsx}>
+        <Box sx={{ width: "100%", minWidth: "135px"}}>
+            <Typography variant="h6" height={"auto"} sx={fontsx}>
                 {(() => { return dayTime() + " " + Auth.getProfile()?.name ?? "User" })()}
             </Typography>
             {window.innerWidth > 900 ? (
                 <React.Fragment>
-                    <Typography variant="h5" height={24} sx={{ ...fontsx, marginTop: { md: "28px", xs: "14px" }, marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
+                    <Typography variant="h5" minHeight={24} sx={{ ...fontsx, marginTop: { md: "28px", xs: "14px" }, marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
                         {form.title}
                     </Typography>
-                    <Typography variant="body1" height={48} sx={fontsx}>
+                    <Typography variant="body1" minHeight={48} sx={fontsx}>
                         {'Edit your form by clicking on the toolbar icons.'}
                     </Typography>
                 </React.Fragment>
             ) : null}
-        </React.Fragment>
+        </Box>
     )
 
     const titlesx = {
@@ -179,7 +181,7 @@ function EditForm() {
     const paperheader = (
         <Box sx={titlesx}>
             <Editable
-                initialText={formRef.current.title ?? "Form"}
+                initialText={formRef.current.title}
                 textProps={{ sx: {
                     fontFamily: 'Roboto',
                     fontStyle: "normal",
@@ -203,7 +205,8 @@ function EditForm() {
                 } }}
                 onChange={(text) => {
                     setForm({ ...formRef.current, description: text });
-                }} 
+                }}
+                maxLength={200} 
             /> : null}
         </Box>
     )
@@ -312,7 +315,7 @@ function EditForm() {
     )
 
     return (
-        <PaperCenter left={left} paper={[paperheader, paperbody]} buttons={buttons} />
+        <PaperCenter left={(window.innerWidth >= 1300 || window.innerWidth <= 900) ? left: null} paper={[paperheader, paperbody]} buttons={buttons} />
     )
 }
 

@@ -70,88 +70,82 @@ function Text({ reduced, editing, editProp, setResponse, error }) {
         }
     }
 
-    const inner = () => {
-        if (editing) return (
-            <React.Fragment>
-                <TextField
-                    hiddenLabel
-                    value={title}
-                    variant="filled"
-                    onChange={setTitle}
-                    placeholder="Question Title"
-                    sx={fieldsx}
-                    error={titleError}
-                />
-                <TextField
-                    hiddenLabel
-                    value={desc}
-                    variant="standard"
-                    onChange={setDesc}
-                    placeholder="Question Placeholder/Description"
-                    sx={fieldsx}
-                />
-            </React.Fragment>
-        )
+    const titlesx = {
+        fontSize: "16px",
+        lineHeight: "24px",
+        letterSpacing: "0.15px",
+        color: "rgba(0, 0, 0, 0.87)",
+        fontWeight: "400",
+        display: "flex",
+        alignItems: "center",
+        width: "100%",
+        marginBottom: editing ? "18px" : "12px",
+        fontFamily: "'Roboto', sans-serif",
+    }
 
-        const titlesx = {
+    const valsx = {
+        fontSize: "16px",
+        lineHeight: "24px",
+        fontFamily: "'Roboto', sans-serif",
+        width: "100%",
+        maxWidth: "430px",
+        "& .MuiInput-input": {
+            padding: "8px 0",
             fontSize: "16px",
             lineHeight: "24px",
-            letterSpacing: "0.15px",
-            color: "rgba(0, 0, 0, 0.87)",
+            fontFamily: "'Roboto', sans-serif",
             fontWeight: "400",
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            marginBottom: editing ? "18px" : "12px",
-            fontFamily: "'Roboto', sans-serif",
-        }
-
-        const valsx = {
-            fontSize: "16px",
-            lineHeight: "24px",
-            fontFamily: "'Roboto', sans-serif",
-            width: "100%",
-            maxWidth: "430px",
-            "& .MuiInput-input": {
-                padding: "8px 0",
-                fontSize: "16px",
-                lineHeight: "24px",
-                fontFamily: "'Roboto', sans-serif",
-                fontWeight: "400",
+            color: "rgba(0, 0, 0, 0.87)",
+            letterSpacing: "0.15px",
+            "&:disabled": {
                 color: "rgba(0, 0, 0, 0.87)",
-                letterSpacing: "0.15px",
-                "&:disabled": {
-                    color: "rgba(0, 0, 0, 0.87)",
-                },
             },
-            "& .MuiFormHelperText-root": {
-                position: "absolute",
-                bottom: "0",
-                margin: "5px 0 0",
-                transform: "translateY(100%)",
-            }
+        },
+        "& .MuiFormHelperText-root": {
+            position: "absolute",
+            bottom: "0",
+            margin: "5px 0 0",
+            transform: "translateY(100%)",
         }
-
-        return (
-            <React.Fragment>
-                <Typography sx={titlesx}>{String(reduced.qtitle + (reduced.qreq ? " *" : ""))}</Typography>
-                <TextField
-                    hiddenLabel
-                    value={value}
-                    variant="standard"
-                    onChange={setValue}
-                    placeholder={reduced.qdesc === '' ? "Text" : reduced.qdesc}
-                    sx={valsx}
-                    error={inpError}
-                    helperText={inpError}
-                />
-            </React.Fragment>
-        )
     }
 
     return (
         <Box sx={contsx}>
-            {inner()}
+            {editing ? (
+                <React.Fragment>
+                    <TextField
+                        hiddenLabel
+                        value={title}
+                        variant="filled"
+                        onChange={setTitle}
+                        placeholder="Question Title"
+                        sx={fieldsx}
+                        error={titleError}
+                    />
+                    <TextField
+                        hiddenLabel
+                        value={desc}
+                        variant="standard"
+                        onChange={setDesc}
+                        placeholder="Question Placeholder/Description"
+                        sx={fieldsx}
+                    />
+                </React.Fragment>
+            ) : (
+                <React.Fragment>
+                    <Typography sx={titlesx}>{String(reduced.qtitle + (reduced.qreq ? " *" : ""))}</Typography>
+                    <TextField
+                        hiddenLabel
+                        value={value}
+                        variant="standard"
+                        onChange={setValue}
+                        placeholder={reduced.qdesc === '' ? "Text" : reduced.qdesc}
+                        sx={valsx}
+                        error={inpError}
+                        helperText={inpError}
+                    />
+                </React.Fragment>
+            )}
         </Box>
     )
 }

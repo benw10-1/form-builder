@@ -99,7 +99,6 @@ function Preview({ responding }) {
             }
             return response;
         })
-        console.log(_errors)
         setErrors(_errors)
         if (!responding) return
         if (ok) mutations.respond(ep, _responses).then(() => {

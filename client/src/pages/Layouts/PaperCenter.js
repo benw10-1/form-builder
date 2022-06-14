@@ -10,7 +10,7 @@ import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import React, { useState, useEffect, useRef } from "react";
 import Signout from "../Signout";
 
-function MobileMenu({ buttons }) {
+function MobileMenu({ buttons, origin, inline }) {
     const [menuOpen, setMenuOpen] = useState(false)
 
     const close = () => {
@@ -28,9 +28,9 @@ function MobileMenu({ buttons }) {
         // padding: "10px",
         width: "25px",
         height: "25px",
-        position: "absolute",
-        top: "24px",
-        right: "24px",
+        position: inline ? "static" : "absolute",
+        top: inline ? "unset" : "24px",
+        right: inline ? "unset" : "24px",
         cursor: "pointer",
         color: "rgba(0, 0, 0, 0.54)",
         "&:hover": {
@@ -38,7 +38,7 @@ function MobileMenu({ buttons }) {
         }
     }
     const menusx = {
-        width: "208px",
+        width: inline ? "auto" : "208px",
         borderRadius: "4px",
         background: "#FFFFFF",
         boxShadow: "0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)",
@@ -46,6 +46,18 @@ function MobileMenu({ buttons }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+    }
+
+    const xtra = {
+        anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'right',
+        },
+        transformOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+        },
+        ...(origin ?? {})
     }
 
     return (
@@ -58,14 +70,7 @@ function MobileMenu({ buttons }) {
                     open={menuOpen}
                     onClose={close}
                     anchorEl={anchorRef.current}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
+                    {...xtra}
                 >
                     <Box sx={menusx}>
                         {buttons}
@@ -93,15 +98,11 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
     const isMob = window.innerWidth < 900
 
     const sidesx = {
-        width: {
-            xs: "100%",
-            md: "350px",
-        },
         padding: {
-            xs: "16px",
-            md: "32px"
+            xs: "16px 0 16px 16px",
+            md: "32px 0 32px 32px"
         },
-        flexShrink: 2,
+        flexShrink: 1,
     }
     const sidebutssx = {
         width: "212px",
@@ -140,7 +141,7 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
         flexDirection: "column",
     }
     const containersx = {
-        overflow: "auto",
+        overflowY: "auto",
         display: "flex",
         justifyContent: "center",
         paddingTop: {
@@ -175,7 +176,7 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
                         {left}
                     </Box> : null}
                 <Box sx={boxsx}>
-                    <Paper sx={contsx}>
+                    <Paper sx={contsx} >
                         {(buttons && isMob) ? <MobileMenu buttons={buttons} /> : null}
                         {paper.map((row, i) => {
                             return (
@@ -200,5 +201,6 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
         </React.Fragment>
     )
 }
+export { PaperCenter, MobileMenu }
 
 export default PaperCenter;

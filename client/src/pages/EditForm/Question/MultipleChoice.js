@@ -65,11 +65,12 @@ function EditableChoice({ removeThis, initalValue, setValue }) {
         border: "0",
         background: "transparent",
         cursor: "pointer",
+        zIndex: "2",
     }
 
     return (
         <Box sx={radiolabelcontsx} ref={(_ref) => { setAnchorEl(_ref) }}>
-            <Editable textProps={{ variant: "body2", sx: radiolabelsx }} initialText={value} onChange={(text) => { _setValue(text); setValue(text) }} />
+            <Editable textProps={{ variant: "body2", sx: radiolabelsx }} initialText={value} onChange={(text) => { _setValue(text); setValue(text) }} maxLength={75} />
             <Box sx={closesx}>
                 <CloseIcon sx={iconsx} onClick={removeThis} />
             </Box>
@@ -277,6 +278,7 @@ function MultipleChoice({ reduced, editing, editProp, error, setResponse, multip
                 <FormControl
                     error={inpError ? true : false}
                     sx={{
+                        position: "static",
                         "& .MuiFormHelperText-root": {
                             position: "absolute",
                             bottom: "0",

@@ -13,17 +13,16 @@ function Question({ reduced, editing, editProp, setResponse, error }) {
     const [type, setType] = useState(reduced.qtype);
 
     let rendered
+    const props = editing ? { reduced, editing, editProp, error } : { reduced, setResponse, error }
+
     if (type === "text") {
-        if (editing) rendered = <Text reduced={reduced} editing={editing} editProp={editProp} error={error} />
-        else rendered = <Text reduced={reduced} setResponse={setResponse} error={error} />
+        rendered = <Text {...props} />
     }
     else if (type === "multiplechoice") {
-        if (editing) rendered = <MultipleChoice reduced={reduced} editing={editing} editProp={editProp} error={error} />
-        else rendered = <MultipleChoice reduced={reduced} setResponse={setResponse} error={error} />
+        rendered = <MultipleChoice {...props} />
     }
     else if (type === "multipleselect") {
-        if (editing) rendered = <MultipleChoice reduced={reduced} editing={editing} editProp={editProp} error={error} multiple={true} />
-        else rendered = <MultipleChoice reduced={reduced} setResponse={setResponse} error={error} multiple={true} />
+        rendered = <MultipleChoice {...props} multiple={true} />
     }
 
     const contsx = {
