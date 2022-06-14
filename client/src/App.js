@@ -21,7 +21,7 @@ function App() {
         <BrowserRouter>
             <Routes>
                 {/*routes that do not require user to be logged in (content in Home will be different if logged in)*/}
-                <Route path="/" element={Auth.loggedIn() ? <Navigate replace to="/dashboard" /> : <Landing />} />
+                <Route path="/" element={Auth.loggedIn() ? <Navigate replace to="/dashboard" /> : <Navigate replace to="/login" />} />
                 <Route path="/login" element={<LoginSignup switchState={false}/>} />
                 <Route path="/signup" element={<LoginSignup switchState={true}/>} />
                 <Route path="/responses/:id" element={<Responses/>} />
