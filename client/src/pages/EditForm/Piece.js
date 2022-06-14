@@ -25,8 +25,7 @@ function BottomMenu({ handlers: { setRequired, copyThis, removeThis, editThis },
     const contsx = {
         width: "100%",
         display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
+        flexDirection: "column",
     }
 
     const iconsx = {
@@ -220,7 +219,7 @@ function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps,
         <Box sx={basepiecesx} ref={thisRef} >
             {(editThis && !editingThis) ? editIcon : null}
             {piece}
-            {(editThis && editingThis) ? <BottomMenu handlers={{ setRequired, copyThis, removeThis, editThis }} states={{ required }} /> : null}
+            {(editThis && editingThis && _type === "question") ? <BottomMenu handlers={{ setRequired, copyThis, removeThis, editThis }} states={{ required }} /> : null}
         </Box>
     )
 }
