@@ -315,7 +315,7 @@ function EditForm() {
     )
 
     return (
-        <PaperCenter left={(window.innerWidth >= 1300 || window.innerWidth <= 900) ? left: null} paper={[paperheader, paperbody]} buttons={buttons} />
+        <PaperCenter left={(window.innerWidth >= 1300 || window.innerWidth < 900) ? left : null} paper={[paperheader, paperbody]} buttons={buttons} />
     )
 }
 

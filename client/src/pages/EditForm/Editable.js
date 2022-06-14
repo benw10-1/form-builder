@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
     Box,
-    TextField,
     Typography,
 } from "@mui/material";
 
@@ -41,12 +40,12 @@ function Editable({ initialText, textProps, onChange, maxLength=50 }) {
     const [height, setHeight] = useState(0);
     const [maxWidth, setMaxWidth] = useState(0);
     const [el, setEl] = useState(null);
+    const [first, setFirst] = useState(true);
     const tmRef = useRef(null);
     const valRef = useRef(value);
 
     const setValue = (_value) => {
         _value = _value || ""
-        console.log("setValue", _value)
         if (maxLength && _value.length > maxLength) {
             _value = _value.substring(0, maxLength);
         }
@@ -68,6 +67,7 @@ function Editable({ initialText, textProps, onChange, maxLength=50 }) {
         onChange(sanitized);
         clearTimeout(tmRef.current);
         tmRef.current = setTimeout(() => {
+            setFirst(true);
             setEditing(false);
         }, 50)
     }
@@ -140,6 +140,7 @@ function Editable({ initialText, textProps, onChange, maxLength=50 }) {
 
     if (textProps) textProps.sx = {
         ...(textProps?.sx ?? {}),
+        width: "auto",
         cursor: "text",
         "&:hover": {
             textDecoration: "underline",
@@ -153,19 +154,21 @@ function Editable({ initialText, textProps, onChange, maxLength=50 }) {
 
     return (
         <Box sx={containersx}>
-            <Box id="_editable" onClick={editableClick} sx={{ width: "fit-content" }}>
+            <Box id="_editable" onClick={editableClick} sx={{ width: "fit-content" }} ref={setEl}>
                 {editing ? (
                     <textarea
                         ref={(ref) => {
                             if (ref) {
-                                setEl(ref);
-                                if (ref.setSelectionRange) { 
-                                    ref.focus(); 
-                                    ref.setSelectionRange(value.length, value.length);
-                                } else if (ref.createTextRange) { 
-                                    let range = ref.createTextRange();  
-                                    range.moveStart('character', value.length);
-                                    range.select(); 
+                                if (first) {
+                                    setFirst(false);
+                                    if (ref.setSelectionRange) { 
+                                        ref.focus();
+                                        ref.setSelectionRange(value.length, value.length);
+                                    } else if (ref.createTextRange) { 
+                                        let range = ref.createTextRange();  
+                                        range.moveStart('character', value.length);
+                                        range.select(); 
+                                    }
                                 }
                             }
                         }}
@@ -180,7 +183,13 @@ function Editable({ initialText, textProps, onChange, maxLength=50 }) {
                         id="_editable"
                         spellCheck="false"
                     />
-                ) : <Typography id="_editable" {...textProps}>{value}</Typography>}
+                ) : <Typography id="_editable" {...textProps} ref={(ref) => {
+                    if (ref) {
+                        const { width, height } = ref.getBoundingClientRect();
+                        setWidth(width);
+                        setHeight(height);
+                    }
+                }}>{value}</Typography>}
             </Box>
             <Box sx={ghostelsx} ref={(ref) => {
                 if (ref) {
