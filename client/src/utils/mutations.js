@@ -84,7 +84,7 @@ async function respond(id, responses) {
 
   const variables = { id, responses }
   const query = `
-    mutation Respond($id: ID!, $responses: [PropInp]!) {
+    mutation Respond($id: String!, $responses: [PropInp]!) {
       respond(id: $id, responses: $responses) {
         _id
         form_ref
@@ -108,7 +108,7 @@ async function respond(id, responses) {
 async function updateFormMeta(id, title, description) {
   const variables = { id, title, description }
   const query = `
-    mutation UpdateFormMeta($id: ID!, $title: String!, $description: String)) {
+    mutation UpdateFormMeta($id: ID!, $title: String!, $description: String) {
       updateFormMeta(id: $id, title: $title, description: $description) {
         _id
         title
@@ -187,4 +187,21 @@ async function deleteForm(id) {
   })
 }
 
-export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished, deleteForm }
+async function deleteResponses(id, responses) {
+  const variables = { id, responses }
+  const query = `
+    mutation DeleteResponses($id: ID!, $responses: [ID!]!) {
+      deleteResponses(id: $id, responses: $responses) 
+    }
+    `
+    console.log(variables)
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.deleteResponses
+    }
+  })
+}
+
+export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished, deleteForm, deleteResponses }

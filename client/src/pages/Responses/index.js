@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { queries, dayTime, Auth } from '../../utils'
+import { queries, dayTime, Auth, mutations } from '../../utils'
 import { useParams } from 'react-router-dom';
 import Box from "@mui/material/Box"
 import Skeleton from "@mui/material/Skeleton"
-import Paper from "@mui/material/Paper"
-import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
-import Divider from "@mui/material/Divider"
 import Button from "@mui/material/Button"
 import Popover from "@mui/material/Popover"
-import Signout from '../Signout'
 import { DataGrid } from "@mui/x-data-grid/DataGrid"
+import { PaperCenter } from '../Layouts';
 
 function parseResponseData(responses, pieces) {
     let columns = [{
@@ -21,12 +18,12 @@ function parseResponseData(responses, pieces) {
         valueFormatter: (params) => {
             return new Date(Number(params.value)).toLocaleString()
         },
-        width: 150
+        width: 140
     }].concat(pieces.filter(p => p._type === "question").map(p => {
         return {
             field: p._id,
             headerName: p.props.reduce((prev, curr) => {
-                if (curr.key === "qtext") return curr.value
+                if (curr.key === "qtitle") return curr.value
                 return prev
             }, ""),
             editable: false,
@@ -46,7 +43,7 @@ function parseResponseData(responses, pieces) {
             if (rs[p.key]) rs[p.key] += `, ${p.value}`
             else rs[p.key] = p.value
         })
-        rs.id = i
+        rs.id = r._id
         rs.createdAt = r.createdAt
         return rs
     })
@@ -66,6 +63,7 @@ function ResponseView({ }) {
     const [form, setForm] = useState({})
     const [anchorEl, setAnchorEl] = useState(null)
     const [selected, _setSelected] = useState(null)
+    const [selection, setSelection] = useState([])
 
     const select = (event, content) => {
         _setSelected(content)
@@ -93,148 +91,145 @@ function ResponseView({ }) {
         })
     }, [])
 
-    const contsx = {
-        width: "100%",
-        maxWidth: {
-            xs: "unset",
-            md: "800px"
-        },
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: {
-            xs: "30px 0",
-            md: "60px"
-        },
-        flexShrink: 1,
-    }
+    const isMob = window.innerWidth < 900
 
     const formContainersx = {
-        width: {
-            xs: "90%",
-            md: "100%"
-        },
-        height: "100%",
-        // overflow: "auto",
-        marginTop: "36px",
+        flex: 1,
+        // marginTop: "36px",
         display: "flex",
         justifyContent: "center",
-        // padding: "0 0 60px 0"
+        position: "relative"
     }
 
     const titlesx = {
         width: "100%",
-        marginBottom: "24px",
+        paddingBottom: "24px",
     }
 
-    const sidesx = {
-        width: "350px",
-        padding: "30px",
-        flexShrink: 2,
-    }
-    const sidebutssx = {
-        width: {
-            xs: "100%",
-            md: "200px"
-        },
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: {
-            xs: "center",
-            md: "start"
-        },
-        alignItems: "center",
-        padding: "0 30px",
-    }
     const buttonsx = {
         width: "174px",
         padding: "8px 0"
     }
 
     const handleCellClick = (params, event) => {
-        if (params.formattedValue === '') return
+        if (params.formattedValue === '' || params.field === "__check__") return true
         select(event, params.formattedValue)
     }
+
+    const paperheader = (
+        <Box sx={titlesx}>
+            <Typography variant="h4" marginBottom={"6px"} >
+                {form.title ?? "Form"}
+            </Typography>
+            {true ? <Typography variant="body1" >{form.description ?? "Some description"}</Typography> : null}
+        </Box>
+    )
+    // console.log(selection)
+    const paperbody = (
+        <Box sx={formContainersx}>
+            {loading ?
+                <Skeleton sx={formContainersx} /> :
+                <DataGrid
+                    columns={data.columns}
+                    rows={data.rows}
+                    pageSize={pageSize}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                    rowsPerPageOptions={[10, 20, 50, 100]}
+                    disableColumnSelector={true}
+                    disableSelectionOnClick
+                    disableColumnMenu
+                    checkboxSelection={true}
+                    onCellClick={handleCellClick}
+                    onSelectionModelChange={(newSelection) => { setSelection(newSelection) }}
+                    selectionModel={selection}
+                    hideFooterSelectedRowCount={true}
+                    sx={{
+                        '& .MuiDataGrid-columnSeparator': {
+                            display: "none"
+                        },
+                        '& .MuiDataGrid-footerContainer': {
+                            border: "none"
+                        },
+                        "& .MuiDataGrid-columnHeader": {
+                            "&:focus": {
+                                outline: "none",
+                                border: "none"
+                            },
+                            border: "none"
+                        },
+                        '&.MuiDataGrid-root .MuiDataGrid-cell:focus': {
+                            outline: 'none',
+                        },
+                        '&': {
+                            border: "none",
+                            height: "unset",
+                        },
+                    }}
+                />}
+            {selection.length > 0 ? (
+                <Box sx={{ position: "absolute", left: 0, bottom: 0, width: "20%", maxWidth: "110px", minWidth: "80px" }}>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={async () => {
+                            const res = await mutations.deleteResponses(id, selection)
+                            if (res.__status__ === "error") return
+                            setData({
+                                columns: data.columns,
+                                rows: data.rows.filter(r => !selection.includes(r.id))
+                            })
+                            setSelection([])
+                        }}
+                        sx={{ ...buttonsx, width: "100%" }}
+                    >Delete</Button>
+                </Box>
+            ) : null}
+            <Box sx={{ position: "absolute", width: "fit-content", height: "fit-content" }}>
+                <Popover
+                    open={anchorEl !== null}
+                    onClose={close}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    anchorEl={anchorEl}
+                >
+                    <Typography padding={".5em 1em"}>{selected}</Typography>
+                </Popover>
+            </Box>
+        </Box>
+    )
+
+    const dashbut = (
+        <Button variant="contained" color="primary" onClick={() => {
+            window.location.assign(`/dashboard`)
+        }} sx={{ ...buttonsx, margin: 0, width: "100%" }}>Back to Dashboard</Button>
+    )
+
+    const left = (
+        <React.Fragment>
+            <Typography variant="h4" sx={{ fontSize: "20px", fontWeight: 500, marginBottom: { md: "28px", xs: "0" } }}>
+                {(() => { return dayTime() + " " + (Auth.getProfile()?.name ?? "User") })()}
+            </Typography>
+            {isMob ?
+                null :
+                <Typography variant="h4" sx={{ fontSize: "16px", fontWeight: 400 }}>
+                    {"Viewing: " + (form.title ?? "Form")}
+                </Typography>}
+        </React.Fragment>
+    )
+
     return (
         <React.Fragment>
-            <Signout />
-            <Container disableGutters={true} maxWidth={true} sx={{ display: "flex", justifyContent: "center", paddingTop: { xs: 0, md: "80px" }, flexDirection: { xs: "column", md: "row" } }}>
-                <Box sx={sidesx}>
-                    <Typography variant="h4" sx={{ fontSize: "20px", fontWeight: 500, marginBottom: "34px" }}>
-                        {(() => { return dayTime() + " " + (Auth.getProfile()?.name ?? "User") })()}
-                    </Typography>
-                    <Typography variant="h4" sx={{ fontSize: "16px", fontWeight: 400 }}>
-                        {"Viewing: " + (form.title ?? "Form")}
-                    </Typography>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "center", width: "100%", flexDirection: { xs: "column", md: "row" }, height: "calc(100% - 100px)" }}>
-                    <Paper sx={contsx}>
-                        <Box sx={titlesx}>
-                            <Typography variant="h4" marginBottom={"6px"} sx={{ textAlign: { xs: "center", md: "start" } }} >
-                                {form.title ?? "Form"}
-                            </Typography>
-                            {true ? <Typography variant="body1" sx={{ textAlign: { xs: "center", md: "start" } }} >{form.description ?? "Some description"}</Typography> : null}
-                        </Box>
-                        <Divider flexItem={true} />
-                        <Box sx={formContainersx}>
-                            {loading ?
-                                <Skeleton sx={formContainersx} /> :
-                                <DataGrid
-                                    columns={data.columns}
-                                    rows={data.rows}
-                                    // autoHeight={true}
-                                    pageSize={pageSize}
-                                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                                    rowsPerPageOptions={[10, 20, 50, 100]}
-                                    disableColumnSelector={true}
-                                    disableSelectionOnClick
-                                    disableColumnMenu
-                                    onCellClick={handleCellClick}
-                                    sx={{
-                                        '& .MuiDataGrid-columnSeparator': {
-                                            display: "none"
-                                        },
-                                        '& .MuiDataGrid-footerContainer': {
-                                            border: "none"
-                                        },
-                                        "& .MuiDataGrid-columnHeaders": {
-                                            // position: "sticky"
-                                        },
-                                        '&.MuiDataGrid-root .MuiDataGrid-cell:focus': {
-                                            outline: 'none',
-                                        },
-                                        '&': {
-                                            border: "none"
-                                        },
-                                    }}
-                                />}
-                            <Box sx={{ position: "absolute", width: "fit-content", height: "fit-content" }}>
-                                <Popover
-                                    open={anchorEl !== null}
-                                    onClose={close}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'left',
-                                    }}
-                                    transformOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'left',
-                                    }}
-                                    anchorEl={anchorEl}
-                                >
-                                    <Typography padding={".5em 1em"}>{selected}</Typography>
-                                </Popover>
-                            </Box>
-                        </Box>
-                    </Paper>
-                    <Box sx={sidebutssx}>
-                        <Button variant="contained" color="primary" onClick={() => {
-                            window.location.assign(`/dashboard`)
-                        }} sx={{ ...buttonsx, margin: { md: "100px 0 24px 0", xs: "50px 0 24px 0" } }}>Back to Dashboard</Button>
-                    </Box>
-                </Box>
-            </Container>
+            <PaperCenter
+                paper={[paperheader, paperbody]}
+                left={left}
+                buttons={dashbut}
+            />
         </React.Fragment>
     )
 }

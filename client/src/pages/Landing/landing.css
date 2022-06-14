@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500&family=Roboto&display=swap');
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.span {
+  font-weight: 500;
 }

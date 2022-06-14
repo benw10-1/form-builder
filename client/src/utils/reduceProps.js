@@ -1,4 +1,4 @@
-function propReducer(props) {
+function reduceProps(props) {
     return props.reduce((prev, curr) => {
         if (curr.key === "qtype") prev.qtype = curr.value
         else if (curr.key === "qoptions") prev.qoptions.push(curr.value)
@@ -10,4 +10,4 @@ function propReducer(props) {
     }, { qtype: "", qoptions: [], qtitle: "", qdesc: "", qreq: false, qlabel: "" })
 }
 
-module.exports = propReducer
+export default reduceProps;

@@ -22,12 +22,6 @@ import "./Dashboard.css"
 
 import Popover from '@mui/material/Popover';
 
-//send to small device touchscreen version if screen less than minW wide or they are using touchscreen
-const minW = 900;
-let touch = { a: false };
-function touchDetect(t) { t.a = true; }
-window.addEventListener('touchstart', () => { touchDetect(touch) });
-
 function FormCard({ form: { _id, title, description, createdAt, published, endpoint } }) {
     const [open, setOpen] = useState(false);
     const [openPop, setOpenPop] = useState(false);
@@ -39,17 +33,19 @@ function FormCard({ form: { _id, title, description, createdAt, published, endpo
     const openRef = useRef(open);
     const copyRef = useRef(false);
 
+    const isSmall = window.innerWidth <= 350;
+
     const cardsx = {
-        width: "280px",
-        // minHeight: "300px",
+        width: isSmall ? "100%" : "280px",
         height: open ? "240px" : "200px",
         display: "flex",
-        "&:hover": { boxShadow: 15 },
-        margin: {
+        "&:hover": isSmall ? undefined : { boxShadow: 15 },
+        margin: isSmall ? 0 : {
             xs: "26px 25px 0",
             md: "26px 50px 0 0",
         },
         transition: "all 0.3s ease-in",
+        ...(isSmall ? { boxShadow: 0, borderRadius: 0 } : {}),
     }
     const hoversx = {
         "&:hover": { cursor: "pointer" }
@@ -87,11 +83,7 @@ function FormCard({ form: { _id, title, description, createdAt, published, endpo
 
     const Rlink = `${window.location.origin}/respond/${endpoint ? endpoint : _id}`
     const editclick = (event) => {
-        if (window.innerWidth < minW || touch.a == true) {
-            window.location.assign(window.location.origin + "/alteditformmob/" + _id)
-        } else {
-            window.location.assign(window.location.origin + "/alteditform/" + _id)
-        }
+        window.location.assign("/editform/" + _id)
     }
     const responsesclick = (event) => {
         window.location.assign(window.location.origin + "/responses/" + _id)
@@ -177,15 +169,15 @@ function FormCard({ form: { _id, title, description, createdAt, published, endpo
                             </Box>
                         </Popover>
                     </Box>
-                    <Box sx={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%", width: "100%"}}>{Rlink}</Box>
+                    <Box sx={{ backgroundColor: "#F0F0F0", padding: "5px", border: "none", height: "100%", width: "100%", color: "#0000EE", textDecoration: "underline", cursor: "pointer" }} onClick={() => {window.open(Rlink)}} >{Rlink}</Box>
                 </Box>
             </Box>
 
             <Divider variant="center" />
 
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                <Box sx={{ height: "62px", display: "grid", placeItems: "center" }}>
-                    <Box sx={{ width: "240px", display: "flex", justifyContent: "space-between" }}>
+                <Box sx={{ height: "62px", display: "grid", placeItems: "center", width: "100%" }}>
+                    <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
                         {publ ? <Button variant="outlined" onClick={async () => {
                             let obj = await mutations.setPublished(_id, false); 
                             if (obj.__status__ !== "error") {
@@ -202,20 +194,22 @@ function FormCard({ form: { _id, title, description, createdAt, published, endpo
 }
 
 function AllForms({ forms = [], modal }) {
+    const isSmall = window.innerWidth <= 350;
     // main render logic
     const render = () => {
         let renderedForms = []
 
         const cardsx = {
-            width: "280px",
-            // minHeight: "300px",
-            height: "auto",
+            width: isSmall ? "100%" : "280px",
+            height: "200px",
             display: "flex",
-            "&:hover": { boxShadow: 15 },
-            margin: {
+            "&:hover": isSmall ? undefined : { boxShadow: 15 },
+            margin: isSmall ? 0 : {
                 xs: "26px 25px 0",
                 md: "26px 50px 0 0",
-            }
+            },
+            transition: "all 0.3s ease-in",
+            ...(isSmall ? { boxShadow: 0, borderRadius: 0 } : {}),
         }
         const centered = {
             display: "flex",
@@ -231,7 +225,12 @@ function AllForms({ forms = [], modal }) {
 
         // maybe add form pages if forms exceed certain count
         forms.forEach(x => {
-            renderedForms.push(<FormCard form={x} />)
+            renderedForms.push((
+                <React.Fragment key={x._id}>
+                    <FormCard form={x} />
+                    {isSmall ? <Divider flexItem={true} sx={{ width: "100%" }} /> : null}
+                </React.Fragment>
+            ))
         })
 
         renderedForms.push((
@@ -244,6 +243,7 @@ function AllForms({ forms = [], modal }) {
 
         return (
             <div className="forms-container">
+                {isSmall ? <Divider flexItem={true} sx={{ width: "100%" }} /> : null}
                 {renderedForms}
             </div>
         )
@@ -255,6 +255,17 @@ function AllForms({ forms = [], modal }) {
 function Dashboard() {
     const [loading, setLoading] = useState(true)
     const [forms, setForms] = useState([])
+
+    const [rerender, setRerender] = useState(false)
+
+    const resizer = (event) => {
+        setRerender(Math.random() * 100)
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize", resizer)
+        return () => window.removeEventListener("resize", resizer)
+    }, [])
 
     const [formName, setFormName] = useState("")
     const [formDesc, setFormDesc] = useState("")
@@ -304,12 +315,7 @@ function Dashboard() {
             return
         }
         handleClose()
-        reloadPage()
-        if (window.innerWidth < minW || touch.a == true) {
-            window.location.assign(window.location.origin + "/alteditformmob/" + newForm._id)
-        } else {
-            window.location.assign(window.location.origin + "/alteditform/" + newForm._id)
-        }
+        window.location.assign("/editform/" + newForm._id)
     }
 
     // main render logic
@@ -329,7 +335,7 @@ function Dashboard() {
         }
         const boxsx = {
             padding: {
-                xs: "36px 0 36px 4%",
+                xs: "18px 0 18px 4%",
                 md: "118px 0 0 4%",
             },
             maxWidth: "320px",
@@ -340,7 +346,7 @@ function Dashboard() {
                 sm: "275",
                 md: "275px",
             },
-            display: "block",
+            display: window.innerHeight > 600 ? "block" : "none",
             position: "relative",
             margin: {
                 xs: "0 0 0 0",
@@ -352,7 +358,7 @@ function Dashboard() {
                 xs: "0",
                 md: "0 0 0 64px",
             },
-            margin: { md: "128px 0 0 0", xs: "64px 0 0 0" },
+            margin: { md: "128px 0 0 0", xs: "32px 0 0 0" },
             display: {
                 xs: "flex",
             },
@@ -366,7 +372,7 @@ function Dashboard() {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 400,
+            width: window.innerWidth <= 450 ? "100%" : "450px",
             bgcolor: '#FFFFFF',
             boxShadow: 24,
             padding: "25px 20px",
@@ -394,7 +400,7 @@ function Dashboard() {
                         <Button width={"42px"} variant={"contained"} onClick={addForm} sx={{ margin: "25px 0 0 0" }} >Create Form</Button>
                     </Box>
                 </Modal>
-                <Signout sx={{ right: { xs: "40px" } }} />
+                <Signout />
 
                 {/* Dashboard Sidebar */}
                 <Container maxWidth={false} disableGutters={true} >
@@ -404,7 +410,7 @@ function Dashboard() {
                                 {(() => { return dayTime() + " " + Auth.getProfile()?.name ?? "User" })()}
                                 <br />
                             </Typography>
-                            <Typography variant="h4" width={73} height={24} sx={{ ...fontsx, marginTop: "34px", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
+                            <Typography variant="h4" width={73} height={24} sx={{ ...fontsx, marginTop: { md: "34px", xs: "16px" }, marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
                                 {'My Forms'}
                                 <br />
                             </Typography>
@@ -414,7 +420,7 @@ function Dashboard() {
                         </Box>
                         <Paper sx={papersx}>
                             <Box sx={boxsx2}>
-                                <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)", display: { xs: "flex" }, justifyContent: { xs: "center", md: "start" } }}>
+                                <Typography variant="body1" height={20} sx={{ ...fontsx, fontSize: "12px", color: "rgba(0, 0, 0, 0.6)", display: { xs: "flex" }, justifyContent: { xs: "center", md: "start" }, marginBottom: { xs: "16px", md: "0" } }}>
                                     {(forms && forms.length > 0) ? 'Click on a form to edit or view responses.' : "No forms available, click on the + button below."}
                                 </Typography>
                                 {(() => {

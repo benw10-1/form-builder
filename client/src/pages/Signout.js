@@ -11,7 +11,10 @@ import Auth from "../utils/auth"
 function Signout({ sx }) {
     const _sx = {
         position: "absolute",
-        right: "54px",
+        right: {
+            xs: "18px",
+            md: "54px",
+        },
         top: "24px",
         fontFamily: "Roboto",
         fontWeight: "400",
