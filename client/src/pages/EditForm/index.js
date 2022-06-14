@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { PaperCenter } from '../Layouts';
 import { useParams } from "react-router-dom";
 import { mutations, queries, Auth, dayTime } from "../../utils";
-import Editor, { SideBar } from "./editor";
+import Editor, { SideBar } from "./Editor";
 import {
     Button,
     Box,
