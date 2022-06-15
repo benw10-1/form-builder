@@ -148,7 +148,6 @@ function MultipleChoice({ reduced, editing, editProp, error, setResponse, multip
     }
 
     const setInpError = (error) => {
-        console.log("setInpError", error)
         _setInpError(error)
     }
 

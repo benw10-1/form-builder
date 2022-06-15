@@ -103,7 +103,7 @@ function Toolbox({ addPiece, editing, resize }) {
         <React.Fragment>
             <Box sx={containersx}>
                 <Paper sx={toolboxsx}>
-                    <Button sx={buttonsx} startIcon={<Add />} variant="text" onClick={() => { addPiece(editing ? editing + 1 : null, "question") }}>Add Question</Button>
+                    <Button sx={buttonsx} startIcon={<Add />} variant="text" onClick={() => { addPiece(typeof editing === "number" ? editing + 1 : null, "question") }}>Add Question</Button>
                 </Paper>
             </Box>
             <Box sx={ghostsx} ref={(ref) => {setGhostEl(ref)}} />

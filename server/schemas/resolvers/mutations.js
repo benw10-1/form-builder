@@ -1,8 +1,8 @@
 const { AuthenticationError } = require('apollo-server-express')
 const { User, Form, Response, Piece } = require("../../models")
-const { signToken } = require('../../utils')
+const { signToken, propReducer, sendVerificationEmail } = require('../../utils')
+const { v4 } = require('uuid')
 const defaultForm = require("../defaultForm")
-const propReducer = require("../../utils/propReducer")
 
 async function signup(parent, args, context) {
     if (await User.findOne({ name: args.name })) throw new Error("Username already taken")
@@ -33,16 +33,22 @@ async function login(parent, { login, password }) {
 }
 
 async function createForm(parent, { title, description }, context) {
-    const user = await User.findOne({ _id: context.user._id }).exec()
+    if (!context.user) throw new AuthenticationError("Not logged in")
+    const user = await User.findById(context.user._id)
+    if (!user) throw new AuthenticationError("Not logged in")
+    if (!user.verified) throw new AuthenticationError("Email not verified")
 
-    if (!user) new AuthenticationError("Not logged in!")
     // creates default form for use in editing
-    const newForm = await defaultForm(title, user._id, description)
+    const newForm = await defaultForm(title, context.user._id, description)
     return newForm
 }
 
 async function updateFormMeta(parent, { id, title, description }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
+    const user = await User.findById(context.user._id)
+    if (!user) throw new AuthenticationError("Not logged in")
+    if (!user.verified) throw new AuthenticationError("Email not verified")
+
     const form = await Form.findById(id).exec()
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
@@ -54,6 +60,10 @@ async function updateFormMeta(parent, { id, title, description }, context) {
 
 async function setPublished(parent, { id, published }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
+    const user = await User.findById(context.user._id)
+    if (!user) throw new AuthenticationError("Not logged in")
+    if (!user.verified) throw new AuthenticationError("Email not verified")
+
     const form = await Form.findById(id).exec()
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
@@ -68,6 +78,10 @@ async function setPublished(parent, { id, published }, context) {
 
 async function updateFormPieces(parent, { id, pieces }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
+    const user = await User.findById(context.user._id)
+    if (!user) throw new AuthenticationError("Not logged in")
+    if (!user.verified) throw new AuthenticationError("Email not verified")
+
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
@@ -76,6 +90,9 @@ async function updateFormPieces(parent, { id, pieces }, context) {
     const parsedPieces = []
     for (const x of pieces) {
         if (!x.props || !x._type) throw new Error("No props or type passed to: " + x._type ?? "Untyped")
+        const { qtype, qoptions, qtitle } = propReducer(x.props)
+        if (!qtype || !qtitle) throw new Error("No type or title passed to: " + (x._type ?? "Untyped"))
+        if ((qtype === "multiplechoice" || qtype === "multipleselect") && !qoptions) throw new Error("No options passed to: " + x._type)
 
         if (x._id) {
             const piece = await Piece.findByIdAndUpdate(x._id, { ...x }).exec()
@@ -90,7 +107,7 @@ async function updateFormPieces(parent, { id, pieces }, context) {
     }
 
     const refSet = new Set(parsedPieces)
-    // console.log(refSet, parsedPieces)
+
     for (const x of form.piece_refs) {
         if (!refSet.has(x.toString())) {
             console.log("DEleted!")
@@ -112,7 +129,7 @@ async function respond(parent, { id, responses }, context) {
 
     for (const x of responses) {
         const { key, value } = x
-        if (!key || !value || value === '' || key === '') continue
+        if (!key || key === '') continue
         const piece = await Piece.findById(key).exec()
         if (!piece) throw new Error("Piece not found")
         if (String(piece.form_ref) !== String(form._id)) throw new Error("Piece not in form")
@@ -120,13 +137,18 @@ async function respond(parent, { id, responses }, context) {
             console.log("Skipping piece: " + piece._type)
             continue
         }
-        const { qtype, qoptions, qtitle } = propReducer(piece.props)
+        const { qtype, qoptions, qtitle, qreq } = propReducer(piece.props)
 
-        if (qtype === "radio") {
+        if (!value || value === '') {
+            if (qreq) throw new Error("Required piece not filled out: " + qtitle)
+            continue
+        }
+
+        if (qtype === "multiplechoice") {
             console.log(value, qoptions)
             if (!qoptions.includes(value)) throw new Error("Value not in options")
         }
-        if (qtype === "check") {
+        if (qtype === "multipleselect") {
             value.split("__sep__").forEach(x => {
                 if (!qoptions.includes(x)) throw new Error("Value not in options")
             })
@@ -142,8 +164,9 @@ async function respond(parent, { id, responses }, context) {
 
 async function deleteForm(parent, { id }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
-    const user = await User.findOne({ _id: context.user._id }).exec()
+    const user = await User.findById(context.user._id)
     if (!user) throw new AuthenticationError("Not logged in")
+    if (!user.verified) throw new AuthenticationError("Email not verified")
 
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
@@ -156,16 +179,46 @@ async function deleteForm(parent, { id }, context) {
 
 async function deleteResponses(parent, { id, responses }, context) {
     if (!context.user) throw new AuthenticationError("Not logged in")
-    const user = await User.findOne({ _id: context.user._id }).exec()
+    const user = await User.findById(context.user._id)
     if (!user) throw new AuthenticationError("Not logged in")
+    if (!user.verified) throw new AuthenticationError("Email not verified")
 
     const form = await Form.findById(id)
     if (!form) throw new Error("Form not found")
     if (context.user._id !== String(form.creator)) throw new AuthenticationError("Not creator")
 
     const deleted = await Response.deleteMany({ _id: { $in: responses } }).exec()
+
     return deleted.deletedCount
 }
+
+async function verify(parent, { code }, context) {
+    if (!code) throw new Error("No code provided")
+    const user = await User.findOne({ verifyCode: code }).exec()
+    if (!user) throw new Error("Code not found")
+
+    const updated = await User.findOneAndUpdate({ _id: user._id }, { verified: true, verifyCode: null }).exec()
+    updated.verified = true
+
+    const token = signToken(updated)
+
+    return token
+}
+
+async function verifyUserEmail(parent, args, context) {
+    if (!context.user) throw new AuthenticationError("Not logged in")
+    const user = await User.findById(context.user._id)
+    if (!user) throw new AuthenticationError("Not logged in")
+    if (user.verified) throw new AuthenticationError("Already verified")
+    
+    const code = v4().replace(/-/g, "")
+    const mail = await sendVerificationEmail(context.user.email, code)
+
+    const _user = await User.findOneAndUpdate({ _id: context.user._id }, { verifyCode: code }).exec()
+
+    return mail ? "Email sent" : "Email failed"
+}
+
 
 module.exports = {
     signup,
@@ -176,5 +229,7 @@ module.exports = {
     updateFormPieces,
     setPublished,
     deleteForm,
-    deleteResponses
+    deleteResponses,
+    verify,
+    verifyUserEmail
 }
