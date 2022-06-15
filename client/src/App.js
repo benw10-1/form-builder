@@ -4,8 +4,6 @@ import {
     Dashboard,
     FourOFour,
     LoginSignup,
-    ALTEditForm,
-    ALTEditFormMob,
     EditForm,
     Responses,
     Landing,
@@ -32,10 +30,6 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard/>} />
                 {/* View responses and edit form in one page */}
                 <Route path="/editform/:id" element={<EditForm/>} />
-
-                {/*testing route*/}
-                <Route path="/alteditform/:id" element={<ALTEditForm/>} />
-                <Route path="/alteditformmob/:id" element={<ALTEditFormMob/>} />
 
                 {/* wrong route route */}
                 <Route path="*" element={<FourOFour />}/>

@@ -57,11 +57,23 @@ import Auth from "./auth"
                 else if (cur.message === "Not logged in") {
                     Auth.logout()
                 }
+                else if (cur.message === "Already verified") {
+                    window.location.assign("/dashboard")
+                }
+                else if (cur.message === "Email not verified") {
+                    Auth.logout()
+                }
+                else if (cur.message === "From not published") {
+                    window.location.assign("/")
+                }
+                else if (cur.message === "Code not found") {
+                    acc.verification = "Code invalid"
+                }
                 else if (cur.message === "Not creator") {
                     window.location.assign("/dashboard")
                 }
                 else {
-                    acc.rest.push(cur)
+                    acc.rest.push(cur.message)
                 }
                 return acc
             }, { rest: [] })

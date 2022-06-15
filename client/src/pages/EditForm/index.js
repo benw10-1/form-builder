@@ -135,12 +135,12 @@ function EditForm() {
             return;
         }
         queries.getFormByID(id).then(async form => {
-            if (!form || form.errors) {
+            if (!form || form.errors || !form.result) {
                 window.location.replace(window.location.origin + "/");
                 return;
             }
-            if (form?.result && form.result.published) {
-                window.location.replace(window.location.origin + "/respond/" + id);
+            if (form.result.published) {
+                window.location.replace(window.location.origin + "/respond/" + (form.result.endpoint ?? id));
                 return;
             }
             setForm(form?.result ?? {});

@@ -169,9 +169,9 @@ function Piece({ _type, form_ref, props, editingThis, editThis, index, setProps,
 
     let piece
     if (_type === "question") {
-        if (!reduced.qtype) reduced.qtype = "text"
-        if (!reduced.qtitle) reduced.qtitle = "Question Title"
-        if (!reduced.qdesc) reduced.qdesc = ""
+        if (!reduced.qtype) editProp("qtype", "text")
+        if (!reduced.qtitle) editProp("qtitle", "Question")
+
         if (editThis) piece = <Question reduced={reduced} editing={editingThis} editProp={editProp} error={error} />
         else piece = <Question reduced={reduced} setResponse={setResponse} error={error} />
     }

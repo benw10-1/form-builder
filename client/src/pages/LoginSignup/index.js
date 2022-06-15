@@ -34,7 +34,7 @@ function Login({ handlers: { login: [loginVal, handleLoginChange], pass: [passVa
 // destructure props
 function Signup({ handlers: { login: [loginVal, handleLoginChange], email: [emailVal, handleEmailChange], pass: [passVal, handlePassChange], handleSubmit, other }, errors = {} }) {
     return (
-        <React.Fragment style={{ minWidth: "320px" }}>
+        <React.Fragment>
             <Box m={"10px 0 20px 0"}>
                 <TextField id="input-user" label="Username" variant="standard" onChange={handleLoginChange} value={loginVal} fullWidth={true} error={errors.user} helperText={errors.user} />
             </Box>
@@ -48,6 +48,25 @@ function Signup({ handlers: { login: [loginVal, handleLoginChange], email: [emai
                 <div className="button-cont">
                     <Button onClick={other} variant="outlined" width={89} height={42}>Login</Button>
                     <Button onClick={handleSubmit} variant="contained" width={105} height={42}>Signup</Button>
+                </div>
+            </div>
+        </React.Fragment>
+    )
+}
+
+function VerifyEmail({ handlers: { verification: [verificationVal, setVerificationVal], handleSubmit, verifySwitch }, errors = {} }) {
+    return (
+        <React.Fragment>
+            <Typography variant="h6" gutterBottom>
+                Verify your email by entering the code we sent to your email
+            </Typography>
+            <Box m={"0 0 20px 0"}>
+                <TextField id="input-verification" label="Verification code" variant="standard" onChange={(event) => {setVerificationVal(event.target.value)}} value={verificationVal} fullWidth={true} error={errors.verification} helperText={errors.verification} />
+            </Box>
+            <div className="button-block">
+                <div className="button-cont">
+                    <Button onClick={() => { verifySwitch(false) }} variant="contained" width={105} height={42} color="error">Back</Button>
+                    <Button onClick={handleSubmit} variant="contained" width={105} height={42}>Verify</Button>
                 </div>
             </div>
         </React.Fragment>
@@ -70,6 +89,8 @@ function LoginSignup({ switchState }) {
     let [emailVal, setEmailVal] = useState("")
     let [passVal, setPassVal] = useState("")
     let [rerender, setRerender] = useState(false)
+    let [verify, setVerify] = useState(false)
+    const [verificationVal, setVerificationVal] = useState("")
 
     // fake loading sequence
     const other = () => {
@@ -86,6 +107,14 @@ function LoginSignup({ switchState }) {
         }, 1000)
     }
 
+    const verifySwitch = (state) => {
+        setLoading(true)
+        setErrors({})
+        setTimeout(() => {
+            setLoading(false)
+            setVerify(state)
+        }, 400)
+    }
     // same logic as Dashboard.js
     useEffect(() => {
         const req = async () => {
@@ -129,14 +158,31 @@ function LoginSignup({ switchState }) {
     const handleSubmit = async (event) => {
         event.preventDefault()
         let result
-        if (_switch) result = await mutations.signup(loginVal, emailVal, passVal)
-        else result = await mutations.login(loginVal, passVal)
-        // checks for error status (see client/src/gqlJS and server/schemas/resolvers)
-        // TODO: Change alert
+        if (verify) {
+            result = await mutations.verify(verificationVal)
+        }
+        else {
+            if (_switch) result = await mutations.signup(loginVal, emailVal, passVal)
+            else result = await mutations.login(loginVal, passVal)
+        }
+
         if (result.__status__ === "error") {
             setErrors(result.errors ?? {})
         }
-        else window.location.assign(window.location.origin + "/dashboard")
+        else {
+            result = result.result
+            if (result?.user && result.user.verified) {
+                window.location.assign(window.location.origin + "/dashboard")
+            }
+            else if (typeof result === "string") {
+                Auth.login(result)
+                window.location.assign(window.location.origin + "/dashboard")
+            }
+            else {
+                verifySwitch(true)
+                const mail = await mutations.verifyUserEmail()
+            }
+        }
     }
 
     const keyHandle = (event) => {
@@ -187,28 +233,41 @@ function LoginSignup({ switchState }) {
                                             {'Fast & easily customizable forms for any situation'}
                                         </Typography>
                                     </div>
-                                    <Card sx={{...sxcont, padding: { xs: "15px 40px", md: "15px 60px" }}} component="form" autoComplete="off" onKeyDown={keyHandle}>
+                                    <Card sx={{ ...sxcont, padding: { xs: "15px 40px", md: "15px 60px" } }} component="form" autoComplete="off" onKeyDown={keyHandle}>
                                         <CardContent sx={sxcontent}>
-                                            {_switch ?
-                                                <Signup
-                                                    handlers={{
-                                                        login: [loginVal, handleLoginChange],
-                                                        email: [emailVal, handleEmailChange],
-                                                        pass: [passVal, handlePassChange],
-                                                        handleSubmit,
-                                                        other,
-                                                    }}
-                                                    errors={errors}
-                                                /> :
-                                                <Login
-                                                    handlers={{
-                                                        login: [loginVal, handleLoginChange],
-                                                        pass: [passVal, handlePassChange],
-                                                        handleSubmit,
-                                                        other,
-                                                    }}
-                                                    errors={errors}
-                                                />
+                                            {
+                                                verify ?
+                                                    <VerifyEmail
+                                                        handlers={{
+                                                            verification: [verificationVal, setVerificationVal],
+                                                            handleSubmit,
+                                                            verifySwitch
+                                                        }}
+                                                        errors={errors}
+                                                    />
+                                                    :
+                                                    (
+                                                        _switch ?
+                                                            <Signup
+                                                                handlers={{
+                                                                    login: [loginVal, handleLoginChange],
+                                                                    email: [emailVal, handleEmailChange],
+                                                                    pass: [passVal, handlePassChange],
+                                                                    handleSubmit,
+                                                                    other,
+                                                                }}
+                                                                errors={errors}
+                                                            /> :
+                                                            <Login
+                                                                handlers={{
+                                                                    login: [loginVal, handleLoginChange],
+                                                                    pass: [passVal, handlePassChange],
+                                                                    handleSubmit,
+                                                                    other,
+                                                                }}
+                                                                errors={errors}
+                                                            />
+                                                    )
                                             }
                                         </CardContent>
                                     </Card>

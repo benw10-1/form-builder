@@ -1,6 +1,5 @@
 import genQuery from "./genQuery"
 import Auth from "./auth"
-import { parseProps, unparseProps } from "./parseProps"
 
 async function login(login, password) {
   const variables = { login, password }
@@ -11,6 +10,7 @@ async function login(login, password) {
         user {
           name
           email
+          verified
         }
       }
     }
@@ -35,6 +35,7 @@ async function signup(name, email, password) {
         user {
           name
           email
+          verified
         }
       }
     }      
@@ -194,7 +195,6 @@ async function deleteResponses(id, responses) {
       deleteResponses(id: $id, responses: $responses) 
     }
     `
-    console.log(variables)
   return genQuery(query, variables).then(data => {
     if (data.__status__ === "error") return data
     return {
@@ -204,4 +204,38 @@ async function deleteResponses(id, responses) {
   })
 }
 
-export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished, deleteForm, deleteResponses }
+async function verify(code) {
+  const variables = { code }
+  const query = `
+    mutation Verify($code: String!) {
+      verify(code: $code)
+    }
+      `
+    
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.verify
+    }
+  })
+}
+
+async function verifyUserEmail(id) {
+  const variables = { id }
+  const query = `
+    mutation VerifyUserEmail {
+      verifyUserEmail
+    }
+      `
+    
+  return genQuery(query, variables).then(data => {
+    if (data.__status__ === "error") return data
+    return {
+      __status__: data.__status__,
+      result: data.verifyUserEmail
+    }
+  })
+}
+
+export default { login, signup, createForm, respond, updateFormMeta, updateFormPieces, setPublished, deleteForm, deleteResponses, verify, verifyUserEmail }

@@ -82,6 +82,11 @@ function ResponseView({ }) {
             return
         }
         queries.getFormByID(id).then(form => {
+            if (!form || form.errors || !form.result) {
+                window.location.replace(window.location.origin + "/");
+                return;
+            }
+
             setForm(form.result)
             queries.getResponsesByForm(id).then(async res => {
                 const pieces = (await queries.getPiecesByID(id))?.result ?? []

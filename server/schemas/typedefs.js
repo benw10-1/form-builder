@@ -5,6 +5,7 @@ const typeDefs = gql`
     _id: ID!
     name: String!
     email: String!
+    verified: Boolean
   }
 
   type Auth {
@@ -75,6 +76,8 @@ const typeDefs = gql`
     setPublished(id: ID!, published: Boolean!): Form
     deleteForm(id: ID!): Form
     deleteResponses(id: ID!, responses: [ID!]!): Int!
+    verify(code: String!): ID!
+    verifyUserEmail: String
   }
 `;
 
