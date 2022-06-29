@@ -162,7 +162,7 @@ function EditForm() {
             </Typography>
             {window.innerWidth > 900 ? (
                 <React.Fragment>
-                    <Typography variant="h5" minHeight={24} sx={{ ...fontsx, marginTop: { md: "28px", xs: "14px" }, marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
+                    <Typography variant="h5" minHeight={24} maxWidth={260} sx={{ ...fontsx, marginTop: { md: "28px", xs: "14px" }, marginBottom: "16px", fontSize: "16px", fontWeight: "500" }} >
                         {form.title}
                     </Typography>
                     <Typography variant="body1" minHeight={48} sx={fontsx}>
@@ -188,6 +188,7 @@ function EditForm() {
                     fontWeight: "400",
                     fontSize: "34px",
                     letterSpacing: "0.25px",
+                    lineHeight: 1.25,
                 } }}
                 onChange={(text) => {
                     setForm({ ...formRef.current, title: text });
@@ -201,6 +202,8 @@ function EditForm() {
                     fontStyle: "normal",
                     fontWeight: "400",
                     fontSize: "16px",
+                    marginTop: ".5rem",
+                    lineHeight: 1.3,
                     letterSpacing: "0.15px",
                 } }}
                 onChange={(text) => {
@@ -211,7 +214,7 @@ function EditForm() {
         </Box>
     )
 
-    const paperbody = loading ? (<Skeleton />) : <Editor pieces={pieces} form={form} handlers={{ setPieces }} />
+    const paperbody = loading ? null : <Editor pieces={pieces} form={form} handlers={{ setPieces }} />
 
     const butcontsx = {
         display: "flex",

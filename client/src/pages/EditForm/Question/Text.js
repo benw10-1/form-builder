@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@mui/material";
 
-function Text({ reduced, editing, editProp, setResponse, error }) {
+function Text({ reduced, editing, editProp, setResponse, error, multiline }) {
     const [title, _setTitle] = useState(reduced.qtitle ?? "");
     const [desc, _setDesc] = useState(reduced.qdesc ?? "");
     const [value, _setValue] = useState("");
@@ -14,11 +14,8 @@ function Text({ reduced, editing, editProp, setResponse, error }) {
     const [inpError, _setInpError] = useState(false);
 
     useEffect(() => {
-        console.log("red", error)
         setInpError(error)
     }, [error])
-
-    // console.log(reduced)
 
     const setTitle = (event) => {
         editProp("qtitle", event.target.value)
@@ -129,6 +126,8 @@ function Text({ reduced, editing, editProp, setResponse, error }) {
                         onChange={setDesc}
                         placeholder="Question Placeholder/Description"
                         sx={fieldsx}
+                        multiline={multiline}
+                        minRows={multiline ? 2 : undefined}
                     />
                 </React.Fragment>
             ) : (
@@ -143,6 +142,8 @@ function Text({ reduced, editing, editProp, setResponse, error }) {
                         sx={valsx}
                         error={inpError}
                         helperText={inpError}
+                        multiline={multiline}
+                        minRows={multiline ? 2 : undefined}
                     />
                 </React.Fragment>
             )}

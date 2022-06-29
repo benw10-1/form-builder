@@ -103,6 +103,7 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
             md: "32px 0 32px 32px"
         },
         flexShrink: 1,
+        maxWidth: "325px",
     }
     const sidebutssx = {
         width: "212px",
@@ -116,7 +117,7 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
         },
     }
     const contsx = {
-        width: "100%",
+        flex: 1,
         maxWidth: {
             xs: "unset",
             md: "800px"
@@ -125,8 +126,6 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
             xs: window.innerHeight - (leftRef.current ? leftRef.current.getBoundingClientRect().height : 0),
             md: window.innerHeight - 80
         },
-        display: "block",
-        flexDirection: "column",
         borderRadius: {
             xs: "0px",
             md: "4px 4px 0 0"
@@ -135,7 +134,6 @@ function PaperCenter({ paper, buttons, children, left, sx, hasSignOut=true }) {
             xs: "30px",
             md: "60px"
         },
-        flexShrink: 1,
         position: "relative",
         display: "flex",
         flexDirection: "column",

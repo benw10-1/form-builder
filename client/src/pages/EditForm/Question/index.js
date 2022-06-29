@@ -18,11 +18,14 @@ function Question({ reduced, editing, editProp, setResponse, error }) {
     if (type === "text") {
         rendered = <Text {...props} />
     }
+    else if (type === "multilinetext") {
+        rendered = <Text {...props} multiline />
+    }
     else if (type === "multiplechoice") {
         rendered = <MultipleChoice {...props} />
     }
     else if (type === "multipleselect") {
-        rendered = <MultipleChoice {...props} multiple={true} />
+        rendered = <MultipleChoice {...props} multiple />
     }
 
     const contsx = {
@@ -53,6 +56,7 @@ function Question({ reduced, editing, editProp, setResponse, error }) {
                         <MenuItem value="text">Text</MenuItem>
                         <MenuItem value="multiplechoice">Multiple Choice</MenuItem>
                         <MenuItem value="multipleselect">Multiple Select</MenuItem>
+                        <MenuItem value="multilinetext">Multiline Text</MenuItem>
                     </Select>
                 </FormControl>
             </Box>

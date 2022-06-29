@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { queries, dayTime, Auth, mutations } from '../../utils'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Box from "@mui/material/Box"
 import Skeleton from "@mui/material/Skeleton"
 import Typography from "@mui/material/Typography"
@@ -64,6 +64,7 @@ function ResponseView({ }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [selected, _setSelected] = useState(null)
     const [selection, setSelection] = useState([])
+    const navigate = useNavigate()
 
     const select = (event, content) => {
         _setSelected(content)
@@ -78,12 +79,12 @@ function ResponseView({ }) {
     useEffect(() => {
         let loggedIn = Auth.loggedIn()
         if (!loggedIn) {
-            window.location.replace(window.location.origin + "/login")
+            navigate(window.location.origin + "/login", { replace: true });
             return
         }
         queries.getFormByID(id).then(form => {
             if (!form || form.errors || !form.result) {
-                window.location.replace(window.location.origin + "/");
+                navigate(window.location.origin + "/", { replace: true });
                 return;
             }
 
@@ -211,12 +212,12 @@ function ResponseView({ }) {
 
     const dashbut = (
         <Button variant="contained" color="primary" onClick={() => {
-            window.location.assign(`/dashboard`)
-        }} sx={{ ...buttonsx, margin: 0, width: "100%" }}>Back to Dashboard</Button>
+            navigate(`/dashboard`)
+        }} sx={{ ...buttonsx, margin: 0, maxWidth: "200px", padding: "10px 10px" }}>Back to Dashboard</Button>
     )
 
     const left = (
-        <React.Fragment>
+        <Box sx={{ width: "100%" }}>
             <Typography variant="h4" sx={{ fontSize: "20px", fontWeight: 500, marginBottom: { md: "28px", xs: "0" } }}>
                 {(() => { return dayTime() + " " + (Auth.getProfile()?.name ?? "User") })()}
             </Typography>
@@ -225,7 +226,7 @@ function ResponseView({ }) {
                 <Typography variant="h4" sx={{ fontSize: "16px", fontWeight: 400 }}>
                     {"Viewing: " + (form.title ?? "Form")}
                 </Typography>}
-        </React.Fragment>
+        </Box>
     )
 
     return (
