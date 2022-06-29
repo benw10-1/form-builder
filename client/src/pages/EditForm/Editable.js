@@ -120,19 +120,20 @@ function Editable({ initialText, textProps, onChange, maxLength=50 }) {
         fontSize: "inherit",
         fontFamily: "inherit",
         fontWeight: "inherit",
-        // color: "black",
         letterSpacing: "inherit",
         backgroundColor: "inherit",
         overflow: "hidden",
+        lineHeight: "inherit",
         ...textProps?.sx ?? {},
         border: "none",
         outline: "none",
-        width: `${Math.min(maxWidth, width)}px`,
+        width: `${width}px`,
+        maxWidth: maxWidth + "px",
         resize: "none",
         textDecoration: "underline",
         display: "flex",
-        flexDirection: "row",
-        // alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
         height: `${height}px`,
         cursor: "text",
         transition: "none"
@@ -140,7 +141,7 @@ function Editable({ initialText, textProps, onChange, maxLength=50 }) {
 
     if (textProps) textProps.sx = {
         ...(textProps?.sx ?? {}),
-        width: "auto",
+        maxWidth: maxWidth + "px",
         cursor: "text",
         "&:hover": {
             textDecoration: "underline",

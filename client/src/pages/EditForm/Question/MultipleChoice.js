@@ -17,7 +17,15 @@ import Editable from "../Editable";
 
 function EditableChoice({ removeThis, initalValue, setValue }) {
     const [value, _setValue] = useState(initalValue);
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl, _setAnchorEl] = useState(null);
+    const [height, _setHeight] = useState(0);
+
+    const setAnchorEl = (ref) => {
+        if (ref) {
+            _setAnchorEl(ref);
+            _setHeight(ref.offsetTop);
+        }
+    }
 
     useEffect(() => {
         _setValue(initalValue);
@@ -55,7 +63,7 @@ function EditableChoice({ removeThis, initalValue, setValue }) {
     }
     const closesx = {
         position: "absolute",
-        top: anchorEl ? `${anchorEl.offsetTop}px` : "0",
+        top: `${height}px`,
         display: anchorEl ? "block" : "none",
         right: "0",
         width: "24px",
@@ -69,7 +77,7 @@ function EditableChoice({ removeThis, initalValue, setValue }) {
     }
 
     return (
-        <Box sx={radiolabelcontsx} ref={(_ref) => { setAnchorEl(_ref) }}>
+        <Box sx={radiolabelcontsx} ref={(_ref) => { if (_ref) setAnchorEl(_ref) }}>
             <Editable textProps={{ variant: "body2", sx: radiolabelsx }} initialText={value} onChange={(text) => { _setValue(text); setValue(text) }} maxLength={75} />
             <Box sx={closesx}>
                 <CloseIcon sx={iconsx} onClick={removeThis} />

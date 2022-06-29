@@ -97,7 +97,7 @@ function FormCard({ form: { _id, title, description, createdAt, published, endpo
     useEffect(() => {
         if (copyRef.current) {
             copyRef.current.addEventListener("click", () => {
-                navigator?.clipboard.writeText(Rlink)
+                navigator?.clipboard?.writeText(Rlink)
                 setOpenPop(true);
             })
         }
